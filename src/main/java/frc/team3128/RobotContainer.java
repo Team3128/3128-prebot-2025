@@ -2,6 +2,7 @@ package frc.team3128;
 
 
 import common.hardware.input.NAR_XboxController;
+import common.hardware.input.NAR_XboxController.XboxButton;
 import common.hardware.motorcontroller.NAR_CANSpark;
 import common.hardware.motorcontroller.NAR_TalonFX;
 
@@ -9,6 +10,7 @@ import static common.hardware.input.NAR_XboxController.XboxButton.*;
 import common.utility.narwhaldashboard.NarwhalDashboard;
 import common.utility.shuffleboard.NAR_Shuffleboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.team3128.subsystems.Swerve;
 
 
@@ -47,7 +49,8 @@ public class RobotContainer {
     }   
 
     private void configureButtonBindings() {
-
+        controller.getButton(XboxButton.kA).onTrue(Swerve.getInstance().identifyOffsetsCommand().ignoringDisable(true));
+        controller.getUpPOVButton().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetGyro(0)));
     }
 
     public void initCameras() {
