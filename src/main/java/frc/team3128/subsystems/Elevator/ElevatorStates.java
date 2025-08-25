@@ -12,7 +12,7 @@ public enum ElevatorStates {
     ALGAE_BARGE(1.5),
     GROUND_INTAKE(0);
 
-    private double setpoint;
+    private final double setpoint;
 
     ElevatorStates(double setpoint) {
         this.setpoint = setpoint;

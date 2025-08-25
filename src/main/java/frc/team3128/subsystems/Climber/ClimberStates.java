@@ -7,7 +7,7 @@ public enum ClimberStates {
     CLIMB_PRIME(95, 1, 0.5),
     CLIMB(160, 1, 0);
 
-    private double angle, winchPower, rollerPower;
+    private final double angle, winchPower, rollerPower;
 
     private ClimberStates(double angle, double winchPower, double rollerPower) {
         this.angle = angle;
@@ -26,5 +26,5 @@ public enum ClimberStates {
     public double getRollerPower() {
         return rollerPower;
     }
-    
+
 }
