@@ -43,5 +43,10 @@ public class Arm extends FSMSubsystemBase<ArmStates> {
 	@Override
 	public void registerTransitions() {
         transitionMap.addCommutativeTransition(List.of(ArmStates.values()), defaultTransitioner);
+        transitionMap.addConvergingTransition(HANDOFF, sequence(
+            pivot.pidTo(HANDOFF.getAngle()), // TODO: replace with calculated angle
+            waitUntil(() -> pivot.atSetpoint()),
+            roller.runCommand(HANDOFF.getPower())
+        ));
 	}
 }
