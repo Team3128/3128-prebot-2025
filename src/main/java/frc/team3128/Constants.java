@@ -5,6 +5,8 @@ import java.util.List;
 
 import common.core.controllers.PIDFFConfig;
 import common.hardware.motorcontroller.NAR_Motor.MotorConfig;
+import common.hardware.motorcontroller.NAR_Motor.Neutral;
+import common.hardware.motorcontroller.NAR_Motor.StatusFrames;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -186,5 +188,48 @@ public class Constants {
             Rotation2d.fromDegrees(120),
             Rotation2d.fromDegrees(180)
         );
+    }
+
+    public static class ClimberConstants {
+
+        public static final int WINCH_ID = 30;
+        public static final int ROLLER_ID = 31;
+
+        public static final double WINCH_GEAR_RATIO = 1.0; // TODO
+        public static final double WINCH_SAMPLE_PER_MINUTE = 60;
+        public static final int WINCH_STATOR_CURRENT_LIMIT = 40;
+        public static final boolean WINCH_INVERT = false; // TODO
+        public static final Neutral WINCH_NEUTRAL_MODE = Neutral.BRAKE;
+        public static final StatusFrames WINCH_STATUS_FRAME = StatusFrames.POSITION;
+
+        public static final double WINCH_POSITION_MIN = 0;
+        public static final double WINCH_POSITION_MAX = 180;
+        public static final double WINCH_TOLERANCE = 1;
+
+        public static final double ROLLER_GEAR_RATIO = 1;
+        public static final double ROLLER_SAMPLE_PER_MINUTE = 60;
+        public static final int ROLLER_STATOR_CURRENT_LIMIT = 40;
+        public static final boolean ROLLER_INVERT = true;
+        public static final Neutral ROLLER_NEUTRAL_MODE = Neutral.BRAKE;
+        public static final StatusFrames ROLLER_STATUS_FRAME = StatusFrames.POSITION;
+
+    }
+
+    public static class ElevatorConstants {
+
+        public static final int LEFT_ID = 40;
+        public static final int RIGHT_ID = 41;
+
+        public static final double GEAR_RATIO = Units.inchesToMeters(60.4375) / 40.18735;
+        public static final double SAMPLE_PER_MINUTE = 60;
+        public static final int STATOR_CURRENT_LIMIT = 60;
+        public static final boolean INVERT = false;
+        public static final Neutral NEUTRAL_MODE = Neutral.COAST;
+        public static final StatusFrames STATUS_FRAME = StatusFrames.POSITION;
+
+        public static final double POSITION_MIN = 0;
+        public static final double POSITION_MAX = Units.inchesToMeters(60.4375);
+        public static final double TOLERANCE = 0.01;
+
     }
 }
