@@ -2,11 +2,16 @@ package frc.team3128.subsystems.Arm;
 
 import static edu.wpi.first.wpilibj2.command.Commands.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.team3128.RobotContainer;
 import common.core.fsm.FSMSubsystemBase;
 import common.core.fsm.TransitionMap;
+import common.hardware.limelight.Limelight;
+import common.hardware.limelight.LimelightKey;
+
 import static frc.team3128.subsystems.Arm.ArmStates.*;
 
 import java.util.List;
+import java.util.function.DoubleSupplier;
 import java.util.function.Function;
 
 public class Arm extends FSMSubsystemBase<ArmStates> {
@@ -35,6 +40,10 @@ public class Arm extends FSMSubsystemBase<ArmStates> {
         registerTransitions();
     }
 
+    public static double findPivotAngle(double horizontalOffset) {
+            return Math.asin((horizontalOffset/67)*(180/Math.PI)); // TODO: replace 67 with arm length
+    } 
+
     public static synchronized Arm getInstance() {
         if (instance == null) instance = new Arm();
         return instance;
@@ -44,9 +53,9 @@ public class Arm extends FSMSubsystemBase<ArmStates> {
 	public void registerTransitions() {
         transitionMap.addCommutativeTransition(List.of(ArmStates.values()), defaultTransitioner);
         transitionMap.addConvergingTransition(HANDOFF, sequence(
-            pivot.pidTo(HANDOFF.getAngle()), // TODO: replace with calculated angle
+            pivot.pidTo(findPivotAngle(RobotContainer.limelight.getValue(LimelightKey.HORIZONTAL_OFFSET))), // TODO: fix ts
             waitUntil(() -> pivot.atSetpoint()),
             roller.runCommand(HANDOFF.getPower())
         ));
 	}
-}
+} 

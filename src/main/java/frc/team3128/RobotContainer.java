@@ -5,6 +5,8 @@ import common.hardware.input.NAR_XboxController;
 import common.hardware.input.NAR_XboxController.XboxButton;
 import common.hardware.motorcontroller.NAR_CANSpark;
 import common.hardware.motorcontroller.NAR_TalonFX;
+import common.hardware.limelight.Limelight;
+import common.hardware.limelight.LimelightKey;
 
 import static common.hardware.input.NAR_XboxController.XboxButton.*;
 import common.utility.narwhaldashboard.NarwhalDashboard;
@@ -30,6 +32,8 @@ public class RobotContainer {
 
     private NarwhalDashboard dashboard;
 
+    public static Limelight limelight;
+
     public RobotContainer() {
         NAR_CANSpark.maximumRetries = 2;
         NAR_TalonFX.maximumRetries = 2;
@@ -54,7 +58,7 @@ public class RobotContainer {
     }
 
     public void initCameras() {
-
+        limelight = new Limelight("limelight-mason", 0, 0, 0, 0);
     }
 
     public void initDashboard() {
