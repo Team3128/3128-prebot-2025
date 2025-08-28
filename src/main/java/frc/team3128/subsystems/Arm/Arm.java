@@ -13,16 +13,20 @@ public class Arm extends FSMSubsystemBase<ArmStates> {
     
     private static Arm instance;
 
-    protected PivotMechanism pivot;
-    protected RollerMechanism roller;
+    public PivotMechanism pivot;
+    public RollerMechanism roller;
 
     private static TransitionMap<ArmStates> transitionMap = new TransitionMap<ArmStates>(ArmStates.class);
+    private static final Command defaultTransitions[] = new Command[ArmStates.values().length];
     private Function<ArmStates, Command> defaultTransitioner = state -> {
-        return sequence(
-            pivot.pidTo(state.getAngle()),
-            waitUntil(() -> pivot.atSetpoint()),
-            roller.runCommand(state.getPower())
-        );
+        if (defaultTransitions[state.ordinal()] == null) {
+            defaultTransitions[state.ordinal()] = sequence(
+                pivot.pidTo(state.getAngle()),
+                waitUntil(() -> pivot.atSetpoint()),
+                roller.runCommand(state.getPower())
+            );
+        }
+        return defaultTransitions[state.ordinal()];
     };
 
     public Arm() {

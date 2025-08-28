@@ -12,11 +12,15 @@ public class Elevator extends FSMSubsystemBase<ElevatorStates> {
 
     private static Elevator instance;
 
-    protected ElevatorMechanism elevator;
+    public ElevatorMechanism elevator;
     
     private static TransitionMap<ElevatorStates> transitionMap = new TransitionMap<ElevatorStates>(ElevatorStates.class);
+    private static final Command defaultTransitions[] = new Command[ElevatorStates.values().length];
     private Function<ElevatorStates, Command> defaultTransitioner = state -> {
-        return elevator.pidTo(state.getSetpoint());
+        if (defaultTransitions[state.ordinal()] == null) {
+            defaultTransitions[state.ordinal()] = elevator.pidTo(state.getSetpoint());
+        }
+        return defaultTransitions[state.ordinal()];
     };
 
     public Elevator() {

@@ -4,6 +4,7 @@ public enum ArmStates {
 
     NEUTRAL(0, -0.05),
     HANDOFF(0, -0.5),
+    GROUND_INTAKE(90, -0.5),
     PRE_L1(-250, -0.05),
     L1(-270, 0.5),
     PRE_L2(-250, -0.05),
