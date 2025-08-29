@@ -12,6 +12,7 @@ import common.utility.shuffleboard.NAR_Shuffleboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.team3128.subsystems.Swerve;
+import frc.team3128.subsystems.Climber.Climber;
 
 
 /**
@@ -49,8 +50,9 @@ public class RobotContainer {
     }   
 
     private void configureButtonBindings() {
-        controller.getButton(XboxButton.kA).onTrue(Swerve.getInstance().identifyOffsetsCommand().ignoringDisable(true));
         controller.getUpPOVButton().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetGyro(0)));
+        controller.getButton(XboxButton.kX).onTrue(Climber.getInstance().winch.resetCommand());
+        controller.getButton(XboxButton.kA).onTrue(Climber.getInstance().winch.runCommand(-0.1)).onFalse(Climber.getInstance().winch.stopCommand());
     }
 
     public void initCameras() {
