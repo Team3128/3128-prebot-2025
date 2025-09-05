@@ -2,6 +2,7 @@ package frc.team3128.subsystems.Superstructure;
 
 import java.util.List;
 
+import edu.wpi.first.math.Pair;
 import frc.team3128.subsystems.Arm.ArmStates;
 import frc.team3128.subsystems.Elevator.ElevatorStates;
 import frc.team3128.subsystems.Intake.IntakeStates;
@@ -57,5 +58,14 @@ public enum SuperstructureStates {
 
     public static final List<SuperstructureStates> hazardStates = List.of(CORAL_GROUND, CORAL_LOLLIPOP, ALGAE_GROUND,
             ALGAE_LOLLIPOP);
+
+    public static final List<Pair<SuperstructureStates, SuperstructureStates>> coupledStates = List.of(
+        // Pair.of(RPL1, RSL1),
+        Pair.of(PRE_L1, L1),
+        Pair.of(PRE_L2, L2),
+        Pair.of(PRE_L3, L3),
+        Pair.of(PRE_L4, L4)
+    );
+
 
 }
