@@ -13,6 +13,10 @@ public enum ArmStates {
     L3(-270, 0.5),
     PRE_L4(-250, -0.05),
     L4(-270, 0.5),
+    PRE_L3_BACK(250, -0.05),
+    L3_BACK(270, 0.5),
+    PRE_L4_BACK(250, -0.05),
+    L4_BACK(270, 0.5),
     ALGAE_1(-270, -0.5),
     ALGAE_2(-270, -0.5),
     ALGAE_BARGE(-235, 0.5);

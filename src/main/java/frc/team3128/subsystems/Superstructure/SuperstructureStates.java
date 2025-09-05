@@ -24,11 +24,15 @@ public enum SuperstructureStates {
     PRE_L2(ArmStates.PRE_L2, ElevatorStates.L2, IntakeStates.NEUTRAL),
     PRE_L3(ArmStates.PRE_L3, ElevatorStates.L3, IntakeStates.NEUTRAL),
     PRE_L4(ArmStates.PRE_L4, ElevatorStates.L4, IntakeStates.NEUTRAL),
+    PRE_L3_BACK(ArmStates.PRE_L3_BACK, ElevatorStates.L3, IntakeStates.NEUTRAL),
+    PRE_L4_BACK(ArmStates.PRE_L4_BACK, ElevatorStates.L4, IntakeStates.NEUTRAL),
 
     L1(ArmStates.L1, ElevatorStates.L1, IntakeStates.NEUTRAL),
     L2(ArmStates.L2, ElevatorStates.L2, IntakeStates.NEUTRAL),
     L3(ArmStates.L3, ElevatorStates.L3, IntakeStates.NEUTRAL),
-    L4(ArmStates.L4, ElevatorStates.L4, IntakeStates.NEUTRAL);
+    L4(ArmStates.L4, ElevatorStates.L4, IntakeStates.NEUTRAL),
+    L3_BACK(ArmStates.L3_BACK, ElevatorStates.L3, IntakeStates.NEUTRAL),
+    L4_BACK(ArmStates.L4_BACK, ElevatorStates.L4, IntakeStates.NEUTRAL);
 
     private final ArmStates arm;
     private final ElevatorStates elevator;

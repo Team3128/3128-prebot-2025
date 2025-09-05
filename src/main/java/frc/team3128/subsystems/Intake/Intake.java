@@ -36,7 +36,7 @@ public class Intake extends FSMSubsystemBase<IntakeStates> {
         pivot = PivotMechanism.getInstance();
         roller = RollerMechanism.getInstance();
 
-        addMechanisms(roller);
+        addMechanisms(roller, pivot);
         registerTransitions();
     }
 
