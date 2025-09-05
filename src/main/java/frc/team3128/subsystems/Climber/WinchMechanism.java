@@ -14,7 +14,7 @@ public class WinchMechanism extends PositionSubsystemBase {
 
     private static WinchMechanism instance;
 
-    private static PIDFFConfig config = new PIDFFConfig(0.00001, 0, 0, 12, 0, 0, 0);
+    private static PIDFFConfig config = new PIDFFConfig(0.00001, 0, 0, 1.2, 0, 0, 0);
     protected static ControllerBase controller = new Controller(config, Controller.Type.POSITION);
 
     public static NAR_TalonFX leader = new NAR_TalonFX(WINCH_ID);
@@ -46,7 +46,7 @@ public class WinchMechanism extends PositionSubsystemBase {
 
     @Override
     protected void configController() {
-        controller.setInputRange(-360, 360);
+        controller.setInputRange(WINCH_POSITION_MIN, WINCH_POSITION_MAX);
         controller.configureFeedback(leader);
         controller.setTolerance(WINCH_TOLERANCE);
     }

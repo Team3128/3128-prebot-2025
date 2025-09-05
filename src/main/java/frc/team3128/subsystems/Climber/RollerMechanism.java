@@ -2,6 +2,7 @@ package frc.team3128.subsystems.Climber;
 
 import common.core.subsystems.VoltageSubsystemBase;
 import common.hardware.motorcontroller.NAR_Motor.MotorConfig;
+import common.utility.shuffleboard.NAR_Shuffleboard;
 import common.hardware.motorcontroller.NAR_CANSpark;
 import common.hardware.motorcontroller.NAR_CANSpark.ControllerType;
 
@@ -39,7 +40,7 @@ public class RollerMechanism extends VoltageSubsystemBase {
 
     @Override
     public void initShuffleboard() {
-
+        NAR_Shuffleboard.addData("RollerMechanism", "Current", () -> leader.getStallCurrent());
     }
 
 }

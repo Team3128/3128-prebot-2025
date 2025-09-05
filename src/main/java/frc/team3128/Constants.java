@@ -195,21 +195,21 @@ public class Constants {
         public static final int WINCH_ID = 30;
         public static final int ROLLER_ID = 31;
 
-        public static final double WINCH_GEAR_RATIO = 360.0 / 9.0; //9.0 / 360.0;
+        public static final double WINCH_GEAR_RATIO = 1; //9.0 / 360.0;
         public static final double WINCH_SAMPLE_PER_MINUTE = 60;
         public static final int WINCH_STATOR_CURRENT_LIMIT = 40;
-        public static final boolean WINCH_INVERT = false; // TODO
+        public static final boolean WINCH_INVERT = true;
         public static final Neutral WINCH_NEUTRAL_MODE = Neutral.BRAKE;
         public static final StatusFrames WINCH_STATUS_FRAME = StatusFrames.POSITION;
 
         public static final double WINCH_POSITION_MIN = 0;
-        public static final double WINCH_POSITION_MAX = 180;
-        public static final double WINCH_TOLERANCE = 1;
+        public static final double WINCH_POSITION_MAX = 75;
+        public static final double WINCH_TOLERANCE = 0.4;
 
         public static final double ROLLER_GEAR_RATIO = 1;
         public static final double ROLLER_SAMPLE_PER_MINUTE = 60;
         public static final int ROLLER_STATOR_CURRENT_LIMIT = 40;
-        public static final boolean ROLLER_INVERT = true;
+        public static final boolean ROLLER_INVERT = false;
         public static final Neutral ROLLER_NEUTRAL_MODE = Neutral.BRAKE;
         public static final StatusFrames ROLLER_STATUS_FRAME = StatusFrames.POSITION;
 
