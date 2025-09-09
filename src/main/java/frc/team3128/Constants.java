@@ -331,6 +331,8 @@ public class Constants {
         public static final Translation2d CENTER_FIELD = FIELD.div(2);
         public static final Translation2d ROBOT_RELATIVE_MANIPULATOR_OFFSET = new Translation2d(Units.inchesToMeters(29.0/2.0), Units.inchesToMeters(-6.25));
         public static final Translation2d ROBOT_RELATIVE_MANIPULATOR_OFFSET_BACKWARDS = new Translation2d(Units.inchesToMeters(29.0/2.0), Units.inchesToMeters(6.25));
+        public static final Translation2d MANIPULATOR_OFFSET = new Translation2d(0,Units.inchesToMeters(6.25)); //fix
+
         public static final Translation2d CORAL_STOP_DIST = new Translation2d(Units.inchesToMeters(4.5), 0);
         public static final Translation2d ALGAE_STOP_DIST = new Translation2d(0.01, Units.inchesToMeters(2));
         public static final Translation2d SOURCE_STOP_DIST = new Translation2d(0.05, 0);
@@ -365,6 +367,7 @@ public class Constants {
 
             private final int id;
             private final Pose2d pose;
+            private final Pose2d backPose;
             private boolean isRight;
 
             public static io.vavr.collection.List<Pose2d> reefLeft = io.vavr.collection.List.of(A.getPose2d(), C.getPose2d(), F.getPose2d(), H.getPose2d(), J.getPose2d(), K.getPose2d());
@@ -391,6 +394,11 @@ public class Constants {
                 Translation2d FIELD_RELATIVE_OFFSET = offset.rotateBy(aprilTagPose.getRotation());
                 Rotation2d rotation = facingTag ? aprilTagPose.getRotation().plus(Rotation2d.k180deg) : aprilTagPose.getRotation();
                 this.pose = new Pose2d(aprilTagPose.getTranslation().plus(FIELD_RELATIVE_MANIPULATOR_OFFSET).plus(FIELD_RELATIVE_OFFSET), rotation);
+
+                FIELD_RELATIVE_MANIPULATOR_OFFSET = (facingTag ? ROBOT_RELATIVE_MANIPULATOR_OFFSET : ROBOT_RELATIVE_MANIPULATOR_OFFSET_BACKWARDS).rotateBy(aprilTagPose.getRotation());
+                FIELD_RELATIVE_OFFSET = offset.rotateBy(aprilTagPose.getRotation());
+                rotation = facingTag ? aprilTagPose.getRotation().plus(Rotation2d.k180deg) : aprilTagPose.getRotation();
+                this.backPose = new Pose2d(aprilTagPose.getTranslation().plus(FIELD_RELATIVE_MANIPULATOR_OFFSET).plus(FIELD_RELATIVE_OFFSET), rotation);
             }
           
             private FieldStates(int id) {
@@ -400,10 +408,15 @@ public class Constants {
             private FieldStates(Pose2d pose) {
                 this.id = -1;
                 this.pose = pose;
+                this.backPose = pose;
             }
 
             public Pose2d getPose2d() {
                 return this.pose;
+            }
+
+            public Pose2d getBackPose2d() {
+                return this.backPose;
             }
 
             public Translation2d getTranslation2d() {

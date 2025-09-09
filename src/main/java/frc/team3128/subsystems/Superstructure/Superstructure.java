@@ -19,6 +19,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import frc.team3128.Constants.*;
 import frc.team3128.Constants.FieldConstants.FieldStates;
 import static frc.team3128.Constants.FieldConstants.*;
@@ -95,8 +97,18 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
     public Command alignScoreCoral(boolean isRight) {;
         final List<Pose2d> setpoints = isRight ? FieldStates.reefRight.asJava() : FieldStates.reefLeft.asJava();
         Supplier<Pose2d> pose = () -> {
-            Pose2d tmp = Swerve.getInstance().nearestPose2d(allianceFlip(setpoints));
-            return new Pose2d(tmp.getX(), tmp.getY(), tmp.getRotation().plus(Rotation2d.fromDegrees(Math.abs(swerve.getAngleTo(tmp.getRotation())) <= (Math.PI)/2 ? 0 : 180)));
+            Pose2d ogPose = Swerve.getInstance().nearestPose2d(allianceFlip(setpoints));
+
+            if (Math.abs(swerve.getAngleTo(ogPose.getRotation())) > (Math.PI)/2) {
+                Translation2d newTrans = ogPose.getTranslation().plus(MANIPULATOR_OFFSET.rotateBy(ogPose.getRotation()));
+                return new Pose2d(newTrans, ogPose.getRotation().plus(Rotation2d.k180deg));
+            } else {
+                return ogPose;
+            }
+            
+            // if (Math.abs(swerve.getAngleTo(tmp.getRotation())) <= (Math.PI)/2) {
+            //     return(X);
+            // }
     };
         return alignScoreCoral(pose, ()-> false, ()->true);
     }
