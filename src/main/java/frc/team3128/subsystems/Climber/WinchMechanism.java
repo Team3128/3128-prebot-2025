@@ -6,6 +6,7 @@ import common.core.controllers.PIDFFConfig;
 import common.core.subsystems.PositionSubsystemBase;
 import common.hardware.motorcontroller.NAR_TalonFX;
 import common.hardware.motorcontroller.NAR_Motor.MotorConfig;
+import common.utility.shuffleboard.NAR_Shuffleboard;
 
 import static frc.team3128.Constants.ClimberConstants.*;
 
@@ -13,10 +14,10 @@ public class WinchMechanism extends PositionSubsystemBase {
 
     private static WinchMechanism instance;
 
-    private static PIDFFConfig config = new PIDFFConfig(0.00001, 0, 0, 12, 0, 0, 0);
+    private static PIDFFConfig config = new PIDFFConfig(0.00001, 0, 0, 1.2, 0, 0, 0);
     protected static ControllerBase controller = new Controller(config, Controller.Type.POSITION);
 
-    protected static NAR_TalonFX leader = new NAR_TalonFX(WINCH_ID);
+    public static NAR_TalonFX leader = new NAR_TalonFX(WINCH_ID);
 
     private WinchMechanism() {
         super(controller, leader);
@@ -48,6 +49,11 @@ public class WinchMechanism extends PositionSubsystemBase {
         controller.setInputRange(WINCH_POSITION_MIN, WINCH_POSITION_MAX);
         controller.configureFeedback(leader);
         controller.setTolerance(WINCH_TOLERANCE);
+    }
+    @Override
+    public void initShuffleboard() {
+        super.initShuffleboard();
+        NAR_Shuffleboard.addData(getName(), "Position", () -> this.getPosition());
     }
 
 }

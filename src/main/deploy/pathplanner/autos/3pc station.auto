@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "barge2-j"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "j-station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "station-k"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "k-station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "station-l"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

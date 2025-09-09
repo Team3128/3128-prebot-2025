@@ -2,7 +2,9 @@ package frc.team3128.subsystems.Climber;
 
 import common.core.subsystems.VoltageSubsystemBase;
 import common.hardware.motorcontroller.NAR_Motor.MotorConfig;
-import common.hardware.motorcontroller.NAR_TalonFX;
+import common.utility.shuffleboard.NAR_Shuffleboard;
+import common.hardware.motorcontroller.NAR_CANSpark;
+import common.hardware.motorcontroller.NAR_CANSpark.ControllerType;
 
 import static frc.team3128.Constants.ClimberConstants.*;
 
@@ -10,7 +12,7 @@ public class RollerMechanism extends VoltageSubsystemBase {
 
     private static RollerMechanism instance;
 
-    protected static NAR_TalonFX leader = new NAR_TalonFX(ROLLER_ID);
+    public static NAR_CANSpark leader = new NAR_CANSpark(ROLLER_ID, ControllerType.CAN_SPARK_FLEX);
 
     private RollerMechanism() {
         super(leader);
@@ -38,7 +40,7 @@ public class RollerMechanism extends VoltageSubsystemBase {
 
     @Override
     public void initShuffleboard() {
-
+        NAR_Shuffleboard.addData("RollerMechanism", "Current", () -> leader.getStallCurrent());
     }
 
 }

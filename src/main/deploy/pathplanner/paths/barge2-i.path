@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 10.27457242012024,
+        "y": 1.861063350949969
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 11.27457242012024,
+        "y": 1.8610633509499692
+      },
+      "isLocked": false,
+      "linkedName": "barge2"
+    },
+    {
+      "anchor": {
+        "x": 12.170119571685792,
+        "y": 2.822567231314523
+      },
+      "prevControl": {
+        "x": 12.074582410897376,
+        "y": 2.5915420142742867
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "i"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 56.222416509640034
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}
