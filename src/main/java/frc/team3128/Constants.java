@@ -1,18 +1,33 @@
 package frc.team3128;
 
+import static frc.team3128.Constants.VisionConstants.APRIL_TAGS;
+
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import common.core.controllers.PIDFFConfig;
 import common.hardware.motorcontroller.NAR_Motor.MotorConfig;
 import common.hardware.motorcontroller.NAR_Motor.Neutral;
 import common.hardware.motorcontroller.NAR_Motor.StatusFrames;
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.team3128.Constants.DriveConstants;
+import frc.team3128.Constants.FieldConstants.FieldStates;
 public class Constants {
 
     public static class DriveConstants {
@@ -91,6 +106,30 @@ public class Constants {
  
         public static final Matrix<N3,N1> SVR_VISION_MEASUREMENT_STD = VecBuilder.fill(0.5,0.5,Units.degreesToRadians(5));
 
+         public static final List<AprilTag> APRIL_TAGS = Arrays.asList(
+            new AprilTag(1, new Pose3d(Units.inchesToMeters(657.37), Units.inchesToMeters(25.80), Units.inchesToMeters(58.50), new Rotation3d(0, Math.toRadians(0), Math.toRadians(126)))),
+            new AprilTag(2, new Pose3d(Units.inchesToMeters(657.37), Units.inchesToMeters(291.20), Units.inchesToMeters(58.50), new Rotation3d(0, Math.toRadians(0), Math.toRadians(234)))),
+            new AprilTag(3, new Pose3d(Units.inchesToMeters(455.15), Units.inchesToMeters(317.15), Units.inchesToMeters(51.25), new Rotation3d(0, Math.toRadians(0), Math.toRadians(270)))),
+            new AprilTag(4, new Pose3d(Units.inchesToMeters(365.20), Units.inchesToMeters(241.64), Units.inchesToMeters(73.54), new Rotation3d(0, Math.toRadians(30), Math.toRadians(0)))),
+            new AprilTag(5, new Pose3d(Units.inchesToMeters(265.20), Units.inchesToMeters(75.39), Units.inchesToMeters(73.54), new Rotation3d(0, Math.toRadians(30), Math.toRadians(0)))),
+            new AprilTag(6, new Pose3d(Units.inchesToMeters(530.49), Units.inchesToMeters(130.17), Units.inchesToMeters(12.13), new Rotation3d(0, Math.toRadians(0), Math.toRadians(300)))),
+            new AprilTag(7, new Pose3d(Units.inchesToMeters(546.87), Units.inchesToMeters(158.50), Units.inchesToMeters(12.13), new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)))),
+            new AprilTag(8, new Pose3d(Units.inchesToMeters(530.49), Units.inchesToMeters(186.83), Units.inchesToMeters(12.13), new Rotation3d(0, Math.toRadians(0), Math.toRadians(60)))),
+            new AprilTag(9, new Pose3d(Units.inchesToMeters(497.77), Units.inchesToMeters(186.83), Units.inchesToMeters(12.13), new Rotation3d(0, Math.toRadians(0), Math.toRadians(120)))),
+            new AprilTag(10, new Pose3d(Units.inchesToMeters(481.39), Units.inchesToMeters(158.50), Units.inchesToMeters(12.13), new Rotation3d(0, Math.toRadians(0), Math.toRadians(180)))),
+            new AprilTag(11, new Pose3d(Units.inchesToMeters(497.77), Units.inchesToMeters(130.17), Units.inchesToMeters(12.13), new Rotation3d(0, Math.toRadians(0), Math.toRadians(240)))),
+            new AprilTag(12, new Pose3d(Units.inchesToMeters(33.51), Units.inchesToMeters(25.80), Units.inchesToMeters(58.50), new Rotation3d(0, Math.toRadians(0), Math.toRadians(54)))),
+            new AprilTag(13, new Pose3d(Units.inchesToMeters(33.51), Units.inchesToMeters(291.20), Units.inchesToMeters(58.50), new Rotation3d(0, Math.toRadians(0), Math.toRadians(306)))),
+            new AprilTag(14, new Pose3d(Units.inchesToMeters(325.68), Units.inchesToMeters(241.64), Units.inchesToMeters(73.54), new Rotation3d(0, Math.toRadians(30), Math.toRadians(180)))),
+            new AprilTag(15, new Pose3d(Units.inchesToMeters(325.68), Units.inchesToMeters(75.39), Units.inchesToMeters(73.54), new Rotation3d(0, Math.toRadians(30), Math.toRadians(180)))),
+            new AprilTag(16, new Pose3d(Units.inchesToMeters(235.73), Units.inchesToMeters(-0.15), Units.inchesToMeters(51.25), new Rotation3d(0, Math.toRadians(0), Math.toRadians(90)))),
+            new AprilTag(17, new Pose3d(Units.inchesToMeters(160.39), Units.inchesToMeters(130.17), Units.inchesToMeters(12.13), new Rotation3d(0, Math.toRadians(0), Math.toRadians(240)))),
+            new AprilTag(18, new Pose3d(Units.inchesToMeters(144.00), Units.inchesToMeters(158.50), Units.inchesToMeters(12.13), new Rotation3d(0, Math.toRadians(0), Math.toRadians(180)))),
+            new AprilTag(19, new Pose3d(Units.inchesToMeters(160.39), Units.inchesToMeters(186.83), Units.inchesToMeters(12.13), new Rotation3d(0, Math.toRadians(0), Math.toRadians(120)))),
+            new AprilTag(20, new Pose3d(Units.inchesToMeters(193.10), Units.inchesToMeters(186.83), Units.inchesToMeters(12.13), new Rotation3d(0, Math.toRadians(0), Math.toRadians(60)))),
+            new AprilTag(21, new Pose3d(Units.inchesToMeters(209.49), Units.inchesToMeters(158.58), Units.inchesToMeters(12.13), new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)))),
+            new AprilTag(22, new Pose3d(Units.inchesToMeters(193.10), Units.inchesToMeters(130.17), Units.inchesToMeters(12.13), new Rotation3d(0, Math.toRadians(0), Math.toRadians(300))))
+        );
     }
     public static class SwerveConstants {
         /* Module Device IDs */
@@ -282,5 +321,215 @@ public class Constants {
         public static final Neutral ROLLER_NEUTRAL_MODE = Neutral.BRAKE;
         public static final StatusFrames ROLLER_STATUS_FRAME = StatusFrames.POSITION;
         
+    }
+
+    public static class FieldConstants{
+
+        public static final double FIELD_X_LENGTH = Units.inchesToMeters(690.875); // meters = 17.548
+        public static final double FIELD_Y_LENGTH = Units.inchesToMeters(317); // meters = 8.052
+        public static final Translation2d FIELD = new Translation2d(FIELD_X_LENGTH, FIELD_Y_LENGTH);
+        public static final Translation2d CENTER_FIELD = FIELD.div(2);
+        public static final Translation2d ROBOT_RELATIVE_MANIPULATOR_OFFSET = new Translation2d(Units.inchesToMeters(29.0/2.0), Units.inchesToMeters(-6.25));
+        public static final Translation2d ROBOT_RELATIVE_MANIPULATOR_OFFSET_BACKWARDS = new Translation2d(Units.inchesToMeters(29.0/2.0), Units.inchesToMeters(6.25));
+        public static final Translation2d MANIPULATOR_OFFSET = new Translation2d(0,Units.inchesToMeters(6.25)); //fix
+
+        public static final Translation2d CORAL_STOP_DIST = new Translation2d(Units.inchesToMeters(4.5), 0);
+        public static final Translation2d ALGAE_STOP_DIST = new Translation2d(0.01, Units.inchesToMeters(2));
+        public static final Translation2d SOURCE_STOP_DIST = new Translation2d(0.05, 0);
+
+        public static final Translation2d CORAL_LEFT_POLE_SHIFT = new Translation2d(0, Units.inchesToMeters(-13.0 / 2));
+        public static final Translation2d SOURCE_LEFT_SHIFT = new Translation2d(0, Units.inchesToMeters(-12.5));
+
+        public enum FieldStates {
+            A(18, CORAL_STOP_DIST.plus(CORAL_LEFT_POLE_SHIFT)),
+            B(18, CORAL_STOP_DIST.minus(CORAL_LEFT_POLE_SHIFT)),
+            C(17, CORAL_STOP_DIST.plus(CORAL_LEFT_POLE_SHIFT)),
+            D(17, CORAL_STOP_DIST.minus(CORAL_LEFT_POLE_SHIFT)),
+            E(22, CORAL_STOP_DIST.plus(CORAL_LEFT_POLE_SHIFT)),
+            F(22, CORAL_STOP_DIST.minus(CORAL_LEFT_POLE_SHIFT)),
+            G(21, CORAL_STOP_DIST.plus(CORAL_LEFT_POLE_SHIFT)),
+            H(21, CORAL_STOP_DIST.minus(CORAL_LEFT_POLE_SHIFT)),
+            I(20, CORAL_STOP_DIST.plus(CORAL_LEFT_POLE_SHIFT)),
+            J(20, CORAL_STOP_DIST.minus(CORAL_LEFT_POLE_SHIFT)),
+            K(19, CORAL_STOP_DIST.plus(CORAL_LEFT_POLE_SHIFT)),
+            L(19, CORAL_STOP_DIST.minus(CORAL_LEFT_POLE_SHIFT)),
+
+            ALGAE_AB(18, ALGAE_STOP_DIST),
+            ALGAE_CD(17, ALGAE_STOP_DIST),
+            ALGAE_EF(22, ALGAE_STOP_DIST),
+            ALGAE_GH(21, ALGAE_STOP_DIST),
+            ALGAE_IJ(20, ALGAE_STOP_DIST),
+            ALGAE_KL(19, ALGAE_STOP_DIST),
+            
+
+            SOURCE_LEFT(12, SOURCE_STOP_DIST.plus(SOURCE_LEFT_SHIFT), false),
+            SOURCE_RIGHT(13, SOURCE_STOP_DIST.minus(SOURCE_LEFT_SHIFT), false);
+
+            private final int id;
+            private final Pose2d pose;
+            private final Pose2d backPose;
+            private boolean isRight;
+
+            public static io.vavr.collection.List<Pose2d> reefLeft = io.vavr.collection.List.of(A.getPose2d(), C.getPose2d(), F.getPose2d(), H.getPose2d(), J.getPose2d(), K.getPose2d());
+            public static io.vavr.collection.List<Pose2d> reefRight = io.vavr.collection.List.of(B.getPose2d(), D.getPose2d(), E.getPose2d(), G.getPose2d(), I.getPose2d(), L.getPose2d());
+            
+            public static io.vavr.collection.List<Pose2d> algaePoses = io.vavr.collection.List.of(ALGAE_AB.getPose2d(), ALGAE_CD.getPose2d(), ALGAE_EF.getPose2d(), ALGAE_GH.getPose2d(), ALGAE_IJ.getPose2d(), ALGAE_KL.getPose2d());
+            public static io.vavr.collection.List<FieldStates> algae = io.vavr.collection.List.of(ALGAE_AB, ALGAE_CD, ALGAE_EF, ALGAE_GH, ALGAE_IJ, ALGAE_KL);
+
+            public static io.vavr.collection.List<Pose2d> reefPoses = io.vavr.collection.List.of(A.getPose2d(), B.getPose2d(), C.getPose2d(), D.getPose2d(), E.getPose2d(), F.getPose2d(), G.getPose2d(), H.getPose2d(), I.getPose2d(), J.getPose2d(), K.getPose2d(), L.getPose2d());
+            public static io.vavr.collection.List<Pose2d> sourcePoses = io.vavr.collection.List.of(SOURCE_LEFT.getPose2d(), SOURCE_RIGHT.getPose2d());
+
+            private FieldStates(int id, Translation2d offset) {
+                this(id, offset, true, new Translation2d(0,0));
+            }
+
+            private FieldStates(int id, Translation2d offset, boolean facingTag) {
+                this(id, offset, facingTag, new Translation2d(0,0));
+            }
+
+            private FieldStates(int id, Translation2d offset, boolean facingTag, Translation2d fudgeFactor) {
+                this.id = id;
+                final Pose2d aprilTagPose = APRIL_TAGS.get(id - 1).pose.toPose2d();
+                Translation2d FIELD_RELATIVE_MANIPULATOR_OFFSET = (facingTag ? ROBOT_RELATIVE_MANIPULATOR_OFFSET : ROBOT_RELATIVE_MANIPULATOR_OFFSET_BACKWARDS).rotateBy(aprilTagPose.getRotation());
+                Translation2d FIELD_RELATIVE_OFFSET = offset.rotateBy(aprilTagPose.getRotation());
+                Rotation2d rotation = facingTag ? aprilTagPose.getRotation().plus(Rotation2d.k180deg) : aprilTagPose.getRotation();
+                this.pose = new Pose2d(aprilTagPose.getTranslation().plus(FIELD_RELATIVE_MANIPULATOR_OFFSET).plus(FIELD_RELATIVE_OFFSET), rotation);
+
+                FIELD_RELATIVE_MANIPULATOR_OFFSET = (facingTag ? ROBOT_RELATIVE_MANIPULATOR_OFFSET : ROBOT_RELATIVE_MANIPULATOR_OFFSET_BACKWARDS).rotateBy(aprilTagPose.getRotation());
+                FIELD_RELATIVE_OFFSET = offset.rotateBy(aprilTagPose.getRotation());
+                rotation = facingTag ? aprilTagPose.getRotation().plus(Rotation2d.k180deg) : aprilTagPose.getRotation();
+                this.backPose = new Pose2d(aprilTagPose.getTranslation().plus(FIELD_RELATIVE_MANIPULATOR_OFFSET).plus(FIELD_RELATIVE_OFFSET), rotation);
+            }
+          
+            private FieldStates(int id) {
+                this(id, new Translation2d());
+            }
+
+            private FieldStates(Pose2d pose) {
+                this.id = -1;
+                this.pose = pose;
+                this.backPose = pose;
+            }
+
+            public Pose2d getPose2d() {
+                return this.pose;
+            }
+
+            public Pose2d getBackPose2d() {
+                return this.backPose;
+            }
+
+            public Translation2d getTranslation2d() {
+                return pose.getTranslation();
+            }
+
+            public Rotation2d getRotation2d() {
+                return pose.getRotation();
+            }
+
+            public boolean getIsRight(){
+                return this.isRight;
+            }
+
+            public int getId() {
+                return this.id;
+            }
+
+            public static int idOf(Pose2d pose) {
+                for(FieldStates state : FieldStates.values()) {
+                    if(pose.equals(state.getPose2d())) return state.getId();
+                }
+                return -1;
+            }
+        }
+
+
+        public static Pose2d allianceFlip(Pose2d pose) {
+            if (Robot.getAlliance() == Alliance.Red) {
+                return flip(pose);
+            }
+            return pose;
+        }
+
+        public static Pose2d allianceFlipRotationally(Pose2d pose) {
+            if (Robot.getAlliance() == Alliance.Red) {
+                return flipRotationally(pose);
+            }
+            return pose;
+        }
+
+        /**
+         * Flips a pose supplier rotationally
+         * @param pose
+         * @return
+         */
+        public static Supplier<Pose2d> allianceFlip(Supplier<Pose2d> pose) {
+            return ()-> allianceFlipRotationally(pose.get());
+        }
+
+        /**
+         * Flips a list of poses rotationally
+         * @param poses
+         * @return
+         */
+        public static List<Pose2d> allianceFlip(List<Pose2d> poses) {
+            return poses.stream().map(pose -> allianceFlipRotationally(pose)).collect(Collectors.toList());
+        }
+
+        public static Translation2d allianceFlip(Translation2d translation) {
+            if (Robot.getAlliance() == Alliance.Red) {
+                return flipTranslation(translation);
+            }
+            return translation;
+        }
+
+        public static Rotation2d allianceFlip(Rotation2d rotation) {
+            if (Robot.getAlliance() == Alliance.Red) {
+                return flipRotation(rotation);
+            }
+            return rotation;
+        }
+
+        public static Pose2d flip(Pose2d pose) {
+            return new Pose2d(flipTranslation(pose.getTranslation()), flipRotation(pose.getRotation()));
+        }
+
+        public static Pose2d flipRotationally(Pose2d pose) {
+            return new Pose2d(flipTranslationRotationally(pose.getTranslation()), Rotation2d.fromDegrees(pose.getRotation().getDegrees() + 180));
+        }
+
+        public static Translation2d flipTranslation(Translation2d translation) {
+            return new Translation2d (
+                FIELD_X_LENGTH - translation.getX(),
+                translation.getY()
+            );
+        }
+
+        public static Translation2d flipTranslationRotationally(Translation2d translation) {
+            return new Translation2d (
+                FIELD_X_LENGTH - translation.getX(),
+                FIELD_Y_LENGTH - translation.getY()
+            );
+        }
+
+        public static Rotation2d flipRotation(Rotation2d rotation) {
+            return Rotation2d.fromDegrees(MathUtil.inputModulus(180 - rotation.getDegrees(), -180, 180));
+        }
+
+        public static Rotation2d flipRotation(double rotation) {
+            return Rotation2d.fromDegrees(MathUtil.inputModulus(180 - rotation, -180, 180));
+        }
+
+        public static Translation2d adjustControllerInputs(double x, double y, boolean fieldRelative) {
+            return adjustControllerInputs(new Translation2d(x, y), fieldRelative);
+        }
+
+        public static Translation2d adjustControllerInputs(Translation2d translation, boolean fieldRelative) {
+            Rotation2d rotation = Rotation2d.fromDegrees(DriveConstants.controllerPOVOffset);
+            if(Robot.getAlliance() == Alliance.Red || !fieldRelative) {
+                rotation = Rotation2d.fromDegrees(DriveConstants.controllerPOVOffset * -1);
+            }
+            return translation.rotateBy(rotation);
+        }
     }
 }

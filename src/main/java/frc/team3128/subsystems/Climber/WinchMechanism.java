@@ -50,7 +50,6 @@ public class WinchMechanism extends PositionSubsystemBase {
         controller.configureFeedback(leader);
         controller.setTolerance(WINCH_TOLERANCE);
     }
-
     @Override
     public void initShuffleboard() {
         super.initShuffleboard();

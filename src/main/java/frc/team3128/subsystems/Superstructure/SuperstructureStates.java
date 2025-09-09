@@ -1,0 +1,71 @@
+package frc.team3128.subsystems.Superstructure;
+
+import java.util.List;
+
+import edu.wpi.first.math.Pair;
+import frc.team3128.subsystems.Arm.ArmStates;
+import frc.team3128.subsystems.Elevator.ElevatorStates;
+import frc.team3128.subsystems.Intake.IntakeStates;
+
+public enum SuperstructureStates {
+
+    NEUTRAL(ArmStates.NEUTRAL, ElevatorStates.NEUTRAL, IntakeStates.NEUTRAL),
+
+    CORAL_GROUND(ArmStates.NEUTRAL, ElevatorStates.NEUTRAL, IntakeStates.INTAKE),
+    CORAL_LOLLIPOP(ArmStates.GROUND_INTAKE, ElevatorStates.CORAL_LOLLIPOP, IntakeStates.NEUTRAL),
+    ALGAE_GROUND(ArmStates.GROUND_INTAKE, ElevatorStates.ALGAE_GROUND, IntakeStates.NEUTRAL),
+    ALGAE_LOLLIPOP(ArmStates.GROUND_INTAKE, ElevatorStates.ALGAE_LOLLIPOP, IntakeStates.NEUTRAL),
+    HANDOFF(ArmStates.HANDOFF, ElevatorStates.NEUTRAL, IntakeStates.HANDOFF),
+
+    ALGAE_1(ArmStates.ALGAE_1, ElevatorStates.ALGAE_1, IntakeStates.NEUTRAL),
+    ALGAE_2(ArmStates.ALGAE_2, ElevatorStates.ALGAE_2, IntakeStates.NEUTRAL),
+    ALGAE_BARGE(ArmStates.ALGAE_BARGE, ElevatorStates.ALGAE_BARGE, IntakeStates.NEUTRAL),
+
+    PRE_L1(ArmStates.PRE_L1, ElevatorStates.L1, IntakeStates.NEUTRAL),
+    PRE_L2(ArmStates.PRE_L2, ElevatorStates.L2, IntakeStates.NEUTRAL),
+    PRE_L3(ArmStates.PRE_L3, ElevatorStates.L3, IntakeStates.NEUTRAL),
+    PRE_L4(ArmStates.PRE_L4, ElevatorStates.L4, IntakeStates.NEUTRAL),
+
+    L1(ArmStates.L1, ElevatorStates.L1, IntakeStates.NEUTRAL),
+    L2(ArmStates.L2, ElevatorStates.L2, IntakeStates.NEUTRAL),
+    L3(ArmStates.L3, ElevatorStates.L3, IntakeStates.NEUTRAL),
+    L4(ArmStates.L4, ElevatorStates.L4, IntakeStates.NEUTRAL);
+
+    private final ArmStates arm;
+    private final ElevatorStates elevator;
+    private final IntakeStates intake;
+
+    SuperstructureStates(ArmStates arm, ElevatorStates elevator, IntakeStates intake) {
+        this.arm = arm;
+        this.elevator = elevator;
+        this.intake = intake;
+    }
+
+    public ArmStates getArm() {
+        return arm;
+    }
+
+    public ElevatorStates getElevator() {
+        return elevator;
+    }
+
+    public IntakeStates getIntake() {
+        return intake;
+    }
+
+    public static final List<SuperstructureStates> safeStates = List.of(NEUTRAL, CORAL_GROUND, HANDOFF, ALGAE_1,
+            ALGAE_2, ALGAE_BARGE, PRE_L1, PRE_L2, PRE_L3, PRE_L4, L1, L2, L3, L4);
+
+    public static final List<SuperstructureStates> hazardStates = List.of(CORAL_GROUND, CORAL_LOLLIPOP, ALGAE_GROUND,
+            ALGAE_LOLLIPOP);
+
+    public static final List<Pair<SuperstructureStates, SuperstructureStates>> coupledStates = List.of(
+        // Pair.of(RPL1, RSL1),
+        Pair.of(PRE_L1, L1),
+        Pair.of(PRE_L2, L2),
+        Pair.of(PRE_L3, L3),
+        Pair.of(PRE_L4, L4)
+    );
+
+
+}
