@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "topmid-e"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "e-stationtop"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "stationtop-d"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "d-stationtop"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "stationtop-c"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
