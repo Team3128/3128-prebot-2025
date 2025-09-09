@@ -4,10 +4,11 @@ package frc.team3128;
 import common.hardware.input.NAR_XboxController;
 import common.hardware.motorcontroller.NAR_CANSpark;
 import common.hardware.motorcontroller.NAR_TalonFX;
-
+import frc.team3128.subsystems.Swerve;
 import static common.hardware.input.NAR_XboxController.XboxButton.*;
 import common.utility.narwhaldashboard.NarwhalDashboard;
 import common.utility.shuffleboard.NAR_Shuffleboard;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 
 /**
@@ -21,6 +22,7 @@ public class RobotContainer {
 
     // Create all subsystems
     
+    public static Swerve swerve = Swerve.getInstance();
 
     public static NAR_XboxController controller, controller2;
 
@@ -42,7 +44,7 @@ public class RobotContainer {
     }   
 
     private void configureButtonBindings() {
-
+        controller.getButton(kLeftTrigger).whileTrue(swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
     }
 
     public void initCameras() {

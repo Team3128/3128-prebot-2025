@@ -11,6 +11,8 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import common.core.controllers.Controller;
 import common.core.controllers.PIDFFConfig;
 import common.core.swerve.SwerveBase;
+
+import static edu.wpi.first.units.Units.Volts;
 import common.core.swerve.SwerveConversions;
 import common.core.swerve.SwerveModule;
 import common.core.swerve.SwerveModuleConfig;
@@ -28,21 +30,26 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.VoltageUnit;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
 import static frc.team3128.Constants.SwerveConstants.*;
 import static frc.team3128.Constants.VisionConstants.*;
+import static edu.wpi.first.units.Units.Second;
 import static frc.team3128.Constants.DriveConstants.*;
 import frc.team3128.Constants.DriveConstants;
 import frc.team3128.Robot;
 
 public class Swerve extends SwerveBase {
-
+    
     private static Swerve instance;
 
     private Pigeon2 gyro;
@@ -398,4 +405,23 @@ public class Swerve extends SwerveBase {
         }
         return translation.rotateBy(rotation);
     }
+     
+    public SysIdRoutine driveRoutine = new SysIdRoutine (
+        new SysIdRoutine.Config(Volts.of(0.2).per(Second), Volts.of(0.1), null),
+        new SysIdRoutine.Mechanism(this::setDriveVoltage, null, this)
+    );
+
+    public void setDriveVoltage(Voltage volts) {
+        for (final SwerveModule module : modules) {
+            module.getDriveMotor().setVolts(volts.in(Volts));
+        }
+    }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return driveRoutine.quasistatic(direction);
+      }
+      
+      public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return driveRoutine.dynamic(direction);
+      }
 }
