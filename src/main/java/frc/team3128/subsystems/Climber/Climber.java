@@ -23,9 +23,10 @@ public class Climber extends FSMSubsystemBase<ClimberStates> {
     private Function<ClimberStates, Command> defaultTransitioner = state -> {
         if (defaultTransitions[state.ordinal()] == null) {
             defaultTransitions[state.ordinal()] = sequence(
-                roller.runCommand(state.getRollerPower()),
+                roller.stopCommand(),
                 runOnce(() -> WinchMechanism.controller.getConfig().kS = () -> 12 * state.getWinchPower()),
-                winch.pidTo(state.getAngle())
+                winch.pidTo(state.getAngle()),
+                roller.runCommand(state.getRollerPower())
             );
         }
         return defaultTransitions[state.ordinal()];
