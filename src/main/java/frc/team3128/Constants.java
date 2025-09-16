@@ -281,6 +281,13 @@ public class Constants {
         public static final boolean ROLLER_INVERT = true;
         public static final Neutral ROLLER_NEUTRAL_MODE = Neutral.BRAKE;
         public static final StatusFrames ROLLER_STATUS_FRAME = StatusFrames.POSITION;
+        public static final String CAM_OBD = ""; // change this based on the object 
+        
+        public static final double X_OFFSET = 0;
+        public static final double Y_OFFSET = 0;
+        public static final double YAW_OFFSET = 0;
+        public static final double PITCH_OFFSET = 0;
+        public static final double ROLL_OFFSET = 0;
         
     }
 }

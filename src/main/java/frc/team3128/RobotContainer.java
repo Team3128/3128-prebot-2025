@@ -7,6 +7,7 @@ import common.hardware.motorcontroller.NAR_CANSpark;
 import common.hardware.motorcontroller.NAR_TalonFX;
 import common.hardware.limelight.Limelight;
 import common.hardware.limelight.LimelightKey;
+import common.hardware.camera.Camera;
 
 import static common.hardware.input.NAR_XboxController.XboxButton.*;
 import common.utility.narwhaldashboard.NarwhalDashboard;
@@ -33,6 +34,7 @@ public class RobotContainer {
     private NarwhalDashboard dashboard;
 
     public static Limelight limelight;
+    public static Camera camera;
 
     public RobotContainer() {
         NAR_CANSpark.maximumRetries = 2;
