@@ -7,11 +7,18 @@ import common.hardware.motorcontroller.NAR_CANSpark;
 import common.hardware.motorcontroller.NAR_TalonFX;
 
 import static common.hardware.input.NAR_XboxController.XboxButton.*;
+
+import com.ctre.phoenix6.configs.FeedbackConfigs;
+
 import common.utility.narwhaldashboard.NarwhalDashboard;
 import common.utility.shuffleboard.NAR_Shuffleboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.team3128.subsystems.Swerve;
+import frc.team3128.subsystems.Arm.*;
+import frc.team3128.subsystems.Elevator.*;
+import frc.team3128.subsystems.Intake.*;
 
 
 /**
@@ -49,8 +56,19 @@ public class RobotContainer {
     }   
 
     private void configureButtonBindings() {
-        controller.getButton(XboxButton.kA).onTrue(Swerve.getInstance().identifyOffsetsCommand().ignoringDisable(true));
+        // controller.getButton(kA).onTrue(Swerve.getInstance().identifyOffsetsCommand().ignoringDisable(true));
         controller.getUpPOVButton().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetGyro(0)));
+
+        controller.getButton(kA).onTrue((Arm.getInstance().pivot.runCommand(0.1)));
+        controller.getButton(kB).onTrue((Arm.getInstance().roller.runCommand(0.1)));
+        controller.getButton(kX).onTrue((Elevator.getInstance().elevator.runCommand(0.1)));
+        controller.getButton(kY).onTrue((Intake.getInstance().pivot.runCommand(0.1)));
+        controller.getButton(kBack).onTrue((Intake.getInstance().roller.runCommand(0.1)));
+
+        controller.getButton(kLeftBumper).whileTrue(Arm.getInstance().pivot.sysIdDynamic(Direction.kForward));
+        controller.getButton(kLeftTrigger).whileTrue(Arm.getInstance().pivot.sysIdDynamic(Direction.kReverse));
+        controller.getButton(kRightBumper).whileTrue(Arm.getInstance().pivot.sysIdQuasistatic(Direction.kForward));
+        controller.getButton(kRightTrigger).whileTrue(Arm.getInstance().pivot.sysIdQuasistatic(Direction.kReverse));
     }
 
     public void initCameras() {

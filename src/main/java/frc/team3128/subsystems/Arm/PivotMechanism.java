@@ -4,8 +4,18 @@ import common.core.controllers.Controller;
 import common.core.controllers.PIDFFConfig;
 import common.core.subsystems.PositionSubsystemBase;
 import common.hardware.motorcontroller.NAR_TalonFX;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import common.hardware.motorcontroller.NAR_Motor.MotorConfig;
 import static frc.team3128.Constants.ArmConstants.*;
+
+import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
+
+import static edu.wpi.first.units.Units.*;
 
 public class PivotMechanism extends PositionSubsystemBase {
 
@@ -20,6 +30,8 @@ public class PivotMechanism extends PositionSubsystemBase {
     private PivotMechanism() {
         super(controller, leader);
         initShuffleboard();
+
+        leader.setUnitConversionFactor(PIVOT_GEAR_RATIO);
     }
 
     public static PivotMechanism getInstance() {
@@ -49,4 +61,23 @@ public class PivotMechanism extends PositionSubsystemBase {
        controller.setTolerance(PIVOT_TOLERANCE);
     }   
 
+    public SysIdRoutine driveRoutine = new SysIdRoutine(
+        new SysIdRoutine.Config(Volts.of(1).per(Second), Volts.of(7), null),
+        new SysIdRoutine.Mechanism((v) -> runVolts(v.in(Volts)), this::logMotors, this)
+    );
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return driveRoutine.quasistatic(direction);
+    }
+      
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return driveRoutine.dynamic(direction);
+    }
+    
+    public void logMotors(SysIdRoutineLog log){
+        log.motor("position").angularPosition(Rotations.of(leader.getPosition()));
+        log.motor("velocity").angularVelocity(RotationsPerSecond.of(leader.getVelocity() / 60.0));
+        log.motor("voltage").voltage(Volts.of(12 * leader.getAppliedOutput()));
+    }
+    
 }

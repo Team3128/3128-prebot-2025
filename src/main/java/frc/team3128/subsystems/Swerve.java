@@ -29,17 +29,23 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
 import static frc.team3128.Constants.SwerveConstants.*;
 import static frc.team3128.Constants.VisionConstants.*;
 import static frc.team3128.Constants.DriveConstants.*;
 import frc.team3128.Constants.DriveConstants;
 import frc.team3128.Robot;
+
+import static edu.wpi.first.units.Units.*;
 
 public class Swerve extends SwerveBase {
 
@@ -397,5 +403,32 @@ public class Swerve extends SwerveBase {
             rotation = Rotation2d.fromDegrees(DriveConstants.controllerPOVOffset * -1);
         }
         return translation.rotateBy(rotation);
+    }
+
+    public SysIdRoutine driveRoutine = new SysIdRoutine (
+        new SysIdRoutine.Config(Volts.of(0.2).per(Second), Volts.of(0.1), null),
+        new SysIdRoutine.Mechanism(this::setDriveVoltage, null, this)
+    );
+
+    public void setDriveVoltage(Voltage volts) {
+        for (final SwerveModule module : modules) {
+            module.getDriveMotor().setVolts(volts.in(Volts));
+        }
+    }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return driveRoutine.quasistatic(direction);
+      }
+      
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return driveRoutine.dynamic(direction);
+    }
+
+    public void logMotors(SysIdRoutineLog log){
+        for (final SwerveModule module : modules) {
+            log.motor("position").linearPosition(Meters.of(module.getDriveMotor().getPosition()));
+            log.motor("velocity").linearVelocity(MetersPerSecond.of(module.getDriveMotor().getVelocity() / 60.0));
+            log.motor("voltage").voltage(Volts.of(12 * module.getDriveMotor().getAppliedOutput()));
+        }
     }
 }
