@@ -64,6 +64,6 @@ public class Arm extends FSMSubsystemBase<ArmStates> {
             pivot.pidTo(findPhotonPivotAngle(cam.getYaw()), 
             waitUntil(() -> pivot.atSetpoint()),
             roller.runCommand(HANDOFF.getPower())
-        ));
+        )));
 	}
 } 
