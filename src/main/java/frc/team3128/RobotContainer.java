@@ -12,6 +12,8 @@ import com.ctre.phoenix6.configs.FeedbackConfigs;
 
 import common.utility.narwhaldashboard.NarwhalDashboard;
 import common.utility.shuffleboard.NAR_Shuffleboard;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -59,16 +61,17 @@ public class RobotContainer {
         // controller.getButton(kA).onTrue(Swerve.getInstance().identifyOffsetsCommand().ignoringDisable(true));
         controller.getUpPOVButton().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetGyro(0)));
 
-        controller.getButton(kA).onTrue((Arm.getInstance().pivot.runCommand(0.1)));
+        controller.getButton(kA).whileTrue(Commands.runOnce(()->Swerve.getInstance().drive(new Translation2d(1,0), 0)));
+        controller.getButton(kA).whileTrue(Commands.runOnce(()->Swerve.getInstance().drive(new Translation2d(0,0), 1)));
         controller.getButton(kB).onTrue((Arm.getInstance().roller.runCommand(0.1)));
         controller.getButton(kX).onTrue((Elevator.getInstance().elevator.runCommand(0.1)));
         controller.getButton(kY).onTrue((Intake.getInstance().pivot.runCommand(0.1)));
         controller.getButton(kBack).onTrue((Intake.getInstance().roller.runCommand(0.1)));
 
-        controller.getButton(kLeftBumper).whileTrue(Arm.getInstance().pivot.sysIdDynamic(Direction.kForward));
-        controller.getButton(kLeftTrigger).whileTrue(Arm.getInstance().pivot.sysIdDynamic(Direction.kReverse));
-        controller.getButton(kRightBumper).whileTrue(Arm.getInstance().pivot.sysIdQuasistatic(Direction.kForward));
-        controller.getButton(kRightTrigger).whileTrue(Arm.getInstance().pivot.sysIdQuasistatic(Direction.kReverse));
+        controller.getButton(kLeftBumper).whileTrue(Swerve.getInstance().sysIdDynamic(Direction.kForward).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
+        controller.getButton(kLeftTrigger).whileTrue(Swerve.getInstance().sysIdDynamic(Direction.kReverse).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
+        controller.getButton(kRightBumper).whileTrue(Swerve.getInstance().sysIdQuasistatic(Direction.kForward).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
+        controller.getButton(kRightTrigger).whileTrue(Swerve.getInstance().sysIdQuasistatic(Direction.kReverse).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
     }
 
     public void initCameras() {
