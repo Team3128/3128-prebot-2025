@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.team3128.Constants.FieldConstants.FieldStates;
 import frc.team3128.autonomous.AutoPrograms;
 import frc.team3128.subsystems.Swerve;
 // import frc.team3128.autonomous.AutoPrograms;
@@ -119,6 +120,7 @@ public class Robot extends NAR_Robot {
 
     @Override
     public void simulationInit() {
+        System.out.println(FieldStates.L.getPose2d().toString());
     }
 
     @Override
@@ -134,7 +136,6 @@ public class Robot extends NAR_Robot {
 
     // @Override
     // public void simulationInit() {
-        
     // }
 
     // @Override

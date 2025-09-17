@@ -158,7 +158,7 @@ public class Constants {
 
 
 
-        public static final double RAMP_TIME = 3;
+        public static final double RAMP_TIME = 3;  
 
         /* Drivetrain Constants */
         public static final double ROBOT_MASS = 62; //kg
@@ -172,7 +172,7 @@ public class Constants {
         public static final double ROBOT_MOI = ROBOT_MASS * (DRIVE_TRACK_WIDTH / 2) * 0.44965 / 0.4443; //kg m^2 mass * (trackWidth / 2) * (Ka angular / Ka linear)
 
         public static final double closedLoopRamp = 0.0;
-
+                          
         public static final double DRIVE_MOTOR_GEAR_RATIO = 6.75;
         public static final double DRIVE_ANGLE_GEAR_RATIO = (150.0 / 7.0); // 300.0 / 13.0
 
@@ -329,9 +329,9 @@ public class Constants {
         public static final double FIELD_Y_LENGTH = Units.inchesToMeters(317); // meters = 8.052
         public static final Translation2d FIELD = new Translation2d(FIELD_X_LENGTH, FIELD_Y_LENGTH);
         public static final Translation2d CENTER_FIELD = FIELD.div(2);
-        public static final Translation2d ROBOT_RELATIVE_MANIPULATOR_OFFSET = new Translation2d(Units.inchesToMeters(29.0/2.0), Units.inchesToMeters(-6.25));
-        public static final Translation2d ROBOT_RELATIVE_MANIPULATOR_OFFSET_BACKWARDS = new Translation2d(Units.inchesToMeters(29.0/2.0), Units.inchesToMeters(6.25));
-        public static final Translation2d MANIPULATOR_OFFSET = new Translation2d(0,Units.inchesToMeters(6.25)); //fix
+        public static final Translation2d ROBOT_RELATIVE_MANIPULATOR_OFFSET = new Translation2d(Units.inchesToMeters(29.0/2.0), Units.inchesToMeters(8));
+        public static final Translation2d ROBOT_RELATIVE_MANIPULATOR_OFFSET_BACKWARDS = new Translation2d(Units.inchesToMeters(29.0/2.0), Units.inchesToMeters(-8));
+        public static final Translation2d MANIPULATOR_OFFSET = new Translation2d(0,Units.inchesToMeters(-8)); //fix
 
         public static final Translation2d CORAL_STOP_DIST = new Translation2d(Units.inchesToMeters(4.5), 0);
         public static final Translation2d ALGAE_STOP_DIST = new Translation2d(0.01, Units.inchesToMeters(2));
