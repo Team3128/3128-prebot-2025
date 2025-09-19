@@ -4,7 +4,9 @@ import common.core.controllers.Controller;
 import common.core.controllers.PIDFFConfig;
 import common.core.subsystems.PositionSubsystemBase;
 import common.hardware.motorcontroller.NAR_Motor.MotorConfig;
+import common.hardware.motorcontroller.NAR_CANSpark;
 import common.hardware.motorcontroller.NAR_TalonFX;
+import common.hardware.motorcontroller.NAR_CANSpark.ControllerType;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -20,7 +22,7 @@ public class ElevatorMechanism extends PositionSubsystemBase {
     private static PIDFFConfig config = new PIDFFConfig(20, 0, 0, 0.6, 2.91916, 0.67429, 0.3);
     protected static Controller controller = new Controller(config, Controller.Type.POSITION);
 
-    protected static NAR_TalonFX left = new NAR_TalonFX(LEFT_ID), right = new NAR_TalonFX(RIGHT_ID);
+    protected static NAR_CANSpark left = new NAR_CANSpark(BOTTOM_ID, ControllerType.CAN_SPARK_FLEX), right = new NAR_CANSpark(TOP_ID,ControllerType.CAN_SPARK_FLEX);
 
     private ElevatorMechanism() {
         super(controller, left, right);
@@ -55,7 +57,7 @@ public class ElevatorMechanism extends PositionSubsystemBase {
        controller.configureFeedback(left);
        controller.setTolerance(TOLERANCE);
     }
-        public SysIdRoutine driveRoutine = new SysIdRoutine(
+    public SysIdRoutine driveRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(Volts.of(1).per(Second), Volts.of(7), null),
         new SysIdRoutine.Mechanism((v) -> runVolts(v.in(Volts)), this::logMotors, this)
     );

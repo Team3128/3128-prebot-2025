@@ -217,14 +217,14 @@ public class Constants {
 
     public static class ElevatorConstants {
 
-        public static final int LEFT_ID = 40;
-        public static final int RIGHT_ID = 41;
+        public static final int BOTTOM_ID = 40;
+        public static final int TOP_ID = 41;
 
         public static final double GEAR_RATIO = Units.inchesToMeters(60.4375) / 40.18735;
         public static final double SAMPLE_PER_MINUTE = 60;
         public static final int STATOR_CURRENT_LIMIT = 60;
         public static final boolean INVERT = false;
-        public static final Neutral NEUTRAL_MODE = Neutral.COAST;
+        public static final Neutral NEUTRAL_MODE = Neutral.BRAKE;
         public static final StatusFrames STATUS_FRAME = StatusFrames.POSITION;
 
         public static final double POSITION_MIN = 0;
@@ -265,7 +265,7 @@ public class Constants {
         public static final double PIVOT_GEAR_RATIO = 90/11.785769;
         public static final double PIVOT_SAMPLE_PER_MINUTE = 60;
         public static final int PIVOT_STATOR_CURRENT_LIMIT = 40;
-        public static final boolean PIVOT_INVERT = true;
+        public static final boolean PIVOT_INVERT = false;
         public static final Neutral PIVOT_NEUTRAL_MODE = Neutral.BRAKE;
         public static final StatusFrames PIVOT_STATUS_FRAME = StatusFrames.POSITION;
 
@@ -278,7 +278,7 @@ public class Constants {
         public static final double ROLLER_GEAR_RATIO = 1;
         public static final double ROLLER_SAMPLE_PER_MINUTE = 60;
         public static final int ROLLER_STATOR_CURRENT_LIMIT = 40;
-        public static final boolean ROLLER_INVERT = true;
+        public static final boolean ROLLER_INVERT = false;
         public static final Neutral ROLLER_NEUTRAL_MODE = Neutral.BRAKE;
         public static final StatusFrames ROLLER_STATUS_FRAME = StatusFrames.POSITION;
         
