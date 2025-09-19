@@ -1,0 +1,22 @@
+{
+  "name": "FRC WPILib 2025 (Codespaces)",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "ms-vscode.cpptools",
+        "wpilibsuite.vscode-wpilib"
+      ]
+    }
+  },
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y unzip build-essential && ./gradlew --version || true",
+  "remoteUser": "vscode"
+}
