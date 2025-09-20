@@ -4,10 +4,15 @@ import common.core.controllers.Controller;
 import common.core.controllers.PIDFFConfig;
 import common.core.subsystems.PositionSubsystemBase;
 import common.hardware.motorcontroller.NAR_TalonFX;
+import edu.wpi.first.units.measure.MutAngle;
+import edu.wpi.first.units.measure.MutAngularVelocity;
+import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import common.hardware.motorcontroller.NAR_Motor.MotorConfig;
+import common.utility.shuffleboard.NAR_Shuffleboard;
+
 import static frc.team3128.Constants.ArmConstants.*;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
@@ -29,9 +34,10 @@ public class PivotMechanism extends PositionSubsystemBase {
 
     private PivotMechanism() {
         super(controller, leader);
+        leader.setUnitConversionFactor(PIVOT_GEAR_RATIO);
+        leader.setTimeConversionFactor(60);
         initShuffleboard();
 
-        leader.setUnitConversionFactor(PIVOT_GEAR_RATIO);
     }
 
     public static PivotMechanism getInstance() {
@@ -61,8 +67,15 @@ public class PivotMechanism extends PositionSubsystemBase {
        controller.setTolerance(PIVOT_TOLERANCE);
     }   
 
+    @Override
+    public void initShuffleboard() {
+        super.initShuffleboard();
+        NAR_Shuffleboard.addData(getName(), "Position", () -> Degrees.of(leader.getPosition()).toShortString(), 2, 5);
+        NAR_Shuffleboard.addData(getName(), "Velocity", () -> DegreesPerSecond.of(leader.getVelocity()).toShortString(), 1, 5);
+    }
+
     public SysIdRoutine driveRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(Volts.of(1).per(Second), Volts.of(7), null),
+        new SysIdRoutine.Config(Volts.of(0.3).per(Second), Volts.of(4), null),
         new SysIdRoutine.Mechanism((v) -> runVolts(v.in(Volts)), this::logMotors, this)
     );
 
@@ -74,10 +87,17 @@ public class PivotMechanism extends PositionSubsystemBase {
         return driveRoutine.dynamic(direction);
     }
     
+    private final MutVoltage appliedVoltage = Volts.mutable(0);
+    private final MutAngle angle = Degrees.mutable(0);
+    private final MutAngularVelocity velocity = DegreesPerSecond.mutable(0);
     public void logMotors(SysIdRoutineLog log){
-        log.motor("position").angularPosition(Rotations.of(leader.getPosition()));
-        log.motor("velocity").angularVelocity(RotationsPerSecond.of(leader.getVelocity() / 60.0));
-        log.motor("voltage").voltage(Volts.of(12 * leader.getAppliedOutput()));
+        // log.motor("position").angularPosition(Degrees.of(leader.getPosition()));
+        // log.motor("velocity").angularVelocity(DegreesPerSecond.of(leader.getVelocity()));
+        // log.motor("voltage").voltage(Volts.of(12 * leader.getAppliedOutput()));
+        
+        log.motor("position").angularPosition(angle.mut_replace(leader.getPosition(), Degrees));
+        log.motor("velocity").angularVelocity(velocity.mut_replace(leader.getVelocity(), DegreesPerSecond));
+        log.motor("voltage").voltage(appliedVoltage.mut_replace(leader.getAppliedOutput()*12, Volts));
     }
     
 }

@@ -1,0 +1,9 @@
+{
+  "download": {
+    "localDir": "C:\\SysIdLogs",
+    "serverTeam": "10.31.28.2"
+  },
+  "output": {
+    "outputFolder": "C:\\SysIdLogs"
+  }
+}

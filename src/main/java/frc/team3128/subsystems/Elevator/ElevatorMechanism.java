@@ -4,6 +4,7 @@ import common.core.controllers.Controller;
 import common.core.controllers.PIDFFConfig;
 import common.core.subsystems.PositionSubsystemBase;
 import common.hardware.motorcontroller.NAR_Motor.MotorConfig;
+import common.utility.shuffleboard.NAR_Shuffleboard;
 import common.hardware.motorcontroller.NAR_CANSpark;
 import common.hardware.motorcontroller.NAR_TalonFX;
 import common.hardware.motorcontroller.NAR_CANSpark.ControllerType;
@@ -52,13 +53,19 @@ public class ElevatorMechanism extends PositionSubsystemBase {
     }
 
     @Override
+    public void initShuffleboard() {
+        super.initShuffleboard();
+        NAR_Shuffleboard.addData(getName(), "Position", () -> left.getPosition());
+    }
+
+    @Override
     protected void configController() {
        controller.setInputRange(POSITION_MIN, POSITION_MAX);
        controller.configureFeedback(left);
        controller.setTolerance(TOLERANCE);
     }
     public SysIdRoutine driveRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(Volts.of(1).per(Second), Volts.of(7), null),
+        new SysIdRoutine.Config(Volts.of(0.1).per(Second), Volts.of(2), null),
         new SysIdRoutine.Mechanism((v) -> runVolts(v.in(Volts)), this::logMotors, this)
     );
 

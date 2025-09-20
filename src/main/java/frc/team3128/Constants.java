@@ -220,7 +220,7 @@ public class Constants {
         public static final int BOTTOM_ID = 40;
         public static final int TOP_ID = 41;
 
-        public static final double GEAR_RATIO = Units.inchesToMeters(60.4375) / 40.18735;
+        public static final double GEAR_RATIO = 1;//Units.inchesToMeters(60.4375) / 40.18735;
         public static final double SAMPLE_PER_MINUTE = 60;
         public static final int STATOR_CURRENT_LIMIT = 60;
         public static final boolean INVERT = false;
@@ -262,15 +262,15 @@ public class Constants {
     
         public static final int PIVOT_ID = 20;
 
-        public static final double PIVOT_GEAR_RATIO = 90/11.785769;
+        public static final double PIVOT_GEAR_RATIO = 360 * (0.2 * 1.0 / 3.0 * 14.0 / 68.0);
         public static final double PIVOT_SAMPLE_PER_MINUTE = 60;
         public static final int PIVOT_STATOR_CURRENT_LIMIT = 40;
         public static final boolean PIVOT_INVERT = false;
         public static final Neutral PIVOT_NEUTRAL_MODE = Neutral.BRAKE;
         public static final StatusFrames PIVOT_STATUS_FRAME = StatusFrames.POSITION;
 
-        public static final double PIVOT_POSITION_MIN = 0;
-        public static final double PIVOT_POSITION_MAX = 120;
+        public static final double PIVOT_POSITION_MIN = -360;
+        public static final double PIVOT_POSITION_MAX = 360;
         public static final double PIVOT_TOLERANCE = 1;
 
         public static final int ROLLER_ID = 21;
