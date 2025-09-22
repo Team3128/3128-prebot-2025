@@ -74,10 +74,15 @@ public class RobotContainer {
         // controller.getButton(kY).onTrue((Intake.getInstance().pivot.runCommand(0.1)));
         // controller.getButton(kBack).onTrue((Intake.getInstance().roller.runCommand(0.1)));
 
-        controller.getButton(kLeftBumper).whileTrue(Arm.getInstance().pivot.sysIdDynamic(Direction.kForward).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
-        controller.getButton(kLeftTrigger).whileTrue(Arm.getInstance().pivot.sysIdDynamic(Direction.kReverse).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
-        controller.getButton(kRightBumper).whileTrue(Arm.getInstance().pivot.sysIdQuasistatic(Direction.kForward).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
-        controller.getButton(kRightTrigger).whileTrue(Arm.getInstance().pivot.sysIdQuasistatic(Direction.kReverse).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
+        controller.getButton(kLeftBumper).whileTrue(PivotMechanism.getInstance().sysIdDynamic(Direction.kForward));
+        controller.getButton(kLeftTrigger).whileTrue(PivotMechanism.getInstance().sysIdDynamic(Direction.kReverse));
+        controller.getButton(kRightBumper).whileTrue(PivotMechanism.getInstance().sysIdQuasistatic(Direction.kForward));
+        controller.getButton(kRightTrigger).whileTrue(PivotMechanism.getInstance().sysIdQuasistatic(Direction.kReverse));
+
+        // controller.getButton(kLeftBumper).whileTrue(Arm.getInstance().pivot.sysIdDynamic(Direction.kForward).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
+        // controller.getButton(kLeftTrigger).whileTrue(Arm.getInstance().pivot.sysIdDynamic(Direction.kReverse).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
+        // controller.getButton(kRightBumper).whileTrue(Arm.getInstance().pivot.sysIdQuasistatic(Direction.kForward).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
+        // controller.getButton(kRightTrigger).whileTrue(Arm.getInstance().pivot.sysIdQuasistatic(Direction.kReverse).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
     }
 
     public void initCameras() {

@@ -70,21 +70,21 @@ public class PivotMechanism extends PositionSubsystemBase {
     @Override
     public void initShuffleboard() {
         super.initShuffleboard();
-        NAR_Shuffleboard.addData(getName(), "Position", () -> Degrees.of(leader.getPosition()).toShortString(), 2, 5);
-        NAR_Shuffleboard.addData(getName(), "Velocity", () -> DegreesPerSecond.of(leader.getVelocity()).toShortString(), 1, 5);
+        NAR_Shuffleboard.addData(getName(), "Position", () -> Degrees.of(leader.getPosition()), 2, 5);
+        NAR_Shuffleboard.addData(getName(), "Velocity", () -> DegreesPerSecond.of(leader.getVelocity()), 1, 5);
     }
 
-    public SysIdRoutine driveRoutine = new SysIdRoutine(
+    private final SysIdRoutine sysIdRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(Volts.of(0.3).per(Second), Volts.of(4), null),
         new SysIdRoutine.Mechanism((v) -> runVolts(v.in(Volts)), this::logMotors, this)
     );
 
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return driveRoutine.quasistatic(direction);
+        return sysIdRoutine.quasistatic(direction);
     }
       
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return driveRoutine.dynamic(direction);
+        return sysIdRoutine.dynamic(direction);
     }
     
     private final MutVoltage appliedVoltage = Volts.mutable(0);
@@ -94,10 +94,10 @@ public class PivotMechanism extends PositionSubsystemBase {
         // log.motor("position").angularPosition(Degrees.of(leader.getPosition()));
         // log.motor("velocity").angularVelocity(DegreesPerSecond.of(leader.getVelocity()));
         // log.motor("voltage").voltage(Volts.of(12 * leader.getAppliedOutput()));
-        
-        log.motor("position").angularPosition(angle.mut_replace(leader.getPosition(), Degrees));
-        log.motor("velocity").angularVelocity(velocity.mut_replace(leader.getVelocity(), DegreesPerSecond));
-        log.motor("voltage").voltage(appliedVoltage.mut_replace(leader.getAppliedOutput()*12, Volts));
+        log.motor("pivot-leader")
+            .angularPosition(angle.mut_replace(leader.getPosition(), Degrees))
+            .angularVelocity(velocity.mut_replace(leader.getVelocity(), DegreesPerSecond))
+            .voltage(appliedVoltage.mut_replace(leader.getAppliedOutput() * 12, Volts));
     }
     
 }
