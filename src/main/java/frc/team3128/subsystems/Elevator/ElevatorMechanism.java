@@ -8,6 +8,11 @@ import common.utility.shuffleboard.NAR_Shuffleboard;
 import common.hardware.motorcontroller.NAR_CANSpark;
 import common.hardware.motorcontroller.NAR_TalonFX;
 import common.hardware.motorcontroller.NAR_CANSpark.ControllerType;
+import edu.wpi.first.units.measure.MutAngle;
+import edu.wpi.first.units.measure.MutAngularVelocity;
+import edu.wpi.first.units.measure.MutDistance;
+import edu.wpi.first.units.measure.MutLinearVelocity;
+import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -77,9 +82,16 @@ public class ElevatorMechanism extends PositionSubsystemBase {
         return driveRoutine.dynamic(direction).onlyWhile(() -> left.getPosition() > POSITION_MIN + 0.2*(POSITION_MAX - POSITION_MIN) && left.getPosition() < POSITION_MAX-0.2*(POSITION_MAX - POSITION_MIN));
     }
     
+    private final MutVoltage appliedVoltage = Volts.mutable(0);
+    private final MutDistance position = Meters.mutable(0);
+    private final MutLinearVelocity velocity = MetersPerSecond.mutable(0);
     public void logMotors(SysIdRoutineLog log){
-        log.motor("position").linearPosition(Meters.of(left.getPosition()));
-        log.motor("velocity").linearVelocity(MetersPerSecond.of(left.getVelocity() / 60.0));
-        log.motor("voltage").voltage(Volts.of(12 * left.getAppliedOutput()));
+        // log.motor("position").linearPosition(Meters.of(left.getPosition()));
+        // log.motor("velocity").linearVelocity(MetersPerSecond.of(left.getVelocity() / 60.0));
+        // log.motor("voltage").voltage(Volts.of(12 * left.getAppliedOutput()));
+        log.motor("elevator-motor")
+            .linearPosition(position.mut_replace(left.getPosition(), Meters))
+            .linearVelocity(velocity.mut_replace(left.getVelocity(), MetersPerSecond))
+            .voltage(appliedVoltage.mut_replace(left.getAppliedOutput() * 12, Volts));
     }
 }

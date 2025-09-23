@@ -69,8 +69,10 @@ public class RobotContainer {
         controller.getButton(kX).onTrue(Arm.getInstance().pivot.runCommand(0.1)).onFalse(Arm.getInstance().pivot.stopCommand());
         controller.getButton(kY).onTrue(Arm.getInstance().pivot.runCommand(-0.1)).onFalse(Arm.getInstance().pivot.stopCommand());
         controller.getButton(kA).onTrue(Arm.getInstance().pivot.resetCommand(0));
-        // controller.getButton(kBack).whileTrue((Elevator.getInstance().elevator.runCommand(0.1))).onFalse(Elevator.getInstance().elevator.stopCommand());
-        // controller.getButton(kStart).whileTrue((Elevator.getInstance().elevator.runCommand(-0.1))).onFalse(Elevator.getInstance().elevator.stopCommand());
+        controller.getButton(kStart).onTrue(PivotMechanism.getInstance().pidTo(45));
+        controller.getButton(kBack).onTrue(PivotMechanism.getInstance().pidTo(-45));
+        // controller.getButton(kBack).whileTrue((Elevator.getInstance().elevator.runCommand(0.2))).onFalse(Elevator.getInstance().elevator.stopCommand());
+        // controller.getButton(kStart).whileTrue((Elevator.getInstance().elevator.runCommand(-0.2))).onFalse(Elevator.getInstance().elevator.stopCommand());
         // controller.getButton(kY).onTrue((Intake.getInstance().pivot.runCommand(0.1)));
         // controller.getButton(kBack).onTrue((Intake.getInstance().roller.runCommand(0.1)));
 

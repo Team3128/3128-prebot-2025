@@ -15,6 +15,8 @@ import common.utility.shuffleboard.NAR_Shuffleboard;
 
 import static frc.team3128.Constants.ArmConstants.*;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -26,7 +28,7 @@ public class PivotMechanism extends PositionSubsystemBase {
 
     private static PivotMechanism instance;
 
-    private static PIDFFConfig config = new PIDFFConfig(0.16, 0, 0, 0.23783, 0.01558, 0.00234, 0.0);
+    private static PIDFFConfig config = new PIDFFConfig(0.02681, 0, 0, 0.16944, 0.019594, 0.0037586, 0.10644);
 
     protected static Controller controller = new Controller(config, Controller.Type.POSITION);
 
@@ -34,6 +36,7 @@ public class PivotMechanism extends PositionSubsystemBase {
 
     private PivotMechanism() {
         super(controller, leader);
+        config.kG_Function = () -> Math.abs(Math.sin(leader.getPosition()));
         leader.setUnitConversionFactor(PIVOT_GEAR_RATIO);
         leader.setTimeConversionFactor(60);
         initShuffleboard();
@@ -70,8 +73,9 @@ public class PivotMechanism extends PositionSubsystemBase {
     @Override
     public void initShuffleboard() {
         super.initShuffleboard();
-        NAR_Shuffleboard.addData(getName(), "Position", () -> Degrees.of(leader.getPosition()), 2, 5);
-        NAR_Shuffleboard.addData(getName(), "Velocity", () -> DegreesPerSecond.of(leader.getVelocity()), 1, 5);
+        NAR_Shuffleboard.addData(getName(), "Position", () -> Degrees.of(leader.getPosition()).toLongString(), 2, 5);
+        NAR_Shuffleboard.addData(getName(), "Velocity", () -> DegreesPerSecond.of(leader.getVelocity()).toLongString(), 1, 5);
+        NAR_Shuffleboard.addData(getName(), "Volts", () -> Volts.of(leader.getMotor().getMotorVoltage().getValueAsDouble()).toLongString(), 3, 5);
     }
 
     private final SysIdRoutine sysIdRoutine = new SysIdRoutine(
@@ -97,7 +101,7 @@ public class PivotMechanism extends PositionSubsystemBase {
         log.motor("pivot-leader")
             .angularPosition(angle.mut_replace(leader.getPosition(), Degrees))
             .angularVelocity(velocity.mut_replace(leader.getVelocity(), DegreesPerSecond))
-            .voltage(appliedVoltage.mut_replace(leader.getAppliedOutput() * 12, Volts));
+            .voltage(appliedVoltage.mut_replace(leader.getMotor().getMotorVoltage().getValueAsDouble(), Volts));
     }
     
 }

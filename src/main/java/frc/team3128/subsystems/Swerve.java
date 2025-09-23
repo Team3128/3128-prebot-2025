@@ -29,6 +29,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.MutDistance;
+import edu.wpi.first.units.measure.MutLinearVelocity;
+import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -435,15 +438,23 @@ public class Swerve extends SwerveBase {
         return driveRoutine.dynamic(direction);
     }
 
+    
+    private final MutVoltage appliedVoltage = Volts.mutable(0);
+    private final MutDistance position = Meters.mutable(0);
+    private final MutLinearVelocity velocity = MetersPerSecond.mutable(0);
     public void logMotors(SysIdRoutineLog log){
-        for (final SwerveModule module : modules) {
-            log.motor("linear position").linearPosition(Meters.of(DRIVE_WHEEL_CIRCUMFERENCE*module.getDriveMotor().getPosition()/DRIVE_MOTOR_GEAR_RATIO));
-            log.motor("linear velocity").linearVelocity(MetersPerSecond.of(DRIVE_WHEEL_CIRCUMFERENCE*module.getDriveMotor().getVelocity()/(60*DRIVE_MOTOR_GEAR_RATIO)));
-            log.motor("drive voltage").voltage(Volts.of(12 * module.getDriveMotor().getAppliedOutput()));
+        log.motor("elevator-motor")
+        .linearPosition(position.mut_replace(modules[0].getDriveMotor().getPosition(), Meters))
+        .linearVelocity(velocity.mut_replace(modules[0].getDriveMotor().getVelocity(), MetersPerSecond))
+        .voltage(appliedVoltage.mut_replace(modules[0].getDriveMotor().getAppliedOutput() * 12, Volts));
+        // for (final SwerveModule module : modules) {
+        //     log.motor("linear position").linearPosition(Meters.of(DRIVE_WHEEL_CIRCUMFERENCE*module.getDriveMotor().getPosition()/DRIVE_MOTOR_GEAR_RATIO));
+        //     log.motor("linear velocity").linearVelocity(MetersPerSecond.of(DRIVE_WHEEL_CIRCUMFERENCE*module.getDriveMotor().getVelocity()/(60*DRIVE_MOTOR_GEAR_RATIO)));
+        //     log.motor("drive voltage").voltage(Volts.of(12 * module.getDriveMotor().getAppliedOutput()));
 
-            // log.motor("angular position").angularPosition(Rotations.of(module.getAngleMotor().getPosition()));
-            // log.motor("angular velocity").angularVelocity(RotationsPerSecond.of(module.getAngleMotor().getVelocity() / 60.0));
-            // log.motor("angle voltage").voltage(Volts.of(12 * module.getDriveMotor().getAppliedOutput()));
-        }
+        //     // log.motor("angular position").angularPosition(Rotations.of(module.getAngleMotor().getPosition()));
+        //     // log.motor("angular velocity").angularVelocity(RotationsPerSecond.of(module.getAngleMotor().getVelocity() / 60.0));
+        //     // log.motor("angle voltage").voltage(Volts.of(12 * module.getDriveMotor().getAppliedOutput()));
+        // }
     }
 }
