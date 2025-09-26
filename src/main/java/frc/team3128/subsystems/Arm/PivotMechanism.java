@@ -65,7 +65,7 @@ public class PivotMechanism extends PositionSubsystemBase {
 
     @Override
     protected void configController() {
-       controller.setInputRange(PIVOT_POSITION_MIN, PIVOT_POSITION_MAX);
+       controller.enableContinuousInput(-180, 180);
        controller.configureFeedback(leader);
        controller.setTolerance(PIVOT_TOLERANCE);
     }   
