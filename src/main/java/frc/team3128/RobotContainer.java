@@ -1,6 +1,7 @@
 package frc.team3128;
 
 
+import common.hardware.camera.Camera;
 import common.hardware.input.NAR_XboxController;
 import common.hardware.input.NAR_XboxController.XboxButton;
 import common.hardware.motorcontroller.NAR_CANSpark;
@@ -11,8 +12,10 @@ import static common.hardware.input.NAR_XboxController.XboxButton.*;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 
+import common.utility.Log;
 import common.utility.narwhaldashboard.NarwhalDashboard;
 import common.utility.shuffleboard.NAR_Shuffleboard;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -24,6 +27,10 @@ import frc.team3128.subsystems.Climber.ClimberStates;
 import frc.team3128.subsystems.Arm.*;
 import frc.team3128.subsystems.Elevator.*;
 import frc.team3128.subsystems.Intake.*;
+import frc.team3128.Constants.*;
+import frc.team3128.Constants.VisionConstants.*;
+import frc.team3128.Constants.FieldConstants.*;
+
 
 
 /**
@@ -36,7 +43,6 @@ import frc.team3128.subsystems.Intake.*;
 public class RobotContainer {
 
     // Create all subsystems
-    
 
     public static NAR_XboxController controller, controller2;
 
@@ -88,7 +94,18 @@ public class RobotContainer {
     }
 
     public void initCameras() {
+        Camera.setResources(() -> Swerve.getInstance().getYaw(), (pose, time) -> Swerve.getInstance().addVisionMeasurement(pose, time), new AprilTagFieldLayout(VisionConstants.APRIL_TAGS, FieldConstants.FIELD_X_LENGTH, FieldConstants.FIELD_Y_LENGTH), () -> Swerve.getInstance().getPose());
+        //Camera.addIgnoredTags(4, 5, 14, 15);
 
+        
+        Camera rightCamera = new Camera("BOTTOM_RIGHT", 0.27, -0.27,  10, 0, 0);
+        rightCamera.setThresholds(0.3, 3, 0.3);
+            
+        Camera middleCamera = new Camera("BOTTOM_LEFT", 0.09, 0.145, 0, 0, 0);
+        middleCamera.setThresholds(0, 3, 0.3);
+
+        Camera swerveCamera = new Camera("BOTTOM_LEFT", 0.09, 0.145, 0, 0, 0);
+        swerveCamera.setThresholds(0, 3, 0.3);
     }
 
     public void initDashboard() {
