@@ -25,7 +25,7 @@ public class ElevatorMechanism extends PositionSubsystemBase {
 
     private static ElevatorMechanism instance;
     //30, 0, 0, 0.25086, 4.52908, 0.99630, 0
-    private static PIDFFConfig config = new PIDFFConfig(20, 0, 0, 0.6, 2.91916, 0.67429, 0.3);
+    private static PIDFFConfig config = new PIDFFConfig(1.5227, 0, 0, 0.16967, 4.3806, 0.3332, 0.264);
     protected static Controller controller = new Controller(config, Controller.Type.POSITION);
 
     protected static NAR_CANSpark left = new NAR_CANSpark(BOTTOM_ID, ControllerType.CAN_SPARK_FLEX), right = new NAR_CANSpark(TOP_ID,ControllerType.CAN_SPARK_FLEX);
@@ -61,6 +61,8 @@ public class ElevatorMechanism extends PositionSubsystemBase {
     public void initShuffleboard() {
         super.initShuffleboard();
         NAR_Shuffleboard.addData(getName(), "Position", () -> left.getPosition());
+        NAR_Shuffleboard.addData(getName(), "Velocity", () -> left.getVelocity());
+        NAR_Shuffleboard.addData(getName(), "Voltage", () -> left.getAppliedOutput() * 12);
     }
 
     @Override
@@ -70,7 +72,7 @@ public class ElevatorMechanism extends PositionSubsystemBase {
        controller.setTolerance(TOLERANCE);
     }
     public SysIdRoutine driveRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(Volts.of(0.1).per(Second), Volts.of(2), null),
+        new SysIdRoutine.Config(Volts.of(0.2).per(Second), Volts.of(4), null),
         new SysIdRoutine.Mechanism((v) -> runVolts(v.in(Volts)), this::logMotors, this)
     );
 

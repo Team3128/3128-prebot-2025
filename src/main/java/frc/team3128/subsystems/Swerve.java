@@ -388,6 +388,10 @@ public class Swerve extends SwerveBase {
         NAR_Shuffleboard.addData("Auto Align", "Translational Velo error", () -> {return velocityTranslationalSupplier.getAsDouble() - Math.abs(getRobotVelocity().vxMetersPerSecond);}, 3, 0);
         NAR_Shuffleboard.addData("Auto Align", "Translational Rotational error", () -> {return velocityRotationalSupplier.getAsDouble() - Math.abs(getRobotVelocity().omegaRadiansPerSecond);}, 3, 1);
 
+        NAR_Shuffleboard.addData("SysId", "Position", ()->m.getPosition(), 0, 0);
+        NAR_Shuffleboard.addData("SysId", "Velocity", ()->m.getVelocity(), 1, 0);
+        NAR_Shuffleboard.addData("SysId", "Voltage", ()->m.getMotor().getMotorVoltage().getValueAsDouble(), 2, 0);
+
     }
 
     public static void disable() {
@@ -399,7 +403,7 @@ public class Swerve extends SwerveBase {
     public static Translation2d adjustControllerInputs(double x, double y, boolean fieldRelative) {
         return adjustControllerInputs(new Translation2d(x, y), fieldRelative);
     }
-
+    
     public static Translation2d adjustControllerInputs(Translation2d translation, boolean fieldRelative) {
         Rotation2d rotation = Rotation2d.fromDegrees(DriveConstants.controllerPOVOffset);
         if(Robot.getAlliance() == Alliance.Red || !fieldRelative) {
@@ -409,7 +413,7 @@ public class Swerve extends SwerveBase {
     }
 
     public SysIdRoutine driveRoutine = new SysIdRoutine (
-        new SysIdRoutine.Config(Volts.of(0.2).per(Second), Volts.of(0.1), null),
+        new SysIdRoutine.Config(null, null, null),
         new SysIdRoutine.Mechanism(this::setDriveVoltage, this::logMotors, this)
     );
     // public SysIdRoutine angleRoutine = new SysIdRoutine (
@@ -442,11 +446,12 @@ public class Swerve extends SwerveBase {
     private final MutVoltage appliedVoltage = Volts.mutable(0);
     private final MutDistance position = Meters.mutable(0);
     private final MutLinearVelocity velocity = MetersPerSecond.mutable(0);
+    NAR_TalonFX m = (NAR_TalonFX) modules[0].getDriveMotor();
     public void logMotors(SysIdRoutineLog log){
-        log.motor("elevator-motor")
-        .linearPosition(position.mut_replace(modules[0].getDriveMotor().getPosition(), Meters))
-        .linearVelocity(velocity.mut_replace(modules[0].getDriveMotor().getVelocity(), MetersPerSecond))
-        .voltage(appliedVoltage.mut_replace(modules[0].getDriveMotor().getAppliedOutput() * 12, Volts));
+        log.motor("mod0-motor")
+        .linearPosition(position.mut_replace(m.getPosition(), Meters))
+        .linearVelocity(velocity.mut_replace(m.getVelocity(), MetersPerSecond))
+        .voltage(appliedVoltage.mut_replace(m.getMotor().getMotorVoltage().getValueAsDouble(), Volts));
         // for (final SwerveModule module : modules) {
         //     log.motor("linear position").linearPosition(Meters.of(DRIVE_WHEEL_CIRCUMFERENCE*module.getDriveMotor().getPosition()/DRIVE_MOTOR_GEAR_RATIO));
         //     log.motor("linear velocity").linearVelocity(MetersPerSecond.of(DRIVE_WHEEL_CIRCUMFERENCE*module.getDriveMotor().getVelocity()/(60*DRIVE_MOTOR_GEAR_RATIO)));

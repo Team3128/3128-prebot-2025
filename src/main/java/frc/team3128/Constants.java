@@ -220,7 +220,7 @@ public class Constants {
         public static final int BOTTOM_ID = 40;
         public static final int TOP_ID = 41;
 
-        public static final double GEAR_RATIO = 1;//Units.inchesToMeters(60.4375) / 40.18735;
+        public static final double GEAR_RATIO = 1.3905 / 60.0;//Units.inchesToMeters(60.4375) / 40.18735;
         public static final double SAMPLE_PER_MINUTE = 60;
         public static final int STATOR_CURRENT_LIMIT = 60;
         public static final boolean INVERT = false;
@@ -228,7 +228,7 @@ public class Constants {
         public static final StatusFrames STATUS_FRAME = StatusFrames.POSITION;
 
         public static final double POSITION_MIN = 0;
-        public static final double POSITION_MAX = Units.inchesToMeters(60.4375);
+        public static final double POSITION_MAX = 1.3905;
         public static final double TOLERANCE = 0.01;
 
     }
