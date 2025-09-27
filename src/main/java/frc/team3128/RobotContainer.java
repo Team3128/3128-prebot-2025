@@ -98,13 +98,13 @@ public class RobotContainer {
         //Camera.addIgnoredTags(4, 5, 14, 15);
 
         
-        Camera rightCamera = new Camera("BOTTOM_RIGHT", 0.27, -0.27,  10, 0, 0);
-        rightCamera.setThresholds(0.3, 3, 0.3);
+        Camera intakeCamera = new Camera("INTAKE_CAMERA", -0.17, 0.30,  90, 0, 0);
+        intakeCamera.setThresholds(0.3, 3, 0.3);
             
-        Camera middleCamera = new Camera("BOTTOM_LEFT", 0.09, 0.145, 0, 0, 0);
-        middleCamera.setThresholds(0, 3, 0.3);
+        Camera centerCamera = new Camera("CENTER_CAMERA", -0.09, 0, 0, 12, 0);
+        centerCamera.setThresholds(0, 3, 0.3);
 
-        Camera swerveCamera = new Camera("BOTTOM_LEFT", 0.09, 0.145, 0, 0, 0);
+        Camera swerveCamera = new Camera("SWERVE_CAMERA", 0.27, 0.27, 117, 0, 0);
         swerveCamera.setThresholds(0, 3, 0.3);
     }
 
