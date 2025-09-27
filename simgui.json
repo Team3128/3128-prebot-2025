@@ -1,13 +1,4 @@
 {
-  "HALProvider": {
-    "Other Devices": {
-      "CANcoder (v6)[10]": {
-        "header": {
-          "open": true
-        }
-      }
-    }
-  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
@@ -57,6 +48,9 @@
     "transitory": {
       "Shuffleboard": {
         ".metadata": {
+          "Swerve": {
+            "open": true
+          },
           "open": true
         },
         ".recording": {
