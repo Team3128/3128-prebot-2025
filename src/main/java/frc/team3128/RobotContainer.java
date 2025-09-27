@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.team3128.subsystems.Swerve;
 import frc.team3128.subsystems.Climber.Climber;
@@ -24,6 +25,9 @@ import frc.team3128.subsystems.Climber.ClimberStates;
 import frc.team3128.subsystems.Arm.*;
 import frc.team3128.subsystems.Elevator.*;
 import frc.team3128.subsystems.Intake.*;
+import frc.team3128.subsystems.Superstructure.Superstructure;
+
+import static frc.team3128.subsystems.Superstructure.SuperstructureStates.*;
 
 
 /**
@@ -41,6 +45,13 @@ public class RobotContainer {
     public static NAR_XboxController controller, controller2;
 
     private NarwhalDashboard dashboard;
+
+    Arm arm;
+    Climber climber;
+    Elevator elevator;
+    Intake intake;
+    Superstructure superstructure;
+    Swerve swerve;
 
     public RobotContainer() {
         NAR_CANSpark.maximumRetries = 2;
@@ -86,6 +97,29 @@ public class RobotContainer {
         // controller.getButton(kLeftTrigger).whileTrue(Swerve.getInstance().sysIdDynamic(Direction.kReverse).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
         // controller.getButton(kRightBumper).whileTrue(Swerve.getInstance().sysIdQuasistatic(Direction.kForward).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
         // controller.getButton(kRightTrigger).whileTrue(Swerve.getInstance().sysIdQuasistatic(Direction.kReverse).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
+    }
+
+    // TO BE USED WHEN ALL SUBSYSTEMS ARE READY
+    private void configureButtonBindings2() {
+        new Trigger(() -> superstructure.stateEquals(NEUTRAL) && arm.roller.hasObjectPresent())
+            .onTrue(superstructure.setStateCommand(HELD_NEUTRAL));
+
+        // INTAKE
+        controller.getButton(kLeftTrigger)
+            .onTrue(superstructure.toggle(CORAL_GROUND));
+        controller.getButton(kLeftBumper)
+            .onTrue(superstructure.setStateCommand(OUTTAKE))
+            .onFalse(superstructure.setStateCommand(NEUTRAL));
+
+        // ELEVATOR
+        controller.getButton(kA)
+            .onTrue(superstructure.tempToggle(PRE_L1, L1));
+        controller.getButton(kB)
+            .onTrue(superstructure.tempToggle(PRE_L2, L2));
+        controller.getButton(kX)
+            .onTrue(superstructure.tempToggle(PRE_L3, L3));
+        controller.getButton(kY)
+            .onTrue(superstructure.tempToggle(PRE_L4, L4));
     }
 
     public void initCameras() {

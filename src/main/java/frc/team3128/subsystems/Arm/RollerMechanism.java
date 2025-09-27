@@ -18,7 +18,7 @@ public class RollerMechanism extends VoltageSubsystemBase {
     protected static NAR_TalonFX leader = new NAR_TalonFX(ROLLER_ID);
 
     private RollerMechanism() {
-        super(leader);
+        super(CURRENT_THRESHOLD, leader);
 
         leader.setUnitConversionFactor(ROLLER_GEAR_RATIO);
     }

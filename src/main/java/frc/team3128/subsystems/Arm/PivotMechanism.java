@@ -15,13 +15,6 @@ import common.utility.shuffleboard.NAR_Shuffleboard;
 
 import static frc.team3128.Constants.ArmConstants.*;
 
-import java.util.function.DoubleSupplier;
-
-import com.ctre.phoenix6.configs.FeedbackConfigs;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
-
 import static edu.wpi.first.units.Units.*;
 
 public class PivotMechanism extends PositionSubsystemBase {

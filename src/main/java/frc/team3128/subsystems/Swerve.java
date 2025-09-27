@@ -333,7 +333,7 @@ public class Swerve extends SwerveBase {
     // }
 
     public Command navigateTo(Supplier<Pose2d> pose) {
-        return navigateTo(pose, 2);
+        return navigateTo(pose, 3);
     }
 
     public Command navigateTo(Supplier<Pose2d> pose, double timeout) {
@@ -347,8 +347,7 @@ public class Swerve extends SwerveBase {
                 disable();
                 Swerve.autoMoveEnabled = false;
             }
-        ).until(()-> atTranslationSetpoint())
-         .withTimeout(timeout);
+        ).until(()-> atTranslationSetpoint()).withTimeout(timeout);
     }
 
     public boolean isConfigured() {
@@ -461,5 +460,9 @@ public class Swerve extends SwerveBase {
         //     // log.motor("angular velocity").angularVelocity(RotationsPerSecond.of(module.getAngleMotor().getVelocity() / 60.0));
         //     // log.motor("angle voltage").voltage(Volts.of(12 * module.getDriveMotor().getAppliedOutput()));
         // }
+    }
+
+    public boolean shouldWait() {
+        return autoMoveEnabled && !atElevatorDist();
     }
 }
