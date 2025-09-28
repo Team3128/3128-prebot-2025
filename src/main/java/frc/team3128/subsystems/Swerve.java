@@ -2,6 +2,7 @@ package frc.team3128.subsystems;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -46,6 +47,7 @@ import static frc.team3128.Constants.SwerveConstants.*;
 import static frc.team3128.Constants.VisionConstants.*;
 import static frc.team3128.Constants.DriveConstants.*;
 import frc.team3128.Constants.DriveConstants;
+import frc.team3128.Constants.FieldConstants.FieldStates;
 import frc.team3128.Robot;
 
 import static edu.wpi.first.units.Units.*;
@@ -350,6 +352,15 @@ public class Swerve extends SwerveBase {
         ).until(()-> atTranslationSetpoint()).withTimeout(timeout);
     }
 
+    public FieldStates nearest(List<FieldStates> states) {
+        return Collections.min(
+            states,
+            Comparator.comparing(
+                (FieldStates state) -> getPose().minus(state.getPose2d()).getTranslation().getNorm()
+            )
+        );
+    }
+
     public boolean isConfigured() {
         for (final SwerveModule module : modules) {
             final double CANCoderAngle = module.getAbsoluteAngle().getDegrees();
@@ -464,5 +475,11 @@ public class Swerve extends SwerveBase {
 
     public boolean shouldWait() {
         return autoMoveEnabled && !atElevatorDist();
+    }
+
+    public boolean shouldScoreForward() {
+        FieldStates closest = nearest(FieldStates.coral);
+        double angleDiff = Math.abs(getPose().getRotation().minus(closest.getPose2d().getRotation()).getDegrees());
+        return angleDiff < 90;
     }
 }

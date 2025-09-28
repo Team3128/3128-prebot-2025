@@ -8,6 +8,7 @@ import common.hardware.motorcontroller.NAR_TalonFX;
 import common.hardware.motorcontroller.NAR_Motor.Neutral;
 
 import static common.hardware.input.NAR_XboxController.XboxButton.*;
+import static edu.wpi.first.wpilibj2.command.Commands.either;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 
@@ -28,6 +29,7 @@ import frc.team3128.subsystems.Intake.*;
 import frc.team3128.subsystems.Superstructure.Superstructure;
 
 import static frc.team3128.subsystems.Superstructure.SuperstructureStates.*;
+import static edu.wpi.first.wpilibj2.command.Commands.*;
 
 
 /**
@@ -99,6 +101,7 @@ public class RobotContainer {
         // controller.getButton(kRightTrigger).whileTrue(Swerve.getInstance().sysIdQuasistatic(Direction.kReverse).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
     }
 
+    private boolean lastRight = false;
     // TO BE USED WHEN ALL SUBSYSTEMS ARE READY
     private void configureButtonBindings2() {
         new Trigger(() -> superstructure.stateEquals(NEUTRAL) && arm.roller.hasObjectPresent())
@@ -106,7 +109,13 @@ public class RobotContainer {
 
         // INTAKE
         controller.getButton(kLeftTrigger)
-            .onTrue(superstructure.toggle(CORAL_GROUND));
+            .onTrue(superstructure.toggle(CORAL_GROUND)
+                .andThen(sequence(
+                    superstructure.setStateCommand(HANDOFF),
+                    waitSeconds(1),
+                    superstructure.setStateCommand(NEUTRAL)
+                ).onlyIf(() -> superstructure.stateEquals(NEUTRAL))
+            ));
         controller.getButton(kLeftBumper)
             .onTrue(superstructure.setStateCommand(OUTTAKE))
             .onFalse(superstructure.setStateCommand(NEUTRAL));
@@ -117,9 +126,28 @@ public class RobotContainer {
         controller.getButton(kB)
             .onTrue(superstructure.tempToggle(PRE_L2, L2));
         controller.getButton(kX)
-            .onTrue(superstructure.tempToggle(PRE_L3, L3));
+            .onTrue(either(
+                superstructure.tempToggle(PRE_L3, L3),
+                superstructure.tempToggle(PRE_L3_BACK, L3_BACK)
+                    .andThen(superstructure.alignScoreCoralBack(lastRight).onlyIf(() -> Swerve.autoMoveEnabled)),
+                () -> swerve.shouldScoreForward()
+            ));
         controller.getButton(kY)
-            .onTrue(superstructure.tempToggle(PRE_L4, L4));
+            .onTrue(either(
+                superstructure.tempToggle(PRE_L4, L4),
+                superstructure.tempToggle(PRE_L4_BACK, L4_BACK)
+                    .andThen(superstructure.alignScoreCoralBack(lastRight).onlyIf(() -> Swerve.autoMoveEnabled)),
+                () -> swerve.shouldScoreForward()
+            ));
+        
+
+        // AUTO ALIGN
+        controller.getButton(kBack)
+            .onTrue(superstructure.alignScoreCoral(false)
+                .andThen(runOnce(() -> lastRight = false)));
+        controller.getButton(kStart)
+            .onTrue(superstructure.alignScoreCoral(true)
+                .andThen(runOnce(() -> lastRight = true)));
     }
 
     public void initCameras() {

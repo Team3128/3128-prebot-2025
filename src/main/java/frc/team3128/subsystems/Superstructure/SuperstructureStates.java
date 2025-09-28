@@ -75,7 +75,7 @@ public enum SuperstructureStates {
     public static final List<SuperstructureStates> hazardStates = List.of(HELD_NEUTRAL, CORAL_GROUND, CORAL_LOLLIPOP,
         ALGAE_GROUND, ALGAE_LOLLIPOP);
 
-    public static final List<Pair<SuperstructureStates, SuperstructureStates>> coupledTransitions = List.of(
+    public static final List<Pair<SuperstructureStates, SuperstructureStates>> coupledStates = List.of(
         Pair.of(PRE_L1, L1), Pair.of(PRE_L2, L2), Pair.of(PRE_L3, L3), Pair.of(PRE_L4, L4),
         Pair.of(PRE_L3_BACK, L3_BACK), Pair.of(PRE_L4_BACK, L4_BACK)
     );

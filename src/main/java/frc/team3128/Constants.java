@@ -201,8 +201,9 @@ public class Constants {
                 return -1;
             }
 
-            public static final List<FieldStates> reefLeft = List.of(A, C, F, H, J, K);
-            public static final List<FieldStates> reefRight = List.of(B, D, E, G, I, L);
+            public static final List<FieldStates> coral = List.of(A, B, C, D, E, F, G, H, I, J, K, L);
+            public static final List<FieldStates> coralLeft = List.of(A, C, F, H, J, K);
+            public static final List<FieldStates> coralRight = List.of(B, D, E, G, I, L);
             public static final List<FieldStates> algae = List.of(ALGAE_AB, ALGAE_CD, ALGAE_EF, ALGAE_GH, ALGAE_IJ, ALGAE_KL);
         }
     }

@@ -2,6 +2,7 @@ package frc.team3128.subsystems.Superstructure;
 
 import static edu.wpi.first.wpilibj2.command.Commands.*;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -12,16 +13,14 @@ import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.team3128.Constants.ArmConstants;
 import static frc.team3128.Constants.SuperstructureConstants.*;
 import static frc.team3128.subsystems.Superstructure.SuperstructureStates.*;
 
+import frc.team3128.Constants.FieldConstants.FieldStates;
 import frc.team3128.subsystems.Swerve;
 import frc.team3128.subsystems.Arm.Arm;
 import frc.team3128.subsystems.Elevator.Elevator;
 import frc.team3128.subsystems.Intake.Intake;
-
-import static edu.wpi.first.wpilibj2.command.Commands.either;
 
 public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
 
@@ -129,13 +128,31 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         return sequence(
             swerve.navigateTo(pose),
             Commands.runOnce(() -> {
-                for (Pair<SuperstructureStates, SuperstructureStates> transition : coupledTransitions) {
-                    if (stateEquals(transition.getFirst())) {
-                        setState(transition.getSecond());
+                for (Pair<SuperstructureStates, SuperstructureStates> coupledState : coupledStates) {
+                    if (stateEquals(coupledState.getFirst())) {
+                        sequence(
+                            setStateCommand(coupledState.getSecond()),
+                            waitSeconds(0.5),
+                            setStateCommand(NEUTRAL)
+                        ).schedule();
                         break;
                     }
                 }
             })
         );
     }
+
+    public Command alignScoreCoral(boolean isRight) {
+        final List<FieldStates> fieldStates = isRight ? FieldStates.coralRight : FieldStates.coralLeft;
+        Supplier<Pose2d> pose = () -> swerve.nearest(fieldStates).getPose2d();
+        return alignScoreCoral(pose);
+    }
+
+    public Command alignScoreCoralBack(boolean isRight) {
+        final List<FieldStates> fieldStates = isRight ? FieldStates.coralRight : FieldStates.coralLeft;
+        Supplier<Pose2d> pose = () -> swerve.nearest(fieldStates).getBackPose2d();
+        return alignScoreCoral(pose);
+    }
+
+    public Command alignIntakeAlgae()
 }
