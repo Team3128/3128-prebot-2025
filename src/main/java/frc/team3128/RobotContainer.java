@@ -18,6 +18,7 @@ import common.utility.shuffleboard.NAR_Shuffleboard;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -98,17 +99,20 @@ public class RobotContainer {
         //Camera.addIgnoredTags(4, 5, 14, 15);
 
         
-        Camera intakeCamera = new Camera("INTAKE_CAMERA", -0.17, 0.30,  90, 0, 0);
-        intakeCamera.setThresholds(0.3, 3, 0.3);
+        //Camera intakeCamera = new Camera("INTAKE_CAMERA", -0.30, -0.17,  -90, 0, 0);
+        //intakeCamera.setThresholds(0.3, 3, 0.3);
             
-        Camera centerCamera = new Camera("CENTER_CAMERA", -0.09, 0, 0, 12, 0);
+        Camera centerCamera = new Camera("CENTER_CAMERA", 0, 0.09, 0, Units.degreesToRadians(12), 0);
         centerCamera.setThresholds(0, 3, 0.3);
 
-        Camera swerveCamera = new Camera("SWERVE_CAMERA", 0.27, 0.27, 117, 0, 0);
+        Camera swerveCamera = new Camera("SWERVE_CAMERA", -0.27, -0.27, Units.degreesToRadians(153), 0, 0);
         swerveCamera.setThresholds(0, 3, 0.3);
     }
 
     public void initDashboard() {
-
+        dashboard = NarwhalDashboard.getInstance();
+        dashboard.addUpdate("robotX", ()-> Swerve.getInstance().getPose().getX());
+        dashboard.addUpdate("robotY", ()-> Swerve.getInstance().getPose().getY());
+        dashboard.addUpdate("robotYaw", ()-> Swerve.getInstance().getYaw());
     }
 }
