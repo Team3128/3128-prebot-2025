@@ -22,7 +22,7 @@ public class ElevatorMechanism extends PositionSubsystemBase {
 
     private static ElevatorMechanism instance;
     //30, 0, 0, 0.25086, 4.52908, 0.99630, 0
-    private static PIDFFConfig config = new PIDFFConfig(1.5227, 0, 0, 0.16967, 4.3806, 0.3332, 0.264);
+    private static PIDFFConfig config = new PIDFFConfig(40, 0, 0, 0.16967, 4.3806, 0.3332, 0.264);
     protected static Controller controller = new Controller(config, Controller.Type.POSITION);
 
     protected static NAR_CANSpark left = new NAR_CANSpark(BOTTOM_ID, ControllerType.CAN_SPARK_FLEX), right = new NAR_CANSpark(TOP_ID,ControllerType.CAN_SPARK_FLEX);

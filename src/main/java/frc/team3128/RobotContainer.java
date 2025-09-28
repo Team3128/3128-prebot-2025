@@ -24,6 +24,7 @@ import frc.team3128.subsystems.Swerve;
 import frc.team3128.subsystems.Climber.Climber;
 import frc.team3128.subsystems.Climber.ClimberStates;
 import frc.team3128.subsystems.Arm.*;
+import frc.team3128.subsystems.Arm.PivotMechanism;
 import frc.team3128.subsystems.Elevator.*;
 import frc.team3128.subsystems.Intake.*;
 import frc.team3128.subsystems.Superstructure.Superstructure;
@@ -79,12 +80,12 @@ public class RobotContainer {
 
         // controller.getButton(kA).whileTrue(Commands.run(()->Swerve.getInstance().drive(new Translation2d(0.2,0), 0)));
         // controller.getButton(kB).whileTrue(Commands.run(()->Swerve.getInstance().drive(new Translation2d(0,0), 0.2)));
-        controller.getButton(kX).onTrue(Elevator.getInstance().elevator.runCommand(0.3)).onFalse(Elevator.getInstance().elevator.stopCommand());
-        controller.getButton(kY).onTrue(Elevator.getInstance().elevator.runCommand(-0.3)).onFalse(Elevator.getInstance().elevator.stopCommand());
-        controller.getButton(kA).onTrue(ElevatorMechanism.getInstance().resetCommand(0));
+        controller.getButton(kX).onTrue(PivotMechanism.getInstance().runCommand(0.3)).onFalse(PivotMechanism.getInstance().stopCommand());
+        controller.getButton(kY).onTrue(PivotMechanism.getInstance().runCommand(-0.3)).onFalse(PivotMechanism.getInstance().stopCommand());
+        controller.getButton(kA).onTrue(PivotMechanism.getInstance().resetCommand(0));
         // controller.getButton(kA).onTrue(Arm.getInstance().pivot.resetCommand(0));
-        controller.getButton(kStart).onTrue(ElevatorMechanism.getInstance().pidTo(1.1));
-        controller.getButton(kBack).onTrue(ElevatorMechanism.getInstance().pidTo(0.3));
+        controller.getButton(kStart).onTrue(PivotMechanism.getInstance().pidTo(135));
+        controller.getButton(kBack).onTrue(PivotMechanism.getInstance().pidTo(-45));
         // controller.getButton(kBack).whileTrue((Elevator.getInstance().elevator.runCommand(0.2))).onFalse(Elevator.getInstance().elevator.stopCommand());
         // controller.getButton(kStart).whileTrue((Elevator.getInstance().elevator.runCommand(-0.2))).onFalse(Elevator.getInstance().elevator.stopCommand());
         // controller.getButton(kY).onTrue((Intake.getInstance().pivot.runCommand(0.1)));

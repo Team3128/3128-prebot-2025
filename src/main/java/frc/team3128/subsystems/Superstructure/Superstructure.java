@@ -154,5 +154,5 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         return alignScoreCoral(pose);
     }
 
-    public Command alignIntakeAlgae()
+    // public Command alignIntakeAlgae()
 }
