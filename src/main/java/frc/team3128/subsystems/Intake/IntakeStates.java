@@ -2,10 +2,10 @@ package frc.team3128.subsystems.Intake;
 
 public enum IntakeStates {
 
-    NEUTRAL(0, -.05),
-    INTAKE(125, -1),
-    OUTTAKE(20, 0.7),
-    HANDOFF(0, 0.5);
+    NEUTRAL(3, -.05),
+    INTAKE(133, -0.7),
+    OUTTAKE(30, 0.8),
+    HANDOFF(3, 1);
 
     private final double angle;
     private final double power;

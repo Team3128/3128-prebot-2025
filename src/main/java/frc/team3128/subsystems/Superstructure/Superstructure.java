@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import common.core.fsm.FSMSubsystemBase;
 import common.core.fsm.TransitionMap;
+import common.utility.shuffleboard.NAR_Shuffleboard;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -37,8 +38,8 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         if (defaultTransitions[state.ordinal()] == null) {
             defaultTransitions[state.ordinal()] = parallel(
                 arm.setStateCommand(state.getArm()),
-                elevator.setStateCommand(state.getElevator())
-                    .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait())),
+                // elevator.setStateCommand(state.getElevator())
+                //     .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait())),
                 intake.setStateCommand(state.getIntake())
             );
         }
@@ -51,10 +52,10 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
                 parallel(
                     arm.setStateCommand(state.getArm()),
                     intake.setStateCommand(state.getIntake())
-                ),
-                waitUntil(() -> Math.abs(MathUtil.inputModulus(arm.pivot.getPosition(), -180, 180)) >= PIVOT_SAFE_ANGLE),
-                elevator.setStateCommand(state.getElevator())
-                    .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait()))
+                )//,
+                // waitUntil(() -> Math.abs(MathUtil.inputModulus(arm.pivot.getPosition(), -180, 180)) >= PIVOT_SAFE_ANGLE),
+                // elevator.setStateCommand(state.getElevator())
+                //     .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait()))
             );
         }
         return toHazardTransitions[state.ordinal()];
@@ -64,11 +65,11 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         if (fromHazardTransitions[state.ordinal()] == null) {
             fromHazardTransitions[state.ordinal()] = sequence(
                 parallel(
-                    elevator.setStateCommand(state.getElevator())
-                        .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait())),
+                    // elevator.setStateCommand(state.getElevator())
+                    //     .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait())),
                     intake.setStateCommand(state.getIntake())
                 ),
-                waitUntil(() -> elevator.elevator.getPosition() >= ELEVATOR_SAFE_HEIGHT),
+                // waitUntil(() -> elevator.elevator.getPosition() >= ELEVATOR_SAFE_HEIGHT),
                 arm.setStateCommand(state.getArm())
             );
         }
@@ -84,6 +85,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         swerve = Swerve.getInstance();
 
         registerTransitions();
+        NAR_Shuffleboard.addData("Superstructure", "state", () -> this.getState().name());
     }
 
     public static Superstructure getInstance() {
@@ -101,7 +103,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
     }
 
     public Command toggle(SuperstructureStates state1, SuperstructureStates state2) {
-        return either(setStateCommand(state1), setStateCommand(state2), () -> stateEquals(state1));
+        return either(setStateCommand(state1), setStateCommand(state2), () -> stateEquals(state2));
     }
 
     public Command toggle(SuperstructureStates state) {

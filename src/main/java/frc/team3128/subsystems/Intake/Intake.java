@@ -23,7 +23,7 @@ public class Intake extends FSMSubsystemBase<IntakeStates> {
         if (defaultTransitions[state.ordinal()] == null) {
             defaultTransitions[state.ordinal()] = sequence(
                 pivot.pidTo(state.getAngle()),
-                waitUntil(() -> pivot.atSetpoint()),
+                waitUntil(() -> pivot.atSetpoint()).withTimeout(0.5),
                 roller.runCommand(state.getPower())
             );
         }
@@ -50,7 +50,7 @@ public class Intake extends FSMSubsystemBase<IntakeStates> {
         transitionMap.addCommutativeTransition(List.of(IntakeStates.values()), defaultTransitioner);
         transitionMap.addConvergingTransition(HANDOFF, sequence(
             pivot.pidTo(HANDOFF.getAngle()),
-            waitUntil(() -> pivot.atSetpoint() && Arm.getInstance().pivot.atSetpoint()),
+            waitUntil(() -> pivot.atSetpoint() && Arm.getInstance().pivot.atSetpoint()).withTimeout(0.75),
             roller.runCommand(HANDOFF.getPower())
         ));
 	}

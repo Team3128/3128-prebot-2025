@@ -3,7 +3,9 @@ package frc.team3128.subsystems.Intake;
 import common.core.controllers.Controller;
 import common.core.controllers.PIDFFConfig;
 import common.core.subsystems.PositionSubsystemBase;
+import common.hardware.motorcontroller.NAR_CANSpark;
 import common.hardware.motorcontroller.NAR_TalonFX;
+import common.hardware.motorcontroller.NAR_CANSpark.ControllerType;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
@@ -19,17 +21,28 @@ public class PivotMechanism extends PositionSubsystemBase {
 
     private static PivotMechanism instance;
 
-    private static PIDFFConfig config = new PIDFFConfig(0.16, 0, 0, 0.23783, 0.01558, 0.00234, 0.0);
+    private static PIDFFConfig config = new PIDFFConfig(0.06, 0, 0, 0.15937, 0.0089583, 0.00067562, 0.25054);
 
     protected static Controller controller = new Controller(config, Controller.Type.POSITION);
 
-    protected static NAR_TalonFX leader = new NAR_TalonFX(PIVOT_ID);
+    protected static NAR_CANSpark leader = new NAR_CANSpark(PIVOT_ID, ControllerType.CAN_SPARK_FLEX);
 
     private PivotMechanism() {
         super(controller, leader);
         initShuffleboard();
+        config.setkG_Function(() -> Math.sin(Math.toRadians(leader.getPosition() - 114.0)));
 
         leader.setUnitConversionFactor(PIVOT_GEAR_RATIO);
+    }
+
+    @Override
+    public String getName() {
+        return "IntakePivot";
+    }
+
+    @Override
+    public void initShuffleboard() {
+        super.initShuffleboard();
     }
 
     public static PivotMechanism getInstance() {
@@ -60,7 +73,7 @@ public class PivotMechanism extends PositionSubsystemBase {
     }   
 
     public SysIdRoutine driveRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(Volts.of(0.2).per(Second), Volts.of(3), null),
+        new SysIdRoutine.Config(Volts.of(0.5).per(Second), Volts.of(2), null),
         new SysIdRoutine.Mechanism((v) -> runVolts(v.in(Volts)), this::logMotors, this)
     );
 
@@ -79,7 +92,7 @@ public class PivotMechanism extends PositionSubsystemBase {
         log.motor("pivot-leader")
             .angularPosition(angle.mut_replace(leader.getPosition(), Degrees))
             .angularVelocity(velocity.mut_replace(leader.getVelocity(), DegreesPerSecond))
-            .voltage(appliedVoltage.mut_replace(leader.getMotor().getMotorVoltage().getValueAsDouble(), Volts));
+            .voltage(appliedVoltage.mut_replace(leader.getAppliedOutput() * 12, Volts));
     }
 
 }
