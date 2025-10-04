@@ -13,9 +13,11 @@ import common.hardware.motorcontroller.NAR_Motor.StatusFrames;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -204,11 +206,6 @@ public class Constants {
             public static final List<FieldStates> coralRight = List.of(B, D, E, G, I, L);
             public static final List<FieldStates> algae = List.of(ALGAE_AB, ALGAE_CD, ALGAE_EF, ALGAE_GH, ALGAE_IJ, ALGAE_KL);
         }
-    }
-
-    public static class FieldConstants{
-        public static final double FIELD_X_LENGTH = Units.inchesToMeters(690.875); // meters = 17.548
-        public static final double FIELD_Y_LENGTH = Units.inchesToMeters(317); // meters = 8.052
     }
 
     public static class SwerveConstants {
