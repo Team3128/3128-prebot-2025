@@ -1,6 +1,7 @@
 package frc.team3128;
 
 
+import common.hardware.camera.Camera;
 import common.hardware.input.NAR_XboxController;
 import common.hardware.input.NAR_XboxController.XboxButton;
 import common.hardware.motorcontroller.NAR_CANSpark;
@@ -12,10 +13,13 @@ import static edu.wpi.first.wpilibj2.command.Commands.either;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 
+import common.utility.Log;
 import common.utility.narwhaldashboard.NarwhalDashboard;
 import common.utility.shuffleboard.NAR_Shuffleboard;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -32,6 +36,10 @@ import frc.team3128.subsystems.Superstructure.Superstructure;
 
 import static frc.team3128.subsystems.Superstructure.SuperstructureStates.*;
 import static edu.wpi.first.wpilibj2.command.Commands.*;
+import frc.team3128.Constants.*;
+import frc.team3128.Constants.VisionConstants.*;
+import frc.team3128.Constants.FieldConstants.*;
+
 
 
 /**
@@ -44,7 +52,6 @@ import static edu.wpi.first.wpilibj2.command.Commands.*;
 public class RobotContainer {
 
     // Create all subsystems
-    
 
     public static NAR_XboxController controller, controller2;
 
@@ -168,10 +175,24 @@ public class RobotContainer {
     }
 
     public void initCameras() {
+        Camera.setResources(() -> Swerve.getInstance().getYaw(), (pose, time) -> Swerve.getInstance().addVisionMeasurement(pose, time), new AprilTagFieldLayout(VisionConstants.APRIL_TAGS, FieldConstants.FIELD_X_LENGTH, FieldConstants.FIELD_Y_LENGTH), () -> Swerve.getInstance().getPose());
+        //Camera.addIgnoredTags(4, 5, 14, 15);
 
+        
+        //Camera intakeCamera = new Camera("INTAKE_CAMERA", -0.30, -0.17,  -90, 0, 0);
+        //intakeCamera.setThresholds(0.3, 3, 0.3);
+            
+        Camera centerCamera = new Camera("CENTER_CAMERA", 0, 0.09, 0, Units.degreesToRadians(12), 0);
+        centerCamera.setThresholds(0, 3, 0.3);
+
+        Camera swerveCamera = new Camera("SWERVE_CAMERA", -0.27, -0.27, Units.degreesToRadians(153), 0, 0);
+        swerveCamera.setThresholds(0, 3, 0.3);
     }
 
     public void initDashboard() {
-
+        dashboard = NarwhalDashboard.getInstance();
+        dashboard.addUpdate("robotX", ()-> Swerve.getInstance().getPose().getX());
+        dashboard.addUpdate("robotY", ()-> Swerve.getInstance().getPose().getY());
+        dashboard.addUpdate("robotYaw", ()-> Swerve.getInstance().getYaw());
     }
 }
