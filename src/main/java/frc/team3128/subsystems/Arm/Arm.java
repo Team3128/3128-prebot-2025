@@ -40,8 +40,11 @@ public class Arm extends FSMSubsystemBase<ArmStates> {
         registerTransitions();
     }
 
-    public static double findPivotAngle(double horizontalOffset) {
-            return Math.asin((horizontalOffset/67)*(180/Math.PI)); // TODO: replace 67 with arm length
+    public static double findPivotAngle(double horizontalOffsetAngle) {
+        double armLength = 67; // TODO: replace 67 with arm length
+        double distanceToTarget = 10; // TODO: replace 100 with distance to target
+        double x = distanceToTarget/Math.tan(horizontalOffsetAngle*(Math.PI/180));
+        return Math.atan((x/armLength));
     } 
     public static double findPhotonPivotAngle(double yaw){
         return yaw;
