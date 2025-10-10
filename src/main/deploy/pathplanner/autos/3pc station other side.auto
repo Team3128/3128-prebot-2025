@@ -11,9 +11,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Score L4 E"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "e-stationtop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align SOURCE_LEFT"
           }
         },
         {
@@ -23,15 +35,33 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Score L4 D"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "d-stationtop"
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Align SOURCE_LEFT"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "stationtop-c"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score L4 C"
           }
         }
       ]

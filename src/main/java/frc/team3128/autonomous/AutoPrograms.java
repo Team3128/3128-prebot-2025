@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
@@ -16,7 +17,9 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.FlippingUtil;
 import com.pathplanner.lib.util.FlippingUtil.FieldSymmetry;
 
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -25,11 +28,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.team3128.Robot;
 import frc.team3128.subsystems.Swerve;
-
+import frc.team3128.subsystems.Elevator.ElevatorMechanism;
+import frc.team3128.Constants.FieldConstants;
+import frc.team3128.Constants.FieldConstants.*;
+import frc.team3128.Constants;
+import frc.team3128.Constants.FieldConstants.FieldStates;
+import static frc.team3128.Constants.FieldConstants.allianceFlip;
+import static frc.team3128.Constants.FieldConstants.allianceFlipRotationally;
 import static edu.wpi.first.wpilibj2.command.Commands.*;
 
 import common.utility.Log;
 import static frc.team3128.Constants.SwerveConstants.*;
+import static frc.team3128.subsystems.Superstructure.SuperstructureStates.*;
+
+import frc.team3128.subsystems.Superstructure.*;
+
+
 
 
 /**
@@ -44,9 +58,12 @@ public class AutoPrograms {
     private static Swerve swerve = Swerve.getInstance();
     private RobotConfig robotConfig;
     private static AutoPrograms instance;
+    private Superstructure robot;
     SendableChooser<Command> autoChooser;
 
     private AutoPrograms() {
+        robot = Superstructure.getInstance();
+
         configPathPlanner();
         initAutoSelector();
     }
@@ -110,6 +127,100 @@ public class AutoPrograms {
             ()-> Robot.getAlliance() == Alliance.Red,
             swerve
             );
+
+        for (FieldStates state : FieldStates.values()) {
+            if (state.name().length() == 1) {         // this just means if state is A or B or C e.t.c. so a reef state
+                NamedCommands.registerCommand(
+                    "Score L4 " + state.name(),
+                    parallel(
+                        run(() -> swerve.drive(0,0,0)),
+                        sequence(
+                            waitSeconds(0.8),
+                            robot.setStateCommand(PRE_L4)
+                        )
+                    ).withDeadline(Superstructure.getInstance().alignScoreCoral(allianceFlip(()-> state.getPose2d()), () -> false, () -> false).
+                    andThen(()->robot.autoScore()).
+                    andThen(waitUntil(() -> robot.stateEquals(NEUTRAL))))
+                );
+
+                NamedCommands.registerCommand(
+                    "Score L3 " + state.name(),
+                    // none()
+                    parallel(
+                        run(() -> swerve.drive(0, 0, 0)),
+                        sequence(
+                            waitSeconds(0.8),
+                            robot.setStateCommand(PRE_L3)
+                        )
+                    ).withDeadline(Superstructure.getInstance().alignScoreCoral(allianceFlip(()-> state.getPose2d()), () -> false, ()->false).
+                        andThen(() -> robot.autoScore()).
+              andThen(waitUntil(() -> robot.stateEquals(NEUTRAL))))
+                );
+            } else if (state.name().length() == 8) {   // this checks if the field state is an algae state
+                NamedCommands.registerCommand(
+                    "Intake " + state.name(),
+                    parallel(
+                        run(() -> swerve.drive(0, 0, 0))
+                    ).withDeadline(
+                        robot.alignAlgaeIntake(allianceFlip(()-> state.getPose2d()))
+                    )
+                );
+            } else { //this means it is a source state
+                NamedCommands.registerCommand(
+                    "Align " + state.name(),
+                    run(() -> swerve.drive(0, 0, 0))
+                        .withDeadline(robot.alignCoralIntake().withTimeout(2)) // swerve.autoAlign(state.getPose2d())
+                );
+            }
+        }
+
+        // NamedCommands.registerCommand(
+        //     "Score ALGAE",
+        //     parallel(
+        //         run(() -> swerve.drive(0, 0, 0))
+        //     ).withDeadline(
+        //         robot.alignAlgaeScore(()-> allianceFlipRotationally(new Pose2d(7.6, 5.4, Rotation2d.kZero)))
+        //             .andThen(waitUntil(() -> robot.stateEquals(NEUTRAL)))
+        //     )
+        // );
+        NamedCommands.registerCommand(
+    "Score ALGAE",
+    robot.alignAlgaeScore(() -> allianceFlipRotationally(new Pose2d(7.6, 5.4, Rotation2d.kZero)))
+        .deadlineWith(run(() -> swerve.drive(0, 0, 0)))
+        .andThen(waitUntil(() -> robot.stateEquals(NEUTRAL)))
+);
+
+        NamedCommands.registerCommand(
+            "Reset RIGHT_BARGE",
+            runOnce(() -> swerve.resetOdometryNoGyro(FieldConstants.allianceFlipRotationally(new Pose2d(7.17, 2.55, Rotation2d.kPi))))
+        );
+
+        NamedCommands.registerCommand(
+            "Reset LEFT_BARGE",
+            runOnce(() -> swerve.resetOdometryNoGyro(FieldConstants.allianceFlipRotationally(new Pose2d(7.17, 5.502, Rotation2d.kPi))))
+        );
+
+        NamedCommands.registerCommand(
+            "Reset MID",
+            runOnce(() -> swerve.resetOdometryNoGyro(FieldConstants.allianceFlipRotationally(new Pose2d(7.17, 3.995, Rotation2d.kPi))))
+        );
+
+        NamedCommands.registerCommand("Score L2", sequence(
+            robot.setStateCommand(PRE_L2),
+            waitUntil(()-> ElevatorMechanism.getInstance().atSetpoint()),
+            robot.setStateCommand(L2),
+            waitSeconds(.25)
+        ));
+
+        NamedCommands.registerCommand("Neutral", sequence(
+            robot.setStateCommand(NEUTRAL)
+        ));
+
+        NamedCommands.registerCommand("L4", sequence(
+            waitSeconds(0.25),
+            robot.setStateCommand(PRE_L4)
+        ));
+
     }
 
     public static Command getPathPlannerAuto(String trajectoryName) {

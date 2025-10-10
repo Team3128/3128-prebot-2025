@@ -140,6 +140,69 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         );
     }
     
+    public void autoScore() {
+
+
+        if (getState() == SuperstructureStates.NEUTRAL) 
+            return;
+
+        coupledStates.forEach((Pair<SuperstructureStates, SuperstructureStates> coupledState) -> {
+            if (coupledState.getFirst() == getState()) {
+                sequence(
+                    waitUntil(() -> ElevatorMechanism.getInstance().atSetpoint()),
+                    setStateCommand(coupledState.getSecond()),
+                    waitSeconds(0.5),
+                    setStateCommand(NEUTRAL)
+                ).schedule();
+            }
+        });
+    }
+
+    public Command alignAlgaeIntake(Supplier<Pose2d> pose) {
+        return parallel(
+            swerve.navigateTo(pose),
+            Commands.runOnce(
+                ()-> {
+                    if(FieldStates.idOf(allianceFlip(pose).get()) % 2 == 0) setStateCommand(ALGAE_2).schedule();
+                    else setStateCommand(ALGAE_1).schedule();
+                }
+            )
+        );
+    }
+
+    public Command alignCoralIntake() {
+        final List<Pose2d> setpoints = List.of(FieldStates.SOURCE_LEFT.getPose2d(), FieldStates.SOURCE_RIGHT.getPose2d());
+        Supplier<Pose2d> pose = ()-> swerve.nearestPose2d(allianceFlip(setpoints));
+        return parallel(
+            swerve.navigateTo(pose),
+            setStateCommand(NEUTRAL)
+        );
+    }
+
+    public Command alignAlgaeScore() {
+        Supplier<Pose2d> pose = ()-> allianceFlip(new Pose2d(new Translation2d(7.6, swerve.getPose().getY()), Rotation2d.fromDegrees(0)));
+        return alignAlgaeScore(pose);
+    }
+    
+    public Command alignAlgaeScore(Supplier<Pose2d> pose) {
+        return parallel(
+            swerve.navigateTo(pose),
+            sequence(
+                waitUntil(()-> swerve.atElevatorDist()), // wait until safe for elevator to move
+                setStateCommand(PRE_ALGAE_BARGE),
+                Commands.runOnce(()-> delayTransition = false),
+                waitUntil(() -> ElevatorMechanism.getInstance().atSetpoint()),
+                waitUntil(()-> !Swerve.autoMoveEnabled),
+                setStateCommand(ALGAE_BARGE),
+                waitSeconds(0.5),
+                setStateCommand(NEUTRAL)
+            )
+        );
+    }
+
+
+
+
     public static Superstructure getInstance() {
         if (instance == null) {
             instance = new Superstructure();

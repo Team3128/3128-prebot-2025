@@ -19,6 +19,7 @@ public enum SuperstructureStates {
 
     ALGAE_1(ArmStates.ALGAE_1, ElevatorStates.ALGAE_1, IntakeStates.NEUTRAL),
     ALGAE_2(ArmStates.ALGAE_2, ElevatorStates.ALGAE_2, IntakeStates.NEUTRAL),
+    PRE_ALGAE_BARGE(ArmStates.ALGAE_BARGE, ElevatorStates.ALGAE_BARGE, IntakeStates.NEUTRAL),
     ALGAE_BARGE(ArmStates.ALGAE_BARGE, ElevatorStates.ALGAE_BARGE, IntakeStates.NEUTRAL),
 
     PRE_L1(ArmStates.PRE_L1, ElevatorStates.L1, IntakeStates.NEUTRAL),

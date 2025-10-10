@@ -7,61 +7,85 @@
         {
           "type": "path",
           "data": {
-            "pathName": "barge2-ij"
+            "pathName": "mid-h"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Score L4 J"
+            "name": "Score L4 H"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ij-station"
+            "pathName": "h-gh"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Align SOURCE_RIGHT"
+            "name": "Intake ALGAE_GH"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "station-k"
+            "pathName": "gh-barge3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Score L4 K"
+            "name": "Score ALGAE"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "k-station"
+            "pathName": "barge3-ij"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Align SOURCE_RIGHT"
+            "name": "Intake ALGAE_IJ"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "station-l"
+            "pathName": "ij-barge3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Score L4 L"
+            "name": "Score ALGAE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "barge3-ef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake ALGAE_EF"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ef-barge3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score ALGAE"
           }
         }
       ]

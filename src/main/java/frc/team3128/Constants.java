@@ -331,7 +331,7 @@ public class Constants {
         public static final Translation2d CENTER_FIELD = FIELD.div(2);
         public static final Translation2d ROBOT_RELATIVE_MANIPULATOR_OFFSET = new Translation2d(Units.inchesToMeters(29.0/2.0), Units.inchesToMeters(8));
         public static final Translation2d ROBOT_RELATIVE_MANIPULATOR_OFFSET_BACKWARDS = new Translation2d(Units.inchesToMeters(29.0/2.0), Units.inchesToMeters(-8));
-        public static final Translation2d MANIPULATOR_OFFSET = new Translation2d(0,Units.inchesToMeters(-8)); //fix
+        public static final Translation2d MANIPULATOR_OFFSET = new Translation2d(0,Units.inchesToMeters(-8));
 
         public static final Translation2d CORAL_STOP_DIST = new Translation2d(Units.inchesToMeters(4.5), 0);
         public static final Translation2d ALGAE_STOP_DIST = new Translation2d(0.01, Units.inchesToMeters(2));
