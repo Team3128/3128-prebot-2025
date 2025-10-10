@@ -22,7 +22,7 @@ public class ElevatorMechanism extends PositionSubsystemBase {
 
     private static ElevatorMechanism instance;
     //30, 0, 0, 0.25086, 4.52908, 0.99630, 0
-    private static PIDFFConfig config = new PIDFFConfig(40, 0, 0, 0.16967, 4.3806, 0.3332, 0.264);
+    private static PIDFFConfig config = new PIDFFConfig(16, 0, 0, 0.22023, 1.6802, 0.22435, 0.46679);
     protected static Controller controller = new Controller(config, Controller.Type.POSITION);
 
     protected static NAR_CANSpark left = new NAR_CANSpark(BOTTOM_ID, ControllerType.CAN_SPARK_FLEX), right = new NAR_CANSpark(TOP_ID,ControllerType.CAN_SPARK_FLEX);
@@ -74,11 +74,19 @@ public class ElevatorMechanism extends PositionSubsystemBase {
     );
 
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return driveRoutine.quasistatic(direction).onlyWhile(() -> left.getPosition() > POSITION_MIN + 0.2*(POSITION_MAX - POSITION_MIN) && left.getPosition() < POSITION_MAX-0.2*(POSITION_MAX - POSITION_MIN));
+        if (direction == SysIdRoutine.Direction.kForward) {
+            return driveRoutine.quasistatic(direction).onlyWhile(() -> left.getPosition() < 0.8 * POSITION_MAX);
+        } else {
+            return driveRoutine.quasistatic(direction).onlyWhile(() -> left.getPosition() > 0.2 * POSITION_MAX);
+        }
     }
       
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return driveRoutine.dynamic(direction).onlyWhile(() -> left.getPosition() > POSITION_MIN + 0.2*(POSITION_MAX - POSITION_MIN) && left.getPosition() < POSITION_MAX-0.2*(POSITION_MAX - POSITION_MIN));
+        if (direction == SysIdRoutine.Direction.kForward) {
+            return driveRoutine.dynamic(direction).onlyWhile(() -> left.getPosition() < 0.8 * POSITION_MAX);
+        } else {
+            return driveRoutine.dynamic(direction).onlyWhile(() -> left.getPosition() > 0.2 * POSITION_MAX);
+        }
     }
     
     private final MutVoltage appliedVoltage = Volts.mutable(0);
