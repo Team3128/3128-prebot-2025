@@ -2,8 +2,8 @@ package frc.team3128.subsystems.Elevator;
 
 public enum ElevatorStates {
 
-    NEUTRAL(0.5),
-    HELD_NEUTRAL(0.1),
+    NEUTRAL(0.95),
+    HELD_NEUTRAL(0),
     L1(0.5),
     L2(0.7),
     L3(0.9),

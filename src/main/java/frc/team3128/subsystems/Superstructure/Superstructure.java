@@ -38,8 +38,8 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         if (defaultTransitions[state.ordinal()] == null) {
             defaultTransitions[state.ordinal()] = parallel(
                 arm.setStateCommand(state.getArm()),
-                // elevator.setStateCommand(state.getElevator())
-                //     .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait())),
+                elevator.setStateCommand(state.getElevator())
+                    .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait())),
                 intake.setStateCommand(state.getIntake())
             );
         }
@@ -52,10 +52,10 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
                 parallel(
                     arm.setStateCommand(state.getArm()),
                     intake.setStateCommand(state.getIntake())
-                )//,
-                // waitUntil(() -> Math.abs(MathUtil.inputModulus(arm.pivot.getPosition(), -180, 180)) >= PIVOT_SAFE_ANGLE),
-                // elevator.setStateCommand(state.getElevator())
-                //     .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait()))
+                ),
+                waitUntil(() -> Math.abs(MathUtil.inputModulus(arm.pivot.getPosition(), -180, 180)) >= PIVOT_SAFE_ANGLE),
+                elevator.setStateCommand(state.getElevator())
+                    .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait()))
             );
         }
         return toHazardTransitions[state.ordinal()];
@@ -65,11 +65,11 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         if (fromHazardTransitions[state.ordinal()] == null) {
             fromHazardTransitions[state.ordinal()] = sequence(
                 parallel(
-                    // elevator.setStateCommand(state.getElevator())
-                    //     .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait())),
+                    elevator.setStateCommand(state.getElevator())
+                        .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait())),
                     intake.setStateCommand(state.getIntake())
                 ),
-                // waitUntil(() -> elevator.elevator.getPosition() >= ELEVATOR_SAFE_HEIGHT),
+                waitUntil(() -> elevator.elevator.getPosition() >= ELEVATOR_SAFE_HEIGHT),
                 arm.setStateCommand(state.getArm())
             );
         }
