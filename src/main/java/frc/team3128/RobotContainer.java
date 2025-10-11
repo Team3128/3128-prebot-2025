@@ -9,7 +9,6 @@ import common.hardware.motorcontroller.NAR_TalonFX;
 import common.hardware.motorcontroller.NAR_Motor.Neutral;
 
 import static common.hardware.input.NAR_XboxController.XboxButton.*;
-import static edu.wpi.first.wpilibj2.command.Commands.either;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 
@@ -97,23 +96,23 @@ public class RobotContainer {
         // controller.getButton(kB).whileTrue(Commands.run(()->Swerve.getInstance().drive(new Translation2d(0,0), 0.2)));
         // controller.getButton(kX).onTrue(ElevatorMechanism.getInstance().runCommand(0.4)).onFalse(PivotMechanism.getInstance().stopCommand());
         // controller.getButton(kY).onTrue(ElevatorMechanism.getInstance().runCommand(-0.4)).onFalse(PivotMechanism.getInstance().stopCommand());
-        controller.getButton(kX).onTrue(ElevatorMechanism.getInstance().resetCommand(0));
-        controller.getButton(kA).onTrue(ElevatorMechanism.getInstance().runCommand(0.4)).onFalse(ElevatorMechanism.getInstance().stopCommand());
-        controller.getButton(kB).onTrue(ElevatorMechanism.getInstance().runCommand(-0.4)).onFalse(ElevatorMechanism.getInstance().stopCommand());
+        controller.getButton(kX).onTrue(superstructure.setStateCommand(NEUTRAL));
+        // controller.getButton(kA).onTrue(ElevatorMechanism.getInstance().runCommand(0.4)).onFalse(ElevatorMechanism.getInstance().stopCommand());
+        // controller.getButton(kB).onTrue(ElevatorMechanism.getInstance().runCommand(-0.4)).onFalse(ElevatorMechanism.getInstance().stopCommand());
         // controller.getButton(kA).onTrue(Arm.getInstance().pivot.resetCommand(0));
-        controller.getButton(kLeftBumper).onTrue(ElevatorMechanism.getInstance().pidTo(0.3));
-        controller.getButton(kRightBumper).onTrue(ElevatorMechanism.getInstance().pidTo(1.1));
+        // controller.getButton(kLeftBumper).onTrue(ElevatorMechanism.getInstance().pidTo(0.3));
+        // controller.getButton(kRightBumper).onTrue(ElevatorMechanism.getInstance().pidTo(1.1));
         // controller.getButton(kBack).whileTrue((Elevator.getInstance().elevator.runCommand(0.2))).onFalse(Elevator.getInstance().elevator.stopCommand());
         // controller.getButton(kStart).whileTrue((Elevator.getInstance().elevator.runCommand(-0.2))).onFalse(Elevator.getInstance().elevator.stopCommand());
         // controller.getButton(kY).onTrue((Intake.getInstance().pivot.runCommand(0.1)));
         // controller.getButton(kBack).onTrue((Intake.getInstance().roller.runCommand(0.1)));
 
-        // controller.getButton(kLeftTrigger).onTrue(superstructure.setStateCommand(CORAL_GROUND)).onFalse(superstructure.setStateCommand(NEUTRAL));
-        // controller.getButton(kLeftBumper).onTrue(superstructure.setStateCommand(OUTTAKE)).onFalse(superstructure.setStateCommand(NEUTRAL));
-        // controller.getButton(kA).onTrue(superstructure.setStateCommand(HANDOFF)).onFalse(superstructure.setStateCommand(NEUTRAL));
-        // controller.getButton(kB).onTrue(superstructure.setStateCommand(HELD_NEUTRAL));
+        controller.getButton(kLeftTrigger).onTrue(superstructure.setStateCommand(CORAL_GROUND)).onFalse(superstructure.setStateCommand(NEUTRAL));
+        controller.getButton(kLeftBumper).onTrue(superstructure.setStateCommand(OUTTAKE)).onFalse(superstructure.setStateCommand(NEUTRAL));
+        controller.getButton(kA).onTrue(superstructure.setStateCommand(HANDOFF)).onFalse(superstructure.setStateCommand(NEUTRAL));
+        controller.getButton(kB).onTrue(superstructure.setStateCommand(HELD_NEUTRAL));
         // controller.getButton(kX).onTrue(arm.pivot.resetCommand(180));
-        // controller.getButton(kY).onTrue(superstructure.toggle(PRE_L2, L2));
+        controller.getButton(kY).onTrue(superstructure.toggle(PRE_L3, L3));
         // controller.getButton(kBack).onTrue(arm.pivot.runCommand(0.4)).onFalse(arm.pivot.runCommand(-0));
         // controller.getButton(kStart).onTrue(arm.pivot.runCommand(-0.4)).onFalse(arm.pivot.runCommand(-0));
         // controller.getButton(kLeftBumper).whileTrue(ElevatorMechanism.getInstance().sysIdDynamic(Direction.kForward));

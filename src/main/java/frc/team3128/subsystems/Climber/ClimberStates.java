@@ -2,6 +2,7 @@ package frc.team3128.subsystems.Climber;
 
 public enum ClimberStates {
 
+    START(0, 0, 0),
     NEUTRAL(0, 0.1, 0),
     PRE_CLIMB_PRIME(25, 0.1, 0),
     CLIMB_PRIME(35, 0.1, 0.5),

@@ -2,11 +2,12 @@ package frc.team3128.subsystems.Elevator;
 
 public enum ElevatorStates {
 
+    START(0),
     NEUTRAL(0.95),
     HELD_NEUTRAL(0),
     L1(0.5),
     L2(0.7),
-    L3(0.9),
+    L3(0.69),
     L4(1.3),
     CORAL_LOLLIPOP(0.1),
     ALGAE_LOLLIPOP(0.5),

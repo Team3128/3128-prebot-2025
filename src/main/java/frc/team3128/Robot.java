@@ -4,9 +4,11 @@
 
 package frc.team3128;
 
+import java.util.List;
 import java.util.Optional;
 
 import common.core.misc.NAR_Robot;
+import common.core.subsystems.PositionSubsystemBase;
 import common.hardware.camera.Camera;
 import common.utility.Log;
 import static common.utility.Log.Type.*;
@@ -22,6 +24,8 @@ import frc.team3128.Constants.FieldConstants.FieldStates;
 import frc.team3128.autonomous.AutoPrograms;
 import frc.team3128.subsystems.Swerve;
 import frc.team3128.subsystems.Arm.Arm;
+import frc.team3128.subsystems.Elevator.Elevator;
+import frc.team3128.subsystems.Intake.Intake;
 
 // import frc.team3128.autonomous.AutoPrograms;
 import com.pathplanner.lib.commands.PathfindingCommand;
@@ -132,6 +136,10 @@ public class Robot extends NAR_Robot {
     @Override
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
+        List<PositionSubsystemBase> pidSubsystems = List.of(Arm.getInstance().pivot, Elevator.getInstance().elevator, Intake.getInstance().pivot);
+        for (var subsystem : pidSubsystems) {
+            subsystem.startPID(subsystem.getPosition());
+        }
     }
 
     @Override

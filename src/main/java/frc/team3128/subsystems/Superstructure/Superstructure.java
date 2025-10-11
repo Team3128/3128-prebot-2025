@@ -20,7 +20,9 @@ import static frc.team3128.subsystems.Superstructure.SuperstructureStates.*;
 import frc.team3128.Constants.FieldConstants.FieldStates;
 import frc.team3128.subsystems.Swerve;
 import frc.team3128.subsystems.Arm.Arm;
+import frc.team3128.subsystems.Arm.ArmStates;
 import frc.team3128.subsystems.Elevator.Elevator;
+import frc.team3128.subsystems.Elevator.ElevatorStates;
 import frc.team3128.subsystems.Intake.Intake;
 
 public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
@@ -53,7 +55,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
                     arm.setStateCommand(state.getArm()),
                     intake.setStateCommand(state.getIntake())
                 ),
-                waitUntil(() -> Math.abs(MathUtil.inputModulus(arm.pivot.getPosition(), -180, 180)) >= PIVOT_SAFE_ANGLE),
+                waitUntil(() -> arm.pivot.atSetpoint()),
                 elevator.setStateCommand(state.getElevator())
                     .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait()))
             );
@@ -69,7 +71,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
                         .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait())),
                     intake.setStateCommand(state.getIntake())
                 ),
-                waitUntil(() -> elevator.elevator.getPosition() >= ELEVATOR_SAFE_HEIGHT),
+                waitUntil(() -> elevator.elevator.atSetpoint()),
                 arm.setStateCommand(state.getArm())
             );
         }
@@ -77,7 +79,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
     };
 
     private Superstructure() {
-        super(SuperstructureStates.class, transitionMap, SuperstructureStates.NEUTRAL);
+        super(SuperstructureStates.class, transitionMap, START);
 
         arm = Arm.getInstance();
         elevator = Elevator.getInstance();
@@ -100,6 +102,8 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         transitionMap.addCommutativeTransition(SuperstructureStates.safeStates, defaultTransitioner);
         transitionMap.addConvergingTransition(SuperstructureStates.hazardStates, toHazardTransitioner);
         transitionMap.addDivergingTransition(SuperstructureStates.hazardStates, fromHazardTransitioner);
+        transitionMap.addDivergingTransition(START, (Command) null);
+        transitionMap.addTransition(START, NEUTRAL, fromHazardTransitioner);
     }
 
     public Command toggle(SuperstructureStates state1, SuperstructureStates state2) {

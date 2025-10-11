@@ -35,7 +35,7 @@ public class Arm extends FSMSubsystemBase<ArmStates> {
     };
 
     public Arm() {
-        super(ArmStates.class, transitionMap, NEUTRAL);
+        super(ArmStates.class, transitionMap, START);
 
         pivot = PivotMechanism.getInstance();
         roller = RollerMechanism.getInstance();

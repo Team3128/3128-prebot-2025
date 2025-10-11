@@ -9,6 +9,7 @@ import frc.team3128.subsystems.Intake.IntakeStates;
 
 public enum SuperstructureStates {
 
+    START(ArmStates.START, ElevatorStates.START, IntakeStates.START),
     NEUTRAL(ArmStates.NEUTRAL, ElevatorStates.NEUTRAL, IntakeStates.NEUTRAL),
     HELD_NEUTRAL(ArmStates.HELD_NEUTRAL, ElevatorStates.HELD_NEUTRAL, IntakeStates.NEUTRAL),
 
@@ -68,6 +69,10 @@ public enum SuperstructureStates {
     public boolean shouldWait() {
         return wait;
     }
+
+    public static final List<SuperstructureStates> normalStates = List.of(NEUTRAL, CORAL_GROUND, HANDOFF, ALGAE_1,
+            ALGAE_2, ALGAE_BARGE, PRE_L1, PRE_L2, PRE_L3, PRE_L4, L1, L2, L3, L4, HELD_NEUTRAL, CORAL_GROUND, CORAL_LOLLIPOP,
+            ALGAE_GROUND, ALGAE_LOLLIPOP);
 
     public static final List<SuperstructureStates> safeStates = List.of(NEUTRAL, CORAL_GROUND, HANDOFF, ALGAE_1,
             ALGAE_2, ALGAE_BARGE, PRE_L1, PRE_L2, PRE_L3, PRE_L4, L1, L2, L3, L4);

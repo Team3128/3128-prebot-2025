@@ -413,7 +413,7 @@ public class Constants {
 
     public static class SuperstructureConstants {
         public static final double PIVOT_SAFE_ANGLE = 0.0; // TODO
-        public static final double ELEVATOR_SAFE_HEIGHT = 0.0; // TODO
+        public static final double ELEVATOR_SAFE_HEIGHT = 0.9; // TODO
     }
 
 }

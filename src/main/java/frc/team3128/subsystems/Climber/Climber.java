@@ -40,7 +40,7 @@ public class Climber extends FSMSubsystemBase<ClimberStates> {
     }
 
     public Climber() {
-        super(ClimberStates.class, transitionMap, NEUTRAL);
+        super(ClimberStates.class, transitionMap, START);
 
         winch = WinchMechanism.getInstance();
         roller = RollerMechanism.getInstance();
