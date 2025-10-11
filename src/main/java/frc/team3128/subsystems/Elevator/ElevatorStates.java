@@ -6,14 +6,14 @@ public enum ElevatorStates {
     NEUTRAL(0.95),
     HELD_NEUTRAL(0),
     L1(0.5),
-    L2(0.7),
-    L3(0.69),
-    L4(1.3),
+    L2(0.6),
+    L3(0.76),
+    L4(1.39),
     CORAL_LOLLIPOP(0.1),
     ALGAE_LOLLIPOP(0.5),
     ALGAE_GROUND(0),
-    ALGAE_1(0.6),
-    ALGAE_2(0.8),
+    ALGAE_1(0.71),
+    ALGAE_2(1.17),
     ALGAE_BARGE(1.5);
 
     private final double setpoint;

@@ -55,7 +55,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
                     arm.setStateCommand(state.getArm()),
                     intake.setStateCommand(state.getIntake())
                 ),
-                waitUntil(() -> arm.pivot.atSetpoint()),
+                waitUntil(() -> arm.pivot.closeToSetpoint()),
                 elevator.setStateCommand(state.getElevator())
                     .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait()))
             );
@@ -71,7 +71,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
                         .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait())),
                     intake.setStateCommand(state.getIntake())
                 ),
-                waitUntil(() -> elevator.elevator.atSetpoint()),
+                waitUntil(() -> elevator.elevator.closeToSetpoint()),
                 arm.setStateCommand(state.getArm())
             );
         }

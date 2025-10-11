@@ -26,6 +26,7 @@ public class Arm extends FSMSubsystemBase<ArmStates> {
     private Function<ArmStates, Command> defaultTransitioner = state -> {
         if (defaultTransitions[state.ordinal()] == null) {
             defaultTransitions[state.ordinal()] = sequence(
+                roller.runCommand(-0.6),
                 pivot.pidTo(state.getAngle()),
                 waitUntil(() -> pivot.atSetpoint()),
                 roller.runCommand(state.getPower())
@@ -60,6 +61,7 @@ public class Arm extends FSMSubsystemBase<ArmStates> {
 	public void registerTransitions() {
         transitionMap.addCommutativeTransition(List.of(ArmStates.values()), defaultTransitioner);
         transitionMap.addConvergingTransition(HANDOFF, sequence(
+            roller.runCommand(-0.3),
             pivot.pidTo(findPivotAngle(0.0)),
             roller.runCommand(HANDOFF.getPower())
         ));

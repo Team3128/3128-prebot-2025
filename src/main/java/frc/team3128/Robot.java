@@ -133,13 +133,11 @@ public class Robot extends NAR_Robot {
         }
     }
 
+    List<PositionSubsystemBase> pidSubsystems = List.of(Arm.getInstance().pivot, Elevator.getInstance().elevator, Intake.getInstance().pivot);
+
     @Override
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
-        List<PositionSubsystemBase> pidSubsystems = List.of(Arm.getInstance().pivot, Elevator.getInstance().elevator, Intake.getInstance().pivot);
-        for (var subsystem : pidSubsystems) {
-            subsystem.startPID(subsystem.getPosition());
-        }
     }
 
     @Override
@@ -165,13 +163,17 @@ public class Robot extends NAR_Robot {
     @Override
     public void disabledInit() {
         CommandScheduler.getInstance().cancelAll();
-        Swerve.getInstance().setBrakeMode(false);
         Swerve.disable();
     }
 
     @Override
     public void disabledExit() {
-        Swerve.getInstance().setBrakeMode(true);
+        for (var subsystem : pidSubsystems) {
+            subsystem.run(0);
+        }
+        for (var subsystem : pidSubsystems) {
+            subsystem.startPID(subsystem.getPosition());
+        }
     }
     
     // @Override

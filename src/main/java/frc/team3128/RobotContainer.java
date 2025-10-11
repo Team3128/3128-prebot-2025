@@ -96,7 +96,7 @@ public class RobotContainer {
         // controller.getButton(kB).whileTrue(Commands.run(()->Swerve.getInstance().drive(new Translation2d(0,0), 0.2)));
         // controller.getButton(kX).onTrue(ElevatorMechanism.getInstance().runCommand(0.4)).onFalse(PivotMechanism.getInstance().stopCommand());
         // controller.getButton(kY).onTrue(ElevatorMechanism.getInstance().runCommand(-0.4)).onFalse(PivotMechanism.getInstance().stopCommand());
-        controller.getButton(kX).onTrue(superstructure.setStateCommand(NEUTRAL));
+        controller.getDownPOVButton().onTrue(superstructure.setStateCommand(NEUTRAL));
         // controller.getButton(kA).onTrue(ElevatorMechanism.getInstance().runCommand(0.4)).onFalse(ElevatorMechanism.getInstance().stopCommand());
         // controller.getButton(kB).onTrue(ElevatorMechanism.getInstance().runCommand(-0.4)).onFalse(ElevatorMechanism.getInstance().stopCommand());
         // controller.getButton(kA).onTrue(Arm.getInstance().pivot.resetCommand(0));
@@ -109,10 +109,16 @@ public class RobotContainer {
 
         controller.getButton(kLeftTrigger).onTrue(superstructure.setStateCommand(CORAL_GROUND)).onFalse(superstructure.setStateCommand(NEUTRAL));
         controller.getButton(kLeftBumper).onTrue(superstructure.setStateCommand(OUTTAKE)).onFalse(superstructure.setStateCommand(NEUTRAL));
-        controller.getButton(kA).onTrue(superstructure.setStateCommand(HANDOFF)).onFalse(superstructure.setStateCommand(NEUTRAL));
-        controller.getButton(kB).onTrue(superstructure.setStateCommand(HELD_NEUTRAL));
+        controller.getButton(kA).onTrue(superstructure.setStateCommand(HANDOFF)).onFalse(superstructure.setStateCommand(HELD_NEUTRAL));
         // controller.getButton(kX).onTrue(arm.pivot.resetCommand(180));
-        controller.getButton(kY).onTrue(superstructure.toggle(PRE_L3, L3));
+        // controller.getButton(kB).onTrue(superstructure.toggle(L2, PRE_L2));
+        // controller.getButton(kX).onTrue(superstructure.toggle(L3, PRE_L3));
+        // controller.getButton(kY).onTrue(superstructure.toggle(L4, PRE_L4));
+
+        controller.getButton(kY).onTrue(superstructure.setStateCommand(ALGAE_1)).onFalse(superstructure.setStateCommand(NEUTRAL));
+        controller.getButton(kB).onTrue(superstructure.setStateCommand(HELD_NEUTRAL));
+        controller.getButton(kX).onTrue(superstructure.setStateCommand(ALGAE_2)).onFalse(superstructure.setStateCommand(NEUTRAL));
+
         // controller.getButton(kBack).onTrue(arm.pivot.runCommand(0.4)).onFalse(arm.pivot.runCommand(-0));
         // controller.getButton(kStart).onTrue(arm.pivot.runCommand(-0.4)).onFalse(arm.pivot.runCommand(-0));
         // controller.getButton(kLeftBumper).whileTrue(ElevatorMechanism.getInstance().sysIdDynamic(Direction.kForward));

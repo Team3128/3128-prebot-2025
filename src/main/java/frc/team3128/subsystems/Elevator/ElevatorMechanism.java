@@ -22,7 +22,7 @@ public class ElevatorMechanism extends PositionSubsystemBase {
 
     private static ElevatorMechanism instance;
     //30, 0, 0, 0.25086, 4.52908, 0.99630, 0
-    private static PIDFFConfig config = new PIDFFConfig(16, 0, 0, 0.22023, 1.6802, 0.22435, 0.46679);
+    private static PIDFFConfig config = new PIDFFConfig(12, 0, 0, 0.22023, 1.6802, 0.22435, 0.46679);
     protected static Controller controller = new Controller(config, Controller.Type.POSITION);
 
     protected static NAR_CANSpark left = new NAR_CANSpark(BOTTOM_ID, ControllerType.CAN_SPARK_FLEX), right = new NAR_CANSpark(TOP_ID,ControllerType.CAN_SPARK_FLEX);
@@ -100,5 +100,9 @@ public class ElevatorMechanism extends PositionSubsystemBase {
             .linearPosition(position.mut_replace(left.getPosition(), Meters))
             .linearVelocity(velocity.mut_replace(left.getVelocity(), MetersPerSecond))
             .voltage(appliedVoltage.mut_replace(left.getAppliedOutput() * 12, Volts));
+    }
+
+    public boolean closeToSetpoint() {
+        return Math.abs(getSetpoint() - controller.getMeasurement()) <= 10 * TOLERANCE;
     }
 }

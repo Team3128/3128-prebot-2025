@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import common.hardware.motorcontroller.NAR_Motor.MotorConfig;
-import common.utility.shuffleboard.NAR_Shuffleboard;
 
 import static frc.team3128.Constants.ArmConstants.*;
 
@@ -58,7 +57,7 @@ public class PivotMechanism extends PositionSubsystemBase {
 
     @Override
     protected void configController() {
-       controller.enableContinuousInput(-180, 180);
+        controller.setInputRange(PIVOT_POSITION_MIN, PIVOT_POSITION_MAX);
        controller.configureFeedback(leader);
        controller.setTolerance(PIVOT_TOLERANCE);
     }   
@@ -95,6 +94,10 @@ public class PivotMechanism extends PositionSubsystemBase {
             .angularPosition(angle.mut_replace(leader.getPosition(), Degrees))
             .angularVelocity(velocity.mut_replace(leader.getVelocity(), DegreesPerSecond))
             .voltage(appliedVoltage.mut_replace(leader.getMotor().getMotorVoltage().getValueAsDouble(), Volts));
+    }
+
+    public boolean closeToSetpoint() {
+        return Math.abs(getSetpoint() - controller.getMeasurement()) <= 10 * PIVOT_TOLERANCE;
     }
     
 }
