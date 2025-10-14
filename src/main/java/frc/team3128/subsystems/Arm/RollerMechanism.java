@@ -2,6 +2,7 @@ package frc.team3128.subsystems.Arm;
 
 import common.core.subsystems.VoltageSubsystemBase;
 import common.hardware.motorcontroller.NAR_Motor.MotorConfig;
+import common.utility.shuffleboard.NAR_Shuffleboard;
 import common.hardware.motorcontroller.NAR_TalonFX;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,7 +46,8 @@ public class RollerMechanism extends VoltageSubsystemBase {
 
     @Override
     public void initShuffleboard() {
-        
+        NAR_Shuffleboard.addData(getName(), "Current", this::getCurrent, 0, 0);
+        NAR_Shuffleboard.addData(getName(), "Has Object", this::hasObjectPresent, 1, 0);
     }
 
         public SysIdRoutine driveRoutine = new SysIdRoutine(

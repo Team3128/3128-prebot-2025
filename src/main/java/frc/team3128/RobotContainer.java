@@ -89,6 +89,8 @@ public class RobotContainer {
     }   
 
     private void configureButtonBindings() {
+        // new Trigger(() -> superstructure.stateEquals(NEUTRAL) && arm.roller.hasObjectPresent() && arm.pivot.atSetpoint())
+        //     .onTrue(superstructure.setStateCommand(HELD_NEUTRAL));
         // controller.getButton(kA).onTrue(Swerve.getInstance().identifyOffsetsCommand().ignoringDisable(true));
         controller.getUpPOVButton().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetGyro(0)));
 
