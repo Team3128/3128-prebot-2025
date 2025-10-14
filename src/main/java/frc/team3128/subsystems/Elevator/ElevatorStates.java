@@ -3,7 +3,8 @@ package frc.team3128.subsystems.Elevator;
 public enum ElevatorStates {
 
     START(0),
-    NEUTRAL(0.95),
+    // NEUTRAL(0.95),
+    NEUTRAL(1),
     HELD_NEUTRAL(0),
     L1(0.5),
     L2(0.6),
@@ -13,7 +14,7 @@ public enum ElevatorStates {
     ALGAE_LOLLIPOP(0.5),
     ALGAE_GROUND(0),
     ALGAE_1(0.71),
-    ALGAE_2(1.17),
+    ALGAE_2(1.25),
     ALGAE_BARGE(1.5);
 
     private final double setpoint;

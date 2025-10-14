@@ -115,9 +115,9 @@ public class RobotContainer {
         // controller.getButton(kX).onTrue(superstructure.toggle(L3, PRE_L3));
         // controller.getButton(kY).onTrue(superstructure.toggle(L4, PRE_L4));
 
-        controller.getButton(kY).onTrue(superstructure.setStateCommand(ALGAE_1)).onFalse(superstructure.setStateCommand(NEUTRAL));
+        controller.getButton(kY).onTrue(superstructure.setStateCommand(ALGAE_1)).onFalse(superstructure.setStateCommand(HELD_NEUTRAL));
         controller.getButton(kB).onTrue(superstructure.setStateCommand(HELD_NEUTRAL));
-        controller.getButton(kX).onTrue(superstructure.setStateCommand(ALGAE_2)).onFalse(superstructure.setStateCommand(NEUTRAL));
+        controller.getButton(kX).onTrue(superstructure.setStateCommand(ALGAE_2)).onFalse(superstructure.setStateCommand(HELD_NEUTRAL));
 
         // controller.getButton(kBack).onTrue(arm.pivot.runCommand(0.4)).onFalse(arm.pivot.runCommand(-0));
         // controller.getButton(kStart).onTrue(arm.pivot.runCommand(-0.4)).onFalse(arm.pivot.runCommand(-0));
