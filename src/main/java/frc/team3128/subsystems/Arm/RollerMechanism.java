@@ -20,6 +20,7 @@ public class RollerMechanism extends VoltageSubsystemBase {
 
     private RollerMechanism() {
         super(CURRENT_THRESHOLD, leader);
+        initShuffleboard();
 
         leader.setUnitConversionFactor(ROLLER_GEAR_RATIO);
     }

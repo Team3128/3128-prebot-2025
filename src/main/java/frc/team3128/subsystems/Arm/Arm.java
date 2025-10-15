@@ -25,12 +25,21 @@ public class Arm extends FSMSubsystemBase<ArmStates> {
     private static final Command defaultTransitions[] = new Command[ArmStates.values().length];
     private Function<ArmStates, Command> defaultTransitioner = state -> {
         if (defaultTransitions[state.ordinal()] == null) {
-            defaultTransitions[state.ordinal()] = sequence(
-                roller.runCommand(-0.6),
-                pivot.pidTo(state.getAngle()),
-                waitUntil(() -> pivot.atSetpoint()),
-                roller.runCommand(state.getPower())
-            );
+            if (state == NEUTRAL || state == L1 || state == L2 || state == L3 || state == L4) {
+                defaultTransitions[state.ordinal()] = sequence(
+                    roller.stopCommand(),
+                    pivot.pidTo(state.getAngle()),
+                    waitUntil(() -> pivot.atSetpoint()),
+                    roller.runCommand(state.getPower())
+                );
+            } else {
+                defaultTransitions[state.ordinal()] = sequence(
+                    roller.runCommand(-0.6),
+                    pivot.pidTo(state.getAngle()),
+                    waitUntil(() -> pivot.atSetpoint()),
+                    roller.runCommand(state.getPower())
+                );
+            }
         }
         return defaultTransitions[state.ordinal()];
     };

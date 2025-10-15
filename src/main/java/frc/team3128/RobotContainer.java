@@ -27,8 +27,8 @@ import frc.team3128.subsystems.Swerve;
 import frc.team3128.subsystems.Climber.Climber;
 import frc.team3128.subsystems.Climber.ClimberStates;
 import frc.team3128.subsystems.Arm.*;
-import frc.team3128.subsystems.Intake.PivotMechanism;
-import frc.team3128.subsystems.Intake.RollerMechanism;
+// import frc.team3128.subsystems.Intake.PivotMechanism;
+// import frc.team3128.subsystems.Intake.RollerMechanism;
 import frc.team3128.subsystems.Elevator.*;
 import frc.team3128.subsystems.Intake.*;
 import frc.team3128.subsystems.Superstructure.Superstructure;
@@ -88,9 +88,20 @@ public class RobotContainer {
         configureButtonBindings();
     }   
 
+    // private void configureButtonBindings3() {
+    //     controller.getButton(kLeftBumper).whileTrue(Swerve.getInstance().sysIdDynamic(Direction.kForward).beforeStarting(Commands.runOnce(() -> Swerve.getInstance().zeroLock())));
+    //     controller.getButton(kLeftTrigger).whileTrue(Swerve.getInstance().sysIdDynamic(Direction.kReverse).beforeStarting(Commands.runOnce(() -> Swerve.getInstance().zeroLock())));
+    //     controller.getButton(kRightBumper).whileTrue(Swerve.getInstance().sysIdQuasistatic(Direction.kForward).beforeStarting(Commands.runOnce(() -> Swerve.getInstance().zeroLock())));
+    //     controller.getButton(kRightTrigger).whileTrue(Swerve.getInstance().sysIdQuasistatic(Direction.kReverse).beforeStarting(Commands.runOnce(() -> Swerve.getInstance().zeroLock())));
+    // }
+
     private void configureButtonBindings() {
-        // new Trigger(() -> superstructure.stateEquals(NEUTRAL) && arm.roller.hasObjectPresent() && arm.pivot.atSetpoint())
-        //     .onTrue(superstructure.setStateCommand(HELD_NEUTRAL));
+        new Trigger(() -> superstructure.getState() == NEUTRAL).debounce(0.5)
+            .and(() -> arm.roller.hasObjectPresent() && arm.pivot.atSetpoint())
+            .onTrue(superstructure.setStateCommand(HELD_NEUTRAL));
+        Trigger t = new Trigger(() -> superstructure.getState() == NEUTRAL).debounce(0.5);
+        NAR_Shuffleboard.addData("Auto Align", "Closest", () -> swerve.nearest(FieldStates.coralRight).name(), 0, 1);
+        NAR_Shuffleboard.addData("Auto Align", "Should Forward", () -> swerve.shouldScoreForward(), 1, 1);
         // controller.getButton(kA).onTrue(Swerve.getInstance().identifyOffsetsCommand().ignoringDisable(true));
         controller.getUpPOVButton().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetGyro(0)));
 
@@ -111,15 +122,33 @@ public class RobotContainer {
 
         controller.getButton(kLeftTrigger).onTrue(superstructure.setStateCommand(CORAL_GROUND)).onFalse(superstructure.setStateCommand(NEUTRAL));
         controller.getButton(kLeftBumper).onTrue(superstructure.setStateCommand(OUTTAKE)).onFalse(superstructure.setStateCommand(NEUTRAL));
-        controller.getButton(kA).onTrue(superstructure.setStateCommand(HANDOFF)).onFalse(superstructure.setStateCommand(HELD_NEUTRAL));
+        controller.getButton(kA).onTrue(superstructure.setStateCommand(HANDOFF)).onFalse(superstructure.setStateCommand(NEUTRAL));
         // controller.getButton(kX).onTrue(arm.pivot.resetCommand(180));
-        // controller.getButton(kB).onTrue(superstructure.toggle(L2, PRE_L2));
+        controller.getButton(kB).onTrue(superstructure.toggle(L2, PRE_L2));
+        controller.getButton(kX).and(controller.getButton(kRightTrigger)).onTrue(superstructure.toggle(L3, PRE_L3));
+        controller.getButton(kX).and(controller.getButton(kRightBumper)).onTrue(superstructure.toggle(L3_BACK, PRE_L3_BACK));
         // controller.getButton(kX).onTrue(superstructure.toggle(L3, PRE_L3));
+        controller.getButton(kY).and(controller.getButton(kRightTrigger)).onTrue(superstructure.toggle(L4, PRE_L4));
+        controller.getButton(kY).and(controller.getButton(kRightBumper)).onTrue(superstructure.toggle(L4_BACK, PRE_L4_BACK));
+        controller.getButton(kBack).onTrue(
+            either(
+                superstructure.alignScoreCoral(false),
+                superstructure.alignScoreCoralBack(false),
+                () -> swerve.shouldScoreForward()
+            )
+        );
+        controller.getButton(kStart).onTrue(
+            either(
+                superstructure.alignScoreCoral(true),
+                superstructure.alignScoreCoralBack(true),
+                () -> swerve.shouldScoreForward()
+            )
+        );
         // controller.getButton(kY).onTrue(superstructure.toggle(L4, PRE_L4));
 
-        controller.getButton(kY).onTrue(superstructure.setStateCommand(ALGAE_1)).onFalse(superstructure.setStateCommand(HELD_NEUTRAL));
-        controller.getButton(kB).onTrue(superstructure.setStateCommand(HELD_NEUTRAL));
-        controller.getButton(kX).onTrue(superstructure.setStateCommand(ALGAE_2)).onFalse(superstructure.setStateCommand(HELD_NEUTRAL));
+        // controller.getButton(kY).onTrue(superstructure.setStateCommand(ALGAE_1)).onFalse(superstructure.setStateCommand(HELD_NEUTRAL));
+        // controller.getButton(kB).onTrue(superstructure.setStateCommand(HELD_NEUTRAL));
+        // controller.getButton(kX).onTrue(superstructure.setStateCommand(ALGAE_2)).onFalse(superstructure.setStateCommand(HELD_NEUTRAL));
 
         // controller.getButton(kBack).onTrue(arm.pivot.runCommand(0.4)).onFalse(arm.pivot.runCommand(-0));
         // controller.getButton(kStart).onTrue(arm.pivot.runCommand(-0.4)).onFalse(arm.pivot.runCommand(-0));
@@ -191,11 +220,11 @@ public class RobotContainer {
         //Camera intakeCamera = new Camera("INTAKE_CAMERA", -0.30, -0.17,  -90, 0, 0);
         //intakeCamera.setThresholds(0.3, 3, 0.3);
             
-        Camera centerCamera = new Camera("CENTER_CAMERA", 0, 0.09, 0, Units.degreesToRadians(12), 0);
-        centerCamera.setThresholds(0, 3, 0.3);
+        Camera backTagCamera = new Camera("BACK_TAG", Units.inchesToMeters(8.875), -Units.inchesToMeters(7), Units.degreesToRadians(10), -Units.degreesToRadians(10), 0);
+        backTagCamera.setThresholds(0, 3, 0.3);
 
-        Camera swerveCamera = new Camera("SWERVE_CAMERA", -0.27, -0.27, Units.degreesToRadians(153), 0, 0);
-        swerveCamera.setThresholds(0, 3, 0.3);
+        Camera frontLeftCamera = new Camera("FRONT_LEFT", -0.27, -0.27, Units.degreesToRadians(153), 0, 0);
+        frontLeftCamera.setThresholds(0, 3, 0.3);
     }
 
     public void initDashboard() {

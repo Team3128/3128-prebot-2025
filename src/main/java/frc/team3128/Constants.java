@@ -224,10 +224,10 @@ public class Constants {
         public static final int MOD3_CANCODER_ID = 13;
 
         /* Cancoder Offsets */
-        public static final double MOD0_CANCODER_OFFSET = 40.95703125;
-        public static final double MOD1_CANCODER_OFFSET = 80.50781249999999;
-        public static final double MOD2_CANCODER_OFFSET = -6.064453125;
-        public static final double MOD3_CANCODER_OFFSET = -174.638671875;
+        public static final double MOD0_CANCODER_OFFSET = 40.95703125-180;
+        public static final double MOD1_CANCODER_OFFSET = 80.50781249999999+180;
+        public static final double MOD2_CANCODER_OFFSET = -6.064453125+180;
+        public static final double MOD3_CANCODER_OFFSET = -174.638671875+180;
         // public static final double MOD0_CANCODER_OFFSET = -117.94921874999999;
         // public static final double MOD1_CANCODER_OFFSET = -68.90625;
         // public static final double MOD2_CANCODER_OFFSET = 66.796875;
@@ -271,9 +271,9 @@ public class Constants {
         public static final double DRIVE_MOTOR_KF = 0.0;
 
         /* Drive Motor Characterization Values */
-        public static final double DRIVE_MOTOR_KS = 0.16621;//0.16746;//0.13023; //0.19057;//0.60094; // 0.19225;
-        public static final double DRIVE_MOTOR_KV = 2.62229; //1.95619;//1.92348; //2.01208;//1.1559;  // 2.4366
-        public static final double DRIVE_MOTOR_KA = -0.42513; // 0.4443;//0.10274; //0.09043; //0.12348; // 0.34415
+        public static final double DRIVE_MOTOR_KS = 0.07709;//0.16746;//0.13023; //0.19057;//0.60094; // 0.19225;
+        public static final double DRIVE_MOTOR_KV = 2.5672; //1.95619;//1.92348; //2.01208;//1.1559;  // 2.4366
+        public static final double DRIVE_MOTOR_KA = 0.16185; // 0.4443;//0.10274; //0.09043; //0.12348; // 0.34415
 
         /* Motor and Sensor IDs */
         public static final int PIDGEON_ID = 9; 
@@ -368,7 +368,7 @@ public class Constants {
 
         public static final double ROLLER_GEAR_RATIO = 1;
         public static final double ROLLER_SAMPLE_PER_MINUTE = 60;
-        public static final int ROLLER_STATOR_CURRENT_LIMIT = 40;
+        public static final int ROLLER_STATOR_CURRENT_LIMIT = 30;
         public static final boolean ROLLER_INVERT = false;
         public static final Neutral ROLLER_NEUTRAL_MODE = Neutral.BRAKE;
         public static final StatusFrames ROLLER_STATUS_FRAME = StatusFrames.POSITION;
@@ -396,7 +396,7 @@ public class Constants {
         public static final int ROLLER_STATOR_CURRENT_LIMIT = 30; // 20;
         public static final boolean ROLLER_INVERT = true;
         public static final Neutral ROLLER_NEUTRAL_MODE = Neutral.BRAKE;
-        public static final StatusFrames ROLLER_STATUS_FRAME = StatusFrames.POSITION;
+        public static final StatusFrames ROLLER_STATUS_FRAME = StatusFrames.VELOCITY;
         
         public static final String CAM_OBD = ""; // change this based on the object 
         public static final double X_OFFSET = 0;
@@ -408,7 +408,7 @@ public class Constants {
         public static final double INTAKE_HEIGHT = 0; // TODO
         public static final double ARM_LENGTH = 0; // TODO
 
-        public static final double CURRENT_THRESHOLD = 0.0; // TODO
+        public static final double CURRENT_THRESHOLD = 15.0; // TODO
     }
 
     public static class SuperstructureConstants {

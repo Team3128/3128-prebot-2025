@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import com.pathplanner.lib.util.FlippingUtil;
+
 import common.core.fsm.FSMSubsystemBase;
 import common.core.fsm.TransitionMap;
 import common.utility.shuffleboard.NAR_Shuffleboard;
@@ -150,13 +152,13 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
 
     public Command alignScoreCoral(boolean isRight) {
         final List<FieldStates> fieldStates = isRight ? FieldStates.coralRight : FieldStates.coralLeft;
-        Supplier<Pose2d> pose = () -> swerve.nearest(fieldStates).getPose2d();
+        Supplier<Pose2d> pose = () -> FlippingUtil.flipFieldPose(swerve.nearest(fieldStates).getPose2d());
         return alignScoreCoral(pose);
     }
 
     public Command alignScoreCoralBack(boolean isRight) {
         final List<FieldStates> fieldStates = isRight ? FieldStates.coralRight : FieldStates.coralLeft;
-        Supplier<Pose2d> pose = () -> swerve.nearest(fieldStates).getBackPose2d();
+        Supplier<Pose2d> pose = () -> FlippingUtil.flipFieldPose(swerve.nearest(fieldStates).getBackPose2d());
         return alignScoreCoral(pose);
     }
 
