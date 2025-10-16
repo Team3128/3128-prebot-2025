@@ -4,7 +4,6 @@ import common.core.controllers.Controller;
 import common.core.controllers.PIDFFConfig;
 import common.core.subsystems.PositionSubsystemBase;
 import common.hardware.motorcontroller.NAR_CANSpark;
-import common.hardware.motorcontroller.NAR_TalonFX;
 import common.hardware.motorcontroller.NAR_CANSpark.ControllerType;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;

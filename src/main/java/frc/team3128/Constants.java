@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.pathplanner.lib.util.FlippingUtil;
+
 import common.core.controllers.PIDFFConfig;
 import common.hardware.motorcontroller.NAR_Motor.MotorConfig;
 import common.hardware.motorcontroller.NAR_Motor.Neutral;
@@ -21,6 +23,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 public class Constants {
 
     public static class DriveConstants {
@@ -133,9 +136,16 @@ public class Constants {
         public static final Translation2d CENTER_FIELD = FIELD.div(2);
         public static final Translation2d MANIP_OFFSET = new Translation2d(Units.inchesToMeters(29.0 / 2.0), Units.inchesToMeters(8));
         public static final Translation2d MANIP_OFFSET_BACK = new Translation2d(Units.inchesToMeters(29.0 / 2.0), Units.inchesToMeters(-8));
-        public static final Translation2d REEF_STOP_DIST = new Translation2d(Units.inchesToMeters(5.0), 0);
+        public static final Translation2d REEF_STOP_DIST = new Translation2d(Units.inchesToMeters(0.5), 0);
         public static final Translation2d CORAL_LEFT_POLE_SHIFT = new Translation2d(0, Units.inchesToMeters(-13.0 / 2));
         public static final Translation2d SOURCE_LEFT_SHIFT = new Translation2d(0, Units.inchesToMeters(-12.5));
+
+        public static Pose2d allianceFlip(Pose2d pose) {
+            if (Robot.getAlliance() == Alliance.Red) {
+                return FlippingUtil.flipFieldPose(pose);
+            }
+            return pose;
+        }
 
         public enum FieldStates {
             A(18, REEF_STOP_DIST.plus(CORAL_LEFT_POLE_SHIFT)),

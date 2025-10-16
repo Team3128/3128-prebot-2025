@@ -48,6 +48,7 @@ import static frc.team3128.Constants.VisionConstants.*;
 import static frc.team3128.Constants.DriveConstants.*;
 import frc.team3128.Constants.DriveConstants;
 import frc.team3128.Constants.FieldConstants.FieldStates;
+import static frc.team3128.Constants.FieldConstants.*;
 import frc.team3128.Robot;
 
 import static edu.wpi.first.units.Units.*;
@@ -356,7 +357,9 @@ public class Swerve extends SwerveBase {
         return Collections.min(
             states,
             Comparator.comparing(
-                (FieldStates state) -> getPose().minus(state.getPose2d()).getTranslation().getNorm()
+                (FieldStates state) -> {
+                    return getPose().minus(allianceFlip(state.getPose2d())).getTranslation().getNorm();
+                }
             )
         );
     }
@@ -479,7 +482,7 @@ public class Swerve extends SwerveBase {
 
     public boolean shouldScoreForward() {
         FieldStates closest = nearest(FieldStates.coral);
-        double angleDiff = Math.abs(getPose().getRotation().minus(closest.getPose2d().getRotation()).getDegrees());
+        double angleDiff = Math.abs(getPose().getRotation().minus(allianceFlip(closest.getPose2d()).getRotation()).getDegrees());
         return angleDiff < 90;
     }
 }

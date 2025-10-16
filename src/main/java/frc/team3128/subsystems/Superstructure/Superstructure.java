@@ -11,21 +11,19 @@ import com.pathplanner.lib.util.FlippingUtil;
 import common.core.fsm.FSMSubsystemBase;
 import common.core.fsm.TransitionMap;
 import common.utility.shuffleboard.NAR_Shuffleboard;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import static frc.team3128.Constants.SuperstructureConstants.*;
 import static frc.team3128.subsystems.Superstructure.SuperstructureStates.*;
 
 import frc.team3128.Constants.FieldConstants.FieldStates;
 import frc.team3128.subsystems.Swerve;
 import frc.team3128.subsystems.Arm.Arm;
-import frc.team3128.subsystems.Arm.ArmStates;
 import frc.team3128.subsystems.Elevator.Elevator;
-import frc.team3128.subsystems.Elevator.ElevatorStates;
 import frc.team3128.subsystems.Intake.Intake;
+
+import static frc.team3128.Constants.FieldConstants.*;
 
 public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
 
@@ -152,13 +150,13 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
 
     public Command alignScoreCoral(boolean isRight) {
         final List<FieldStates> fieldStates = isRight ? FieldStates.coralRight : FieldStates.coralLeft;
-        Supplier<Pose2d> pose = () -> FlippingUtil.flipFieldPose(swerve.nearest(fieldStates).getPose2d());
+        Supplier<Pose2d> pose = () -> allianceFlip(swerve.nearest(fieldStates).getPose2d());
         return alignScoreCoral(pose);
     }
 
     public Command alignScoreCoralBack(boolean isRight) {
         final List<FieldStates> fieldStates = isRight ? FieldStates.coralRight : FieldStates.coralLeft;
-        Supplier<Pose2d> pose = () -> FlippingUtil.flipFieldPose(swerve.nearest(fieldStates).getBackPose2d());
+        Supplier<Pose2d> pose = () -> allianceFlip(swerve.nearest(fieldStates).getBackPose2d());
         return alignScoreCoral(pose);
     }
 
