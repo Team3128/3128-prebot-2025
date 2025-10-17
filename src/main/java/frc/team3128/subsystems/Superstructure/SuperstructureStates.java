@@ -24,34 +24,35 @@ public enum SuperstructureStates {
     ALGAE_2(ArmStates.ALGAE_2, ElevatorStates.ALGAE_2, IntakeStates.NEUTRAL),
     ALGAE_BARGE(ArmStates.ALGAE_BARGE, ElevatorStates.ALGAE_BARGE, IntakeStates.NEUTRAL),
 
-    PRE_L1(ArmStates.PRE_L1, ElevatorStates.L1, IntakeStates.NEUTRAL, true),
-    PRE_L2(ArmStates.PRE_L2, ElevatorStates.L2, IntakeStates.NEUTRAL, true),
-    PRE_L3(ArmStates.PRE_L3, ElevatorStates.L3, IntakeStates.NEUTRAL, true),
-    PRE_L4(ArmStates.PRE_L4, ElevatorStates.L4, IntakeStates.NEUTRAL, true),
-    PRE_L3_BACK(ArmStates.PRE_L3_BACK, ElevatorStates.L3, IntakeStates.NEUTRAL, true),
-    PRE_L4_BACK(ArmStates.PRE_L4_BACK, ElevatorStates.L4, IntakeStates.NEUTRAL, true),
+    PRE_L1(ArmStates.PRE_L1, ElevatorStates.L1, IntakeStates.NEUTRAL, true, false),
+    PRE_L2(ArmStates.PRE_L2, ElevatorStates.L2, IntakeStates.NEUTRAL, true, false),
+    PRE_L3(ArmStates.PRE_L3, ElevatorStates.L3, IntakeStates.NEUTRAL, true, false),
+    PRE_L4(ArmStates.PRE_L4, ElevatorStates.L4, IntakeStates.NEUTRAL, true, false),
+    PRE_L3_BACK(ArmStates.PRE_L3_BACK, ElevatorStates.L3, IntakeStates.NEUTRAL, true, false),
+    PRE_L4_BACK(ArmStates.PRE_L4_BACK, ElevatorStates.L4, IntakeStates.NEUTRAL, true, false),
 
-    L1(ArmStates.L1, ElevatorStates.L1, IntakeStates.NEUTRAL),
-    L2(ArmStates.L2, ElevatorStates.L2, IntakeStates.NEUTRAL),
-    L3(ArmStates.L3, ElevatorStates.L3, IntakeStates.NEUTRAL),
-    L4(ArmStates.L4, ElevatorStates.L4, IntakeStates.NEUTRAL),
-    L3_BACK(ArmStates.L3_BACK, ElevatorStates.L3, IntakeStates.NEUTRAL),
-    L4_BACK(ArmStates.L4_BACK, ElevatorStates.L4, IntakeStates.NEUTRAL);
+    L1(ArmStates.L1, ElevatorStates.L1, IntakeStates.NEUTRAL, false, true),
+    L2(ArmStates.L2, ElevatorStates.L2, IntakeStates.NEUTRAL, false, true),
+    L3(ArmStates.L3, ElevatorStates.L3, IntakeStates.NEUTRAL, false, true),
+    L4(ArmStates.L4, ElevatorStates.L4, IntakeStates.NEUTRAL, false, true),
+    L3_BACK(ArmStates.L3_BACK, ElevatorStates.L3, IntakeStates.NEUTRAL, false, true),
+    L4_BACK(ArmStates.L4_BACK, ElevatorStates.L4, IntakeStates.NEUTRAL, false, true);
 
     private final ArmStates arm;
     private final ElevatorStates elevator;
     private final IntakeStates intake;
-    private final boolean wait;
+    private final boolean waitClose, waitFull;
 
-    SuperstructureStates(ArmStates arm, ElevatorStates elevator, IntakeStates intake, boolean wait) {
+    SuperstructureStates(ArmStates arm, ElevatorStates elevator, IntakeStates intake, boolean waitClose, boolean waitFull) {
         this.arm = arm;
         this.elevator = elevator;
         this.intake = intake;
-        this.wait = wait;
+        this.waitClose = waitClose;
+        this.waitFull = waitFull;
     }
 
     SuperstructureStates(ArmStates arm, ElevatorStates elevator, IntakeStates intake) {
-        this(arm, elevator, intake, false);
+        this(arm, elevator, intake, false, false);
     }
 
     public ArmStates getArm() {
@@ -66,8 +67,12 @@ public enum SuperstructureStates {
         return intake;
     }
 
-    public boolean shouldWait() {
-        return wait;
+    public boolean shouldWaitClose() {
+        return waitClose;
+    }
+
+    public boolean shouldWaitFull() {
+        return waitFull;
     }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
     public static final List<SuperstructureStates> safeStates = List.of(NEUTRAL, CORAL_GROUND, HANDOFF,

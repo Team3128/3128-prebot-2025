@@ -2,7 +2,6 @@ package frc.team3128.subsystems.Intake;
 
 import static edu.wpi.first.wpilibj2.command.Commands.*;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.team3128.subsystems.Arm.Arm;
 import common.core.fsm.FSMSubsystemBase;
 import common.core.fsm.TransitionMap;
 import static frc.team3128.subsystems.Intake.IntakeStates.*;
@@ -48,10 +47,5 @@ public class Intake extends FSMSubsystemBase<IntakeStates> {
 	@Override
 	public void registerTransitions() {
         transitionMap.addCommutativeTransition(List.of(IntakeStates.values()), defaultTransitioner);
-        transitionMap.addConvergingTransition(HANDOFF, sequence(
-            pivot.pidTo(HANDOFF.getAngle()),
-            waitUntil(() -> pivot.atSetpoint() && Arm.getInstance().pivot.atSetpoint()).withTimeout(0.75),
-            roller.runCommand(HANDOFF.getPower())
-        ));
 	}
 }

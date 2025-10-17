@@ -476,8 +476,12 @@ public class Swerve extends SwerveBase {
         // }
     }
 
-    public boolean shouldWait() {
+    public boolean shouldWaitClose() {
         return autoMoveEnabled && !atElevatorDist();
+    }
+
+    public boolean shouldWaitFull() {
+        return autoMoveEnabled;
     }
 
     public boolean shouldScoreForward() {

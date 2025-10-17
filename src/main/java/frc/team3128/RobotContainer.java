@@ -95,72 +95,76 @@ public class RobotContainer {
     //     controller.getButton(kRightTrigger).whileTrue(Swerve.getInstance().sysIdQuasistatic(Direction.kReverse).beforeStarting(Commands.runOnce(() -> Swerve.getInstance().zeroLock())));
     // }
 
+    boolean l1Mode = false, l2Mode = false;
     private void configureButtonBindings() {
         new Trigger(() -> superstructure.getState() == NEUTRAL).debounce(0.5)
             .and(() -> arm.roller.hasObjectPresent() && arm.pivot.atSetpoint())
             .onTrue(superstructure.setStateCommand(HELD_NEUTRAL));
-        Trigger t = new Trigger(() -> superstructure.getState() == NEUTRAL).debounce(0.5);
-        NAR_Shuffleboard.addData("Auto Align", "Closest", () -> swerve.nearest(FieldStates.coralRight).name(), 0, 1);
-        NAR_Shuffleboard.addData("Auto Align", "Should Forward", () -> swerve.shouldScoreForward(), 1, 1);
-        // controller.getButton(kA).onTrue(Swerve.getInstance().identifyOffsetsCommand().ignoringDisable(true));
-        controller.getUpPOVButton().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetGyro(0)));
 
-        // controller.getButton(kA).whileTrue(Commands.run(()->Swerve.getInstance().drive(new Translation2d(0.2,0), 0)));
-        // controller.getButton(kB).whileTrue(Commands.run(()->Swerve.getInstance().drive(new Translation2d(0,0), 0.2)));
-        // controller.getButton(kX).onTrue(ElevatorMechanism.getInstance().runCommand(0.4)).onFalse(PivotMechanism.getInstance().stopCommand());
-        // controller.getButton(kY).onTrue(ElevatorMechanism.getInstance().runCommand(-0.4)).onFalse(PivotMechanism.getInstance().stopCommand());
-        controller.getDownPOVButton().onTrue(superstructure.setStateCommand(NEUTRAL));
-        // controller.getButton(kA).onTrue(ElevatorMechanism.getInstance().runCommand(0.4)).onFalse(ElevatorMechanism.getInstance().stopCommand());
-        // controller.getButton(kB).onTrue(ElevatorMechanism.getInstance().runCommand(-0.4)).onFalse(ElevatorMechanism.getInstance().stopCommand());
-        // controller.getButton(kA).onTrue(Arm.getInstance().pivot.resetCommand(0));
-        // controller.getButton(kLeftBumper).onTrue(ElevatorMechanism.getInstance().pidTo(0.3));
-        // controller.getButton(kRightBumper).onTrue(ElevatorMechanism.getInstance().pidTo(1.1));
-        // controller.getButton(kBack).whileTrue((Elevator.getInstance().elevator.runCommand(0.2))).onFalse(Elevator.getInstance().elevator.stopCommand());
-        // controller.getButton(kStart).whileTrue((Elevator.getInstance().elevator.runCommand(-0.2))).onFalse(Elevator.getInstance().elevator.stopCommand());
-        // controller.getButton(kY).onTrue((Intake.getInstance().pivot.runCommand(0.1)));
-        // controller.getButton(kBack).onTrue((Intake.getInstance().roller.runCommand(0.1)));
+        controller.getUpPOVButton()
+            .onTrue(Commands.runOnce(() -> Swerve.getInstance().resetGyro(0)));
+        controller.getDownPOVButton()
+            .onTrue(superstructure.setStateCommand(NEUTRAL));
 
-        controller.getButton(kLeftTrigger).onTrue(superstructure.setStateCommand(CORAL_GROUND)).onFalse(superstructure.setStateCommand(NEUTRAL));
-        controller.getButton(kLeftBumper).onTrue(superstructure.setStateCommand(OUTTAKE)).onFalse(superstructure.setStateCommand(NEUTRAL));
-        controller.getButton(kA).onTrue(superstructure.setStateCommand(HANDOFF)).onFalse(superstructure.setStateCommand(NEUTRAL));
-        // controller.getButton(kX).onTrue(arm.pivot.resetCommand(180));
-        controller.getButton(kB).onTrue(superstructure.toggle(L2, PRE_L2));
-        controller.getButton(kX).and(controller.getButton(kRightTrigger)).onTrue(superstructure.toggle(L3, PRE_L3));
-        controller.getButton(kX).and(controller.getButton(kRightBumper)).onTrue(superstructure.toggle(L3_BACK, PRE_L3_BACK));
-        // controller.getButton(kX).onTrue(superstructure.toggle(L3, PRE_L3));
-        controller.getButton(kY).and(controller.getButton(kRightTrigger)).onTrue(superstructure.toggle(L4, PRE_L4));
-        controller.getButton(kY).and(controller.getButton(kRightBumper)).onTrue(superstructure.toggle(L4_BACK, PRE_L4_BACK));
-        controller.getButton(kBack).onTrue(
-            either(
+        controller.getButton(kLeftTrigger)
+            .onTrue(superstructure.setStateCommand(CORAL_GROUND))
+            .onFalse(either(
+                superstructure.setStateCommand(NEUTRAL),
+                sequence(
+                    superstructure.setStateCommand(HANDOFF),
+                    waitSeconds(0.5),
+                    superstructure.setStateCommand(NEUTRAL)
+                ), 
+                () -> l1Mode
+            ));
+        controller.getButton(kLeftBumper)
+            .onTrue(superstructure.setStateCommand(OUTTAKE))
+            .onFalse(superstructure.setStateCommand(NEUTRAL));
+        
+        controller.getButton(kB)
+            .onTrue(superstructure.tempToggle(PRE_L2, L2));
+        controller.getButton(kX)
+            .onTrue(either(
+                superstructure.tempToggle(PRE_L3, L3),
+                either(
+                    superstructure.tempToggle(PRE_L3, L3),
+                    superstructure.tempToggle(PRE_L3_BACK, L3_BACK),
+                    () -> swerve.shouldScoreForward()
+                ),
+                () -> l2Mode
+            ));
+        controller.getButton(kY)
+            .onTrue(either(
+                superstructure.tempToggle(PRE_L4, L4),
+                either(
+                    superstructure.tempToggle(PRE_L4, L4),
+                    superstructure.tempToggle(PRE_L4_BACK, L4_BACK),
+                    () -> swerve.shouldScoreForward()
+                ),
+                () -> l2Mode
+            ));
+        
+        controller.getButton(kBack)
+            .onTrue(either(
                 superstructure.alignScoreCoral(false),
-                superstructure.alignScoreCoralBack(false),
-                () -> swerve.shouldScoreForward()
-            )
-        );
-        controller.getButton(kStart).onTrue(
-            either(
+                either(
+                    superstructure.alignScoreCoral(false),
+                    superstructure.alignScoreCoralBack(false),
+                    () -> swerve.shouldScoreForward()
+                ),
+                () -> l2Mode
+            ));
+
+        controller.getButton(kStart)
+            .onTrue(either(
                 superstructure.alignScoreCoral(true),
-                superstructure.alignScoreCoralBack(true),
-                () -> swerve.shouldScoreForward()
-            )
-        );
-        // controller.getButton(kY).onTrue(superstructure.toggle(L4, PRE_L4));
-
-        // controller.getButton(kY).onTrue(superstructure.setStateCommand(ALGAE_1)).onFalse(superstructure.setStateCommand(HELD_NEUTRAL));
-        // controller.getButton(kB).onTrue(superstructure.setStateCommand(HELD_NEUTRAL));
-        // controller.getButton(kX).onTrue(superstructure.setStateCommand(ALGAE_2)).onFalse(superstructure.setStateCommand(HELD_NEUTRAL));
-
-        // controller.getButton(kBack).onTrue(arm.pivot.runCommand(0.4)).onFalse(arm.pivot.runCommand(-0));
-        // controller.getButton(kStart).onTrue(arm.pivot.runCommand(-0.4)).onFalse(arm.pivot.runCommand(-0));
-        // controller.getButton(kLeftBumper).whileTrue(ElevatorMechanism.getInstance().sysIdDynamic(Direction.kForward));
-        // controller.getButton(kLeftTrigger).whileTrue(ElevatorMechanism.getInstance().sysIdDynamic(Direction.kReverse));
-        // controller.getButton(kRightBumper).whileTrue(ElevatorMechanism.getInstance().sysIdQuasistatic(Direction.kForward));
-        // controller.getButton(kRightTrigger).whileTrue(ElevatorMechanism.getInstance().sysIdQuasistatic(Direction.kReverse));
-
-        // controller.getButton(kLeftBumper).whileTrue(Swerve.getInstance().sysIdDynamic(Direction.kForward).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
-        // controller.getButton(kLeftTrigger).whileTrue(Swerve.getInstance().sysIdDynamic(Direction.kReverse).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
-        // controller.getButton(kRightBumper).whileTrue(Swerve.getInstance().sysIdQuasistatic(Direction.kForward).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
-        // controller.getButton(kRightTrigger).whileTrue(Swerve.getInstance().sysIdQuasistatic(Direction.kReverse).beforeStarting(Commands.runOnce(()->Swerve.getInstance().zeroLock())));
+                either(
+                    superstructure.alignScoreCoral(true),
+                    superstructure.alignScoreCoralBack(true),
+                    () -> swerve.shouldScoreForward()
+                ),
+                () -> l2Mode
+            ));
     }
 
     private boolean lastRight = false;

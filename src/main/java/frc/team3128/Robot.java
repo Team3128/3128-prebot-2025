@@ -13,6 +13,7 @@ import common.hardware.camera.Camera;
 import common.utility.Log;
 import static common.utility.Log.Type.*;
 import static edu.wpi.first.wpilibj2.command.Commands.*;
+import static frc.team3128.subsystems.Intake.IntakeStates.INTAKE;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -24,8 +25,15 @@ import frc.team3128.Constants.FieldConstants.FieldStates;
 import frc.team3128.autonomous.AutoPrograms;
 import frc.team3128.subsystems.Swerve;
 import frc.team3128.subsystems.Arm.Arm;
+import frc.team3128.subsystems.Arm.ArmStates;
+import frc.team3128.subsystems.Climber.Climber;
+import frc.team3128.subsystems.Climber.ClimberStates;
 import frc.team3128.subsystems.Elevator.Elevator;
+import frc.team3128.subsystems.Elevator.ElevatorStates;
 import frc.team3128.subsystems.Intake.Intake;
+import frc.team3128.subsystems.Intake.IntakeStates;
+import frc.team3128.subsystems.Superstructure.Superstructure;
+import frc.team3128.subsystems.Superstructure.SuperstructureStates;
 
 // import frc.team3128.autonomous.AutoPrograms;
 import com.pathplanner.lib.commands.PathfindingCommand;
@@ -164,6 +172,11 @@ public class Robot extends NAR_Robot {
     public void disabledInit() {
         CommandScheduler.getInstance().cancelAll();
         Swerve.disable();
+        Arm.getInstance().overrideState(ArmStates.START);
+        Climber.getInstance().overrideState(ClimberStates.START);
+        Elevator.getInstance().overrideState(ElevatorStates.START);
+        Intake.getInstance().overrideState(IntakeStates.START);
+        Superstructure.getInstance().overrideState(SuperstructureStates.START);
     }
 
     @Override

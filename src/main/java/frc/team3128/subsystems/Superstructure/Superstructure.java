@@ -3,10 +3,9 @@ package frc.team3128.subsystems.Superstructure;
 import static edu.wpi.first.wpilibj2.command.Commands.*;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import com.pathplanner.lib.util.FlippingUtil;
 
 import common.core.fsm.FSMSubsystemBase;
 import common.core.fsm.TransitionMap;
@@ -40,10 +39,10 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         if (defaultTransitions[state.ordinal()] == null) {
             defaultTransitions[state.ordinal()] = parallel(
                 arm.setStateCommand(state.getArm()),
-                elevator.setStateCommand(state.getElevator())
-                    .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait())),
+                elevator.setStateCommand(state.getElevator()),
                 intake.setStateCommand(state.getIntake())
-            );
+            ).beforeStarting(waitUntil(() -> !swerve.shouldWaitClose()).onlyIf(() -> state.shouldWaitClose()))
+            .beforeStarting(waitUntil(() -> !swerve.shouldWaitFull()).onlyIf(() -> state.shouldWaitFull()));;
         }
         return defaultTransitions[state.ordinal()];
     };
@@ -57,8 +56,8 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
                 ),
                 waitUntil(() -> arm.pivot.closeToSetpoint()),
                 elevator.setStateCommand(state.getElevator())
-                    .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait()))
-            );
+            ).beforeStarting(waitUntil(() -> !swerve.shouldWaitClose()).onlyIf(() -> state.shouldWaitClose()))
+            .beforeStarting(waitUntil(() -> !swerve.shouldWaitFull()).onlyIf(() -> state.shouldWaitFull()));
         }
         return toHazardTransitions[state.ordinal()];
     };
@@ -67,13 +66,13 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         if (fromHazardTransitions[state.ordinal()] == null) {
             fromHazardTransitions[state.ordinal()] = sequence(
                 parallel(
-                    elevator.setStateCommand(state.getElevator())
-                        .beforeStarting(waitUntil(() -> !swerve.shouldWait()).onlyIf(() -> state.shouldWait())),
+                    elevator.setStateCommand(state.getElevator()),
                     intake.setStateCommand(state.getIntake())
                 ),
                 waitUntil(() -> elevator.elevator.closeToSetpoint()),
                 arm.setStateCommand(state.getArm())
-            );
+            ).beforeStarting(waitUntil(() -> !swerve.shouldWaitClose()).onlyIf(() -> state.shouldWaitClose()))
+            .beforeStarting(waitUntil(() -> !swerve.shouldWaitFull()).onlyIf(() -> state.shouldWaitFull()));
         }
         return fromHazardTransitions[state.ordinal()];
     };
@@ -106,28 +105,44 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         transitionMap.addTransition(START, NEUTRAL, fromHazardTransitioner);
     }
 
-    public Command toggle(SuperstructureStates state1, SuperstructureStates state2) {
-        return either(setStateCommand(state1), setStateCommand(state2), () -> stateEquals(state2));
-    }
-
-    public Command toggle(SuperstructureStates state) {
-        return toggle(state, SuperstructureStates.NEUTRAL);
-    }
-
-    public Command tempToggle(SuperstructureStates state1, SuperstructureStates state2, double delay) {
+    public Command toggle(Command defaultCommand, Command exclusiveCommand, BooleanSupplier condition) {
         return either(
-            sequence(
-                setStateCommand(state2),
-                waitSeconds(delay),
-                setStateCommand(NEUTRAL)
-            ),
-            setStateCommand(state1),
-            () -> stateEquals(state1)
+            exclusiveCommand,
+            defaultCommand,
+            condition
         );
     }
 
-    public Command tempToggle(SuperstructureStates state1, SuperstructureStates state2) {
-        return tempToggle(state1, state2, 0.5);
+    public Command toggle(SuperstructureStates defaultState, SuperstructureStates exclusiveState, BooleanSupplier condition) {
+        return toggle(setStateCommand(defaultState), setStateCommand(exclusiveState), condition);
+    }
+
+    public Command toggle(SuperstructureStates defaultState, SuperstructureStates exclusiveState) {
+        return toggle(defaultState, exclusiveState, ()-> stateEquals(defaultState));
+    }
+
+    public Command toggle(SuperstructureStates state) {
+        return toggle(state, NEUTRAL);
+    }
+
+    public Command tempToggle(SuperstructureStates defaultState, SuperstructureStates exclusiveState, BooleanSupplier condition, double delay) {
+        return either(
+            sequence(
+                setStateCommand(exclusiveState),
+                waitSeconds(0.5),
+                setStateCommand(NEUTRAL)
+            ),
+            setStateCommand(defaultState), 
+            condition
+        );
+    }
+
+    public Command tempToggle(SuperstructureStates defaultStates, SuperstructureStates exclusiveState, BooleanSupplier condition) {
+        return tempToggle(defaultStates, exclusiveState, condition, 1);
+    }
+
+    public Command tempToggle(SuperstructureStates defaultStates, SuperstructureStates exclusiveState) {
+        return tempToggle(defaultStates, exclusiveState,  ()-> stateEquals(defaultStates), 1);
     }
 
     public Command alignScoreCoral(Supplier<Pose2d> pose) {
@@ -159,6 +174,4 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         Supplier<Pose2d> pose = () -> allianceFlip(swerve.nearest(fieldStates).getBackPose2d());
         return alignScoreCoral(pose);
     }
-
-    // public Command alignIntakeAlgae()
 }
