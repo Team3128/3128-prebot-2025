@@ -129,7 +129,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         return either(
             sequence(
                 setStateCommand(exclusiveState),
-                waitSeconds(0.5),
+                waitSeconds(1.25),
                 setStateCommand(NEUTRAL)
             ),
             setStateCommand(defaultState), 
@@ -153,7 +153,8 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
                     if (stateEquals(coupledState.getFirst())) {
                         sequence(
                             setStateCommand(coupledState.getSecond()),
-                            waitSeconds(0.5),
+                            waitSeconds(0.75),
+                            swerve.driveBackwards().withDeadline(waitSeconds(0.5)),
                             setStateCommand(NEUTRAL)
                         ).schedule();
                         break;

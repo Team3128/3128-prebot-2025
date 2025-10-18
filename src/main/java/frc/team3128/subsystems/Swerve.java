@@ -52,6 +52,7 @@ import static frc.team3128.Constants.FieldConstants.*;
 import frc.team3128.Robot;
 
 import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.wpilibj2.command.Commands.either;
 
 public class Swerve extends SwerveBase {
 
@@ -108,7 +109,7 @@ public class Swerve extends SwerveBase {
 
     // x * kP = dx/dt && (v_max)^2 = 2*a_max*x
     public static final Constraints translationConstraints = new Constraints(MAX_DRIVE_SPEED, MAX_DRIVE_ACCELERATION);
-    public static final PIDFFConfig translationConfig = new PIDFFConfig(1, 0, 0);//used to be 4,2//3 // used to be 5//2 * MAX_DRIVE_ACCELERATION / MAX_DRIVE_SPEED); //Conservative Kp estimate (2*a_max/v_max)
+    public static final PIDFFConfig translationConfig = new PIDFFConfig(2.5, 0, 0);//used to be 4,2//3 // used to be 5//2 * MAX_DRIVE_ACCELERATION / MAX_DRIVE_SPEED); //Conservative Kp estimate (2*a_max/v_max)
     public static final Controller translationController = new Controller(translationConfig, Controller.Type.POSITION); //Displacement error to output velocity
     public static final double translationTolerance = 0.03;
 
@@ -488,5 +489,13 @@ public class Swerve extends SwerveBase {
         FieldStates closest = nearest(FieldStates.coral);
         double angleDiff = Math.abs(getPose().getRotation().minus(allianceFlip(closest.getPose2d()).getRotation()).getDegrees());
         return angleDiff < 90;
+    }
+
+    public Command driveBackwards() {
+        return either(
+            run(() -> drive(-1, 0, 0)), 
+            run(() -> drive(1, 0, 0)), 
+            this::shouldScoreForward
+        );
     }
 }

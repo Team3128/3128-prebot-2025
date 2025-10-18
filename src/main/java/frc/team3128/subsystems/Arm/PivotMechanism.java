@@ -97,7 +97,7 @@ public class PivotMechanism extends PositionSubsystemBase {
     }
 
     public boolean closeToSetpoint() {
-        return Math.abs(getSetpoint() - controller.getMeasurement()) <= 10 * PIVOT_TOLERANCE;
+        return Math.abs(getSetpoint() - controller.getMeasurement()) <= 30 * PIVOT_TOLERANCE;
     }
     
 }

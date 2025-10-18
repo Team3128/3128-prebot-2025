@@ -105,14 +105,18 @@ public class RobotContainer {
             .onTrue(Commands.runOnce(() -> Swerve.getInstance().resetGyro(0)));
         controller.getDownPOVButton()
             .onTrue(superstructure.setStateCommand(NEUTRAL));
+        controller.getLeftPOVButton()
+            .onTrue(arm.roller.runCommand(0.5))
+            .onFalse(arm.roller.stopCommand());
 
         controller.getButton(kLeftTrigger)
             .onTrue(superstructure.setStateCommand(CORAL_GROUND))
             .onFalse(either(
                 superstructure.setStateCommand(NEUTRAL),
                 sequence(
-                    superstructure.setStateCommand(HANDOFF),
                     waitSeconds(0.5),
+                    superstructure.setStateCommand(HANDOFF),
+                    waitSeconds(1.25),
                     superstructure.setStateCommand(NEUTRAL)
                 ), 
                 () -> l1Mode
@@ -165,6 +169,22 @@ public class RobotContainer {
                 ),
                 () -> l2Mode
             ));
+
+        controller.getButton(kRightTrigger)
+            .onTrue(superstructure.toggle(ALGAE_1));
+        controller.getButton(kRightTrigger)
+            .onTrue(superstructure.toggle(ALGAE_2));
+
+        controller2.getButton(kA)
+            .onTrue(runOnce(() -> l1Mode = !l1Mode));
+        controller2.getButton(kB)
+            .onTrue(runOnce(() -> l2Mode = !l2Mode));
+
+        controller2.getButton(kX)
+            .onTrue(climber.runCommand(0.4))
+            .onFalse(climber.runCommand(0));
+
+        controller.getRightPOVButton().whileTrue(swerve.driveBackwards());
     }
 
     private boolean lastRight = false;

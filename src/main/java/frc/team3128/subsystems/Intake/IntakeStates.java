@@ -4,7 +4,7 @@ public enum IntakeStates {
 
     START(0, 0),
     NEUTRAL(3, -.05),
-    INTAKE(133, -0.7),
+    INTAKE(133, -0.45),
     OUTTAKE(30, 0.8),
     HANDOFF(3, 1);
 
