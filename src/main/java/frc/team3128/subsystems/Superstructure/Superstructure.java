@@ -99,8 +99,8 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
     @Override
     public void registerTransitions() {
         transitionMap.addCommutativeTransition(SuperstructureStates.safeStates, defaultTransitioner);
-        transitionMap.addConvergingTransition(SuperstructureStates.hazardStates, toHazardTransitioner);
         transitionMap.addDivergingTransition(SuperstructureStates.hazardStates, fromHazardTransitioner);
+        transitionMap.addConvergingTransition(SuperstructureStates.hazardStates, toHazardTransitioner);
         transitionMap.addDivergingTransition(START, (Command) null);
         transitionMap.addTransition(START, NEUTRAL, fromHazardTransitioner);
     }
@@ -143,6 +143,27 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
 
     public Command tempToggle(SuperstructureStates defaultStates, SuperstructureStates exclusiveState) {
         return tempToggle(defaultStates, exclusiveState,  ()-> stateEquals(defaultStates), 1);
+    }
+
+    public Command alignScoreCoralAuto(Supplier<Pose2d> pose) {
+        return sequence(
+            swerve.navigateTo(pose),
+            Commands.runOnce(() -> {
+                for (Pair<SuperstructureStates, SuperstructureStates> coupledState : coupledStates) {
+                    if (stateEquals(coupledState.getFirst())) {
+                        sequence(
+                            setStateCommand(coupledState.getSecond()),
+                            waitSeconds(0.75),
+                            swerve.driveBackwards().withDeadline(waitSeconds(0.5)),
+                            setStateCommand(HELD_NEUTRAL)
+                        ).schedule();
+                        break;
+                    }
+                }
+            })
+        ).alongWith(
+            Commands.run(() -> swerve.drive(0, 0, 0), swerve).until(() -> swerve.driving)
+        );
     }
 
     public Command alignScoreCoral(Supplier<Pose2d> pose) {

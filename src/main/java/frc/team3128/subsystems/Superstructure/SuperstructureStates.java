@@ -14,11 +14,12 @@ public enum SuperstructureStates {
     HELD_NEUTRAL(ArmStates.HELD_NEUTRAL, ElevatorStates.HELD_NEUTRAL, IntakeStates.NEUTRAL),
 
     CORAL_GROUND(ArmStates.NEUTRAL, ElevatorStates.NEUTRAL, IntakeStates.INTAKE),
+    CORAL_GROUND_L1(ArmStates.HELD_NEUTRAL, ElevatorStates.HELD_NEUTRAL, IntakeStates.INTAKE),
     CORAL_LOLLIPOP(ArmStates.GROUND_INTAKE, ElevatorStates.CORAL_LOLLIPOP, IntakeStates.NEUTRAL),
     ALGAE_GROUND(ArmStates.GROUND_INTAKE, ElevatorStates.ALGAE_GROUND, IntakeStates.NEUTRAL),
     ALGAE_LOLLIPOP(ArmStates.GROUND_INTAKE, ElevatorStates.ALGAE_LOLLIPOP, IntakeStates.NEUTRAL),
     HANDOFF(ArmStates.HANDOFF, ElevatorStates.NEUTRAL, IntakeStates.HANDOFF),
-    OUTTAKE(ArmStates.NEUTRAL, ElevatorStates.NEUTRAL, IntakeStates.OUTTAKE),
+    OUTTAKE(ArmStates.HELD_NEUTRAL, ElevatorStates.HELD_NEUTRAL, IntakeStates.OUTTAKE),
 
     ALGAE_1(ArmStates.ALGAE_1, ElevatorStates.ALGAE_1, IntakeStates.NEUTRAL),
     ALGAE_2(ArmStates.ALGAE_2, ElevatorStates.ALGAE_2, IntakeStates.NEUTRAL),
@@ -78,7 +79,7 @@ public enum SuperstructureStates {
     public static final List<SuperstructureStates> safeStates = List.of(NEUTRAL, CORAL_GROUND, HANDOFF,
             ALGAE_2, ALGAE_BARGE, PRE_L1, PRE_L3, PRE_L4, PRE_L3_BACK, PRE_L4_BACK, L2, L3, L4, L3_BACK, L4_BACK);
 
-    public static final List<SuperstructureStates> hazardStates = List.of(HELD_NEUTRAL, CORAL_GROUND, CORAL_LOLLIPOP,
+    public static final List<SuperstructureStates> hazardStates = List.of(START, HELD_NEUTRAL, CORAL_GROUND_L1, CORAL_LOLLIPOP, OUTTAKE,
         ALGAE_GROUND, ALGAE_LOLLIPOP, ALGAE_1, PRE_L2, L2);
 
     public static final List<Pair<SuperstructureStates, SuperstructureStates>> coupledStates = List.of(

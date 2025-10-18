@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
@@ -23,13 +24,18 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.team3128.Constants.FieldConstants.FieldStates;
 import frc.team3128.Robot;
 import frc.team3128.subsystems.Swerve;
+import frc.team3128.subsystems.Superstructure.Superstructure;
 
 import static edu.wpi.first.wpilibj2.command.Commands.*;
 
 import common.utility.Log;
+
+import static frc.team3128.Constants.FieldConstants.allianceFlip;
 import static frc.team3128.Constants.SwerveConstants.*;
+import static frc.team3128.subsystems.Superstructure.SuperstructureStates.*;
 
 
 /**
@@ -45,8 +51,10 @@ public class AutoPrograms {
     private RobotConfig robotConfig;
     private static AutoPrograms instance;
     SendableChooser<Command> autoChooser;
+    private Superstructure superstructure;
 
     private AutoPrograms() {
+        superstructure = Superstructure.getInstance();
         configPathPlanner();
         initAutoSelector();
     }
@@ -109,7 +117,44 @@ public class AutoPrograms {
             robotConfig,
             ()-> Robot.getAlliance() == Alliance.Red,
             swerve
-            );
+        );
+        NamedCommands.registerCommand(
+            "Start",
+            runOnce(() -> {
+                superstructure.overrideState(HELD_NEUTRAL);
+                swerve.resetGyro(Robot.getAlliance() == Alliance.Red ? 0 : 180);
+            })
+        );
+        for (FieldStates state : FieldStates.values()) {
+            if (state.name().length() == 1) {
+                NamedCommands.registerCommand(
+                    "Front L4 " + state.name(),
+                    parallel(
+                        superstructure.alignScoreCoralAuto(() -> allianceFlip(state.getPose2d())),
+                        sequence(
+                            waitSeconds(0.5),
+                            superstructure.setStateCommand(PRE_L4)
+                        )
+                    ).withDeadline(
+                        sequence(
+                            waitSeconds(0.5),
+                            waitUntil(() -> superstructure.stateEquals(HELD_NEUTRAL))
+                        )
+                    )
+                );
+                
+                NamedCommands.registerCommand(
+                    "Back L4 " + state.name(),
+                    parallel(
+                        superstructure.alignScoreCoralAuto(() -> allianceFlip(state.getBackPose2d())),
+                        sequence(
+                            waitSeconds(0.5),
+                            superstructure.setStateCommand(PRE_L4)
+                        )
+                    ).until(() -> superstructure.stateEquals(HELD_NEUTRAL))
+                );
+            }
+        }
     }
 
     public static Command getPathPlannerAuto(String trajectoryName) {
@@ -135,7 +180,7 @@ public class AutoPrograms {
         // String hardcode = "LB_3pc_ILK_auto";
         // String hardcode = "MID_1pc_H_auto"; 
         // String hardcode = "Left_Leave_Backwards";
-        String hardcode = "RB_3pc_FCD_auto";
+        String hardcode = "proc_1pc_b";
         
          
         Command autoCommand;

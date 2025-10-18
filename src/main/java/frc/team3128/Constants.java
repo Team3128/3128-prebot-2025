@@ -135,8 +135,8 @@ public class Constants {
         public static final double FIELD_Y_LENGTH = Units.inchesToMeters(317); // meters = 8.052
         public static final Translation2d FIELD = new Translation2d(FIELD_X_LENGTH, FIELD_Y_LENGTH);
         public static final Translation2d CENTER_FIELD = FIELD.div(2);
-        public static final Translation2d MANIP_OFFSET = new Translation2d(Units.inchesToMeters(29.0 / 2.0), Units.inchesToMeters(7.5));
-        public static final Translation2d MANIP_OFFSET_BACK = new Translation2d(Units.inchesToMeters(29.0 / 2.0), Units.inchesToMeters(-7.5));
+        public static final Translation2d MANIP_OFFSET = new Translation2d(Units.inchesToMeters(29.0 / 2.0), Units.inchesToMeters(8));
+        public static final Translation2d MANIP_OFFSET_BACK = new Translation2d(Units.inchesToMeters(29.0 / 2.0), Units.inchesToMeters(-8));
         public static final Translation2d REEF_STOP_DIST = new Translation2d(Units.inchesToMeters(0.5), 0);
         public static final Translation2d CORAL_LEFT_POLE_SHIFT = new Translation2d(0, Units.inchesToMeters(-13.0 / 2));
         public static final Translation2d SOURCE_LEFT_SHIFT = new Translation2d(0, Units.inchesToMeters(-12.5));
@@ -379,7 +379,7 @@ public class Constants {
 
         public static final double ROLLER_GEAR_RATIO = 1;
         public static final double ROLLER_SAMPLE_PER_MINUTE = 60;
-        public static final int ROLLER_STATOR_CURRENT_LIMIT = 30;
+        public static final int ROLLER_STATOR_CURRENT_LIMIT = 40;
         public static final boolean ROLLER_INVERT = false;
         public static final Neutral ROLLER_NEUTRAL_MODE = Neutral.BRAKE;
         public static final StatusFrames ROLLER_STATUS_FRAME = StatusFrames.POSITION;
@@ -419,7 +419,7 @@ public class Constants {
         public static final double INTAKE_HEIGHT = 0; // TODO
         public static final double ARM_LENGTH = 0; // TODO
 
-        public static final double CURRENT_THRESHOLD = 15.0; // TODO
+        public static final double CURRENT_THRESHOLD = 17.0; // TODO
     }
 
     public static class SuperstructureConstants {

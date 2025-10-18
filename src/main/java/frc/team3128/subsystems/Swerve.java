@@ -491,10 +491,23 @@ public class Swerve extends SwerveBase {
         return angleDiff < 90;
     }
 
+    public boolean driving = false;
     public Command driveBackwards() {
+        var back = new FunctionalCommand(
+            () -> driving = true,
+            () -> drive(-1, 0, 0),
+            (b) -> driving = false,
+            () -> false
+        );
+        var forward = new FunctionalCommand(
+            () -> driving = true,
+            () -> drive(1, 0, 0),
+            (b) -> driving = false,
+            () -> false
+        );
         return either(
-            run(() -> drive(-1, 0, 0)), 
-            run(() -> drive(1, 0, 0)), 
+            back,
+            forward, 
             this::shouldScoreForward
         );
     }

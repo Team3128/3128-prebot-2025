@@ -110,20 +110,25 @@ public class RobotContainer {
             .onFalse(arm.roller.stopCommand());
 
         controller.getButton(kLeftTrigger)
-            .onTrue(superstructure.setStateCommand(CORAL_GROUND))
+            .onTrue(either(
+                superstructure.setStateCommand(CORAL_GROUND_L1),
+                superstructure.setStateCommand(CORAL_GROUND),
+                () -> l1Mode
+            ))
             .onFalse(either(
-                superstructure.setStateCommand(NEUTRAL),
+                superstructure.setStateCommand(HELD_NEUTRAL),
                 sequence(
+                    superstructure.setStateCommand(NEUTRAL),
                     waitSeconds(0.5),
                     superstructure.setStateCommand(HANDOFF),
-                    waitSeconds(1.25),
+                    waitSeconds(1),
                     superstructure.setStateCommand(NEUTRAL)
                 ), 
                 () -> l1Mode
             ));
         controller.getButton(kLeftBumper)
-            .onTrue(superstructure.setStateCommand(OUTTAKE))
-            .onFalse(superstructure.setStateCommand(NEUTRAL));
+            .onTrue(superstructure.setStateCommand(OUTTAKE).onlyIf(() -> l1Mode))
+            .onFalse(superstructure.setStateCommand(HELD_NEUTRAL));
         
         controller.getButton(kB)
             .onTrue(superstructure.tempToggle(PRE_L2, L2));
@@ -179,6 +184,10 @@ public class RobotContainer {
             .onTrue(runOnce(() -> l1Mode = !l1Mode));
         controller2.getButton(kB)
             .onTrue(runOnce(() -> l2Mode = !l2Mode));
+
+        new Trigger(() -> l1Mode)
+            .onTrue(superstructure.setStateCommand(HELD_NEUTRAL))
+            .onFalse(superstructure.setStateCommand(NEUTRAL));
 
         controller2.getButton(kX)
             .onTrue(climber.runCommand(0.4))
@@ -244,10 +253,10 @@ public class RobotContainer {
         //Camera intakeCamera = new Camera("INTAKE_CAMERA", -0.30, -0.17,  -90, 0, 0);
         //intakeCamera.setThresholds(0.3, 3, 0.3);
             
-        Camera backTagCamera = new Camera("BACK_TAG", Units.inchesToMeters(8.875), -Units.inchesToMeters(7), Units.degreesToRadians(10), -Units.degreesToRadians(10), 0);
+        Camera backTagCamera = new Camera("BACK_TAG", Units.inchesToMeters(9), -Units.inchesToMeters(7), Units.degreesToRadians(10), -Units.degreesToRadians(10), 0);
         backTagCamera.setThresholds(0, 3, 0.3);
 
-        Camera frontLeftCamera = new Camera("FRONT_LEFT", -0.27, -0.27, Units.degreesToRadians(153), 0, 0);
+        Camera frontLeftCamera = new Camera("FRONT_LEFT", -Units.inchesToMeters(11), -Units.inchesToMeters(10), Units.degreesToRadians(153), 0, 0);
         frontLeftCamera.setThresholds(0, 3, 0.3);
     }
 
