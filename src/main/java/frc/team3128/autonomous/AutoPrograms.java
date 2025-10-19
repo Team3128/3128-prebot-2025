@@ -151,7 +151,12 @@ public class AutoPrograms {
                             waitSeconds(0.5),
                             superstructure.setStateCommand(PRE_L4)
                         )
-                    ).until(() -> superstructure.stateEquals(HELD_NEUTRAL))
+                    ).withDeadline(
+                        sequence(
+                            waitSeconds(0.5),
+                            waitUntil(() -> superstructure.stateEquals(HELD_NEUTRAL))
+                        )
+                    )
                 );
             }
         }
