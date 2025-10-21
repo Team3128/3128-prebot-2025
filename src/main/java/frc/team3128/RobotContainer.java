@@ -95,7 +95,7 @@ public class RobotContainer {
     //     controller.getButton(kRightTrigger).whileTrue(Swerve.getInstance().sysIdQuasistatic(Direction.kReverse).beforeStarting(Commands.runOnce(() -> Swerve.getInstance().zeroLock())));
     // }
 
-    boolean l1Mode = false, l2Mode = false;
+    public static boolean l1Mode = false, l2Mode = false;
     private void configureButtonBindings() {
         new Trigger(() -> superstructure.getState() == NEUTRAL).debounce(0.5)
             .and(() -> arm.roller.hasObjectPresent() && arm.pivot.atSetpoint())
@@ -106,7 +106,7 @@ public class RobotContainer {
         controller.getDownPOVButton()
             .onTrue(superstructure.setStateCommand(NEUTRAL));
         controller.getLeftPOVButton()
-            .onTrue(arm.roller.runCommand(0.5))
+            .onTrue(arm.roller.runCommand(1))
             .onFalse(arm.roller.stopCommand());
 
         controller.getButton(kLeftTrigger)
@@ -216,8 +216,6 @@ public class RobotContainer {
             .onFalse(superstructure.setStateCommand(NEUTRAL));
 
         // ELEVATOR
-        controller.getButton(kA)
-            .onTrue(superstructure.tempToggle(PRE_L1, L1));
         controller.getButton(kB)
             .onTrue(superstructure.tempToggle(PRE_L2, L2));
         controller.getButton(kX)

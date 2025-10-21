@@ -102,7 +102,13 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         transitionMap.addDivergingTransition(SuperstructureStates.hazardStates, fromHazardTransitioner);
         transitionMap.addConvergingTransition(SuperstructureStates.hazardStates, toHazardTransitioner);
         transitionMap.addDivergingTransition(START, (Command) null);
+        transitionMap.addTransition(NEUTRAL, NEUTRAL, defaultTransitioner);
         transitionMap.addTransition(START, NEUTRAL, fromHazardTransitioner);
+        transitionMap.addTransition(START, HELD_NEUTRAL, toHazardTransitioner);
+        transitionMap.addConvergingTransition(List.of(PRE_L2, PRE_L3, PRE_L4, PRE_L3_BACK, PRE_L4_BACK, L2, L3, L4, L3_BACK, L4_BACK), (Command) null);
+        transitionMap.addDivergingTransition(HELD_NEUTRAL, List.of(PRE_L3, PRE_L4, PRE_L3_BACK, PRE_L4_BACK), defaultTransitioner);
+        transitionMap.addTransition(HELD_NEUTRAL, PRE_L2, toHazardTransitioner);
+        transitionMap.addMappedTransition(coupledStates, defaultTransitioner);
     }
 
     public Command toggle(Command defaultCommand, Command exclusiveCommand, BooleanSupplier condition) {
@@ -125,7 +131,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         return toggle(state, NEUTRAL);
     }
 
-    public Command tempToggle(SuperstructureStates defaultState, SuperstructureStates exclusiveState, BooleanSupplier condition, double delay) {
+    public Command tempToggle(SuperstructureStates defaultState, SuperstructureStates exclusiveState, BooleanSupplier condition) {
         return either(
             sequence(
                 setStateCommand(exclusiveState),
@@ -137,12 +143,21 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         );
     }
 
-    public Command tempToggle(SuperstructureStates defaultStates, SuperstructureStates exclusiveState, BooleanSupplier condition) {
-        return tempToggle(defaultStates, exclusiveState, condition, 1);
+    public Command tempToggle(SuperstructureStates defaultState, SuperstructureStates exclusiveState) {
+        return tempToggle(defaultState, exclusiveState, ()-> stateEquals(defaultState));
     }
 
-    public Command tempToggle(SuperstructureStates defaultStates, SuperstructureStates exclusiveState) {
-        return tempToggle(defaultStates, exclusiveState,  ()-> stateEquals(defaultStates), 1);
+    public Command tempToggleAndDrive(SuperstructureStates defaultState, SuperstructureStates exclusiveState) {
+        return either(
+            sequence(
+                setStateCommand(exclusiveState),
+                waitSeconds(0.75),
+                swerve.driveBackwards().withTimeout(0.5),
+                setStateCommand(NEUTRAL)
+            ),
+            setStateCommand(defaultState),
+            () -> stateEquals(defaultState)
+        );
     }
 
     public Command alignScoreCoralAuto(Supplier<Pose2d> pose) {
@@ -154,7 +169,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
                         sequence(
                             setStateCommand(coupledState.getSecond()),
                             waitSeconds(0.75),
-                            swerve.driveBackwards().withDeadline(waitSeconds(0.5)),
+                            swerve.driveBackwards().withTimeout(0.5),
                             setStateCommand(HELD_NEUTRAL)
                         ).schedule();
                         break;
@@ -175,7 +190,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
                         sequence(
                             setStateCommand(coupledState.getSecond()),
                             waitSeconds(0.75),
-                            swerve.driveBackwards().withDeadline(waitSeconds(0.5)),
+                            swerve.driveBackwards().withTimeout(0.5),
                             setStateCommand(NEUTRAL)
                         ).schedule();
                         break;

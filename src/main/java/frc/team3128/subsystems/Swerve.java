@@ -50,6 +50,7 @@ import frc.team3128.Constants.DriveConstants;
 import frc.team3128.Constants.FieldConstants.FieldStates;
 import static frc.team3128.Constants.FieldConstants.*;
 import frc.team3128.Robot;
+import frc.team3128.RobotContainer;
 
 import static edu.wpi.first.units.Units.*;
 import static edu.wpi.first.wpilibj2.command.Commands.either;
@@ -488,7 +489,7 @@ public class Swerve extends SwerveBase {
     public boolean shouldScoreForward() {
         FieldStates closest = nearest(FieldStates.coral);
         double angleDiff = Math.abs(getPose().getRotation().minus(allianceFlip(closest.getPose2d()).getRotation()).getDegrees());
-        return angleDiff < 90;
+        return angleDiff < 90 || RobotContainer.l2Mode;
     }
 
     public boolean driving = false;

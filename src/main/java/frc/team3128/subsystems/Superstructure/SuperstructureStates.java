@@ -25,14 +25,12 @@ public enum SuperstructureStates {
     ALGAE_2(ArmStates.ALGAE_2, ElevatorStates.ALGAE_2, IntakeStates.NEUTRAL),
     ALGAE_BARGE(ArmStates.ALGAE_BARGE, ElevatorStates.ALGAE_BARGE, IntakeStates.NEUTRAL),
 
-    PRE_L1(ArmStates.PRE_L1, ElevatorStates.L1, IntakeStates.NEUTRAL, true, false),
     PRE_L2(ArmStates.PRE_L2, ElevatorStates.L2, IntakeStates.NEUTRAL, true, false),
     PRE_L3(ArmStates.PRE_L3, ElevatorStates.L3, IntakeStates.NEUTRAL, true, false),
     PRE_L4(ArmStates.PRE_L4, ElevatorStates.L4, IntakeStates.NEUTRAL, true, false),
     PRE_L3_BACK(ArmStates.PRE_L3_BACK, ElevatorStates.L3, IntakeStates.NEUTRAL, true, false),
     PRE_L4_BACK(ArmStates.PRE_L4_BACK, ElevatorStates.L4, IntakeStates.NEUTRAL, true, false),
 
-    L1(ArmStates.L1, ElevatorStates.L1, IntakeStates.NEUTRAL, false, true),
     L2(ArmStates.L2, ElevatorStates.L2, IntakeStates.NEUTRAL, false, true),
     L3(ArmStates.L3, ElevatorStates.L3, IntakeStates.NEUTRAL, false, true),
     L4(ArmStates.L4, ElevatorStates.L4, IntakeStates.NEUTRAL, false, true),
@@ -77,13 +75,13 @@ public enum SuperstructureStates {
     }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
     public static final List<SuperstructureStates> safeStates = List.of(NEUTRAL, CORAL_GROUND, HANDOFF,
-            ALGAE_2, ALGAE_BARGE, PRE_L1, PRE_L3, PRE_L4, PRE_L3_BACK, PRE_L4_BACK, L2, L3, L4, L3_BACK, L4_BACK);
+        ALGAE_2, ALGAE_BARGE, PRE_L3, PRE_L4, PRE_L3_BACK, PRE_L4_BACK, L2, L3, L4, L3_BACK, L4_BACK);
 
     public static final List<SuperstructureStates> hazardStates = List.of(START, HELD_NEUTRAL, CORAL_GROUND_L1, CORAL_LOLLIPOP, OUTTAKE,
         ALGAE_GROUND, ALGAE_LOLLIPOP, ALGAE_1, PRE_L2, L2);
 
     public static final List<Pair<SuperstructureStates, SuperstructureStates>> coupledStates = List.of(
-        Pair.of(PRE_L1, L1), Pair.of(PRE_L2, L2), Pair.of(PRE_L3, L3), Pair.of(PRE_L4, L4),
+        Pair.of(PRE_L2, L2), Pair.of(PRE_L3, L3), Pair.of(PRE_L4, L4),
         Pair.of(PRE_L3_BACK, L3_BACK), Pair.of(PRE_L4_BACK, L4_BACK)
     );
 
