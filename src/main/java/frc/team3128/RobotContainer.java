@@ -131,23 +131,23 @@ public class RobotContainer {
             .onFalse(superstructure.setStateCommand(HELD_NEUTRAL));
         
         controller.getButton(kB)
-            .onTrue(superstructure.tempToggle(PRE_L2, L2));
+            .onTrue(superstructure.tempToggleAndDrive(PRE_L2, L2));
         controller.getButton(kX)
             .onTrue(either(
-                superstructure.tempToggle(PRE_L3, L3),
+                superstructure.tempToggleAndDrive(PRE_L3, L3),
                 either(
-                    superstructure.tempToggle(PRE_L3, L3),
-                    superstructure.tempToggle(PRE_L3_BACK, L3_BACK),
+                    superstructure.tempToggleAndDrive(PRE_L3, L3),
+                    superstructure.tempToggleAndDrive(PRE_L3_BACK, L3_BACK),
                     () -> swerve.shouldScoreForward()
                 ),
                 () -> l2Mode
             ));
         controller.getButton(kY)
             .onTrue(either(
-                superstructure.tempToggle(PRE_L4, L4),
+                superstructure.tempToggleAndDrive(PRE_L4, L4),
                 either(
-                    superstructure.tempToggle(PRE_L4, L4),
-                    superstructure.tempToggle(PRE_L4_BACK, L4_BACK),
+                    superstructure.tempToggleAndDrive(PRE_L4, L4),
+                    superstructure.tempToggleAndDrive(PRE_L4_BACK, L4_BACK),
                     () -> swerve.shouldScoreForward()
                 ),
                 () -> l2Mode

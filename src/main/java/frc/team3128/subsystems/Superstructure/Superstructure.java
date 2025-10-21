@@ -187,12 +187,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
             Commands.runOnce(() -> {
                 for (Pair<SuperstructureStates, SuperstructureStates> coupledState : coupledStates) {
                     if (stateEquals(coupledState.getFirst())) {
-                        sequence(
-                            setStateCommand(coupledState.getSecond()),
-                            waitSeconds(0.75),
-                            swerve.driveBackwards().withTimeout(0.5),
-                            setStateCommand(NEUTRAL)
-                        ).schedule();
+                        tempToggleAndDrive(coupledState.getFirst(), coupledState.getSecond()).schedule();
                         break;
                     }
                 }
