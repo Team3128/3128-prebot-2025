@@ -35,7 +35,9 @@ public enum SuperstructureStates {
     L3(ArmStates.L3, ElevatorStates.L3, IntakeStates.NEUTRAL, false, true),
     L4(ArmStates.L4, ElevatorStates.L4, IntakeStates.NEUTRAL, false, true),
     L3_BACK(ArmStates.L3_BACK, ElevatorStates.L3, IntakeStates.NEUTRAL, false, true),
-    L4_BACK(ArmStates.L4_BACK, ElevatorStates.L4, IntakeStates.NEUTRAL, false, true);
+    L4_BACK(ArmStates.L4_BACK, ElevatorStates.L4, IntakeStates.NEUTRAL, false, true),
+    
+    CLIMB(ArmStates.CLIMB, ElevatorStates.HELD_NEUTRAL, IntakeStates.NEUTRAL);
 
     private final ArmStates arm;
     private final ElevatorStates elevator;
@@ -78,7 +80,7 @@ public enum SuperstructureStates {
         ALGAE_2, ALGAE_BARGE, PRE_L3, PRE_L4, PRE_L3_BACK, PRE_L4_BACK, L2, L3, L4, L3_BACK, L4_BACK);
 
     public static final List<SuperstructureStates> hazardStates = List.of(START, HELD_NEUTRAL, CORAL_GROUND_L1, CORAL_LOLLIPOP, OUTTAKE,
-        ALGAE_GROUND, ALGAE_LOLLIPOP, ALGAE_1, PRE_L2, L2);
+        ALGAE_GROUND, ALGAE_LOLLIPOP, ALGAE_1, PRE_L2, L2, CLIMB);
 
     public static final List<Pair<SuperstructureStates, SuperstructureStates>> coupledStates = List.of(
         Pair.of(PRE_L2, L2), Pair.of(PRE_L3, L3), Pair.of(PRE_L4, L4),

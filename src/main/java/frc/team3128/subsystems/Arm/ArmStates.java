@@ -21,7 +21,8 @@ public enum ArmStates {
     L4_BACK(280, 0),
     ALGAE_1(90, 0.8),
     ALGAE_2(90, 0.8),
-    ALGAE_BARGE(135, 0.5);
+    ALGAE_BARGE(135, 0.5),
+    CLIMB(135, 0);
 
     private final double angle;
     private final double power;

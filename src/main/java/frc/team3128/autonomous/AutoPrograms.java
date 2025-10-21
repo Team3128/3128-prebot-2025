@@ -149,7 +149,7 @@ public class AutoPrograms {
                         superstructure.alignScoreCoralAuto(() -> allianceFlip(state.getBackPose2d())),
                         sequence(
                             waitSeconds(0.5),
-                            superstructure.setStateCommand(PRE_L4)
+                            superstructure.setStateCommand(PRE_L4_BACK)
                         )
                     ).withDeadline(
                         sequence(

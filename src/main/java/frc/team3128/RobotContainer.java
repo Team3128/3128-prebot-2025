@@ -175,6 +175,16 @@ public class RobotContainer {
                 () -> l2Mode
             ));
 
+        controller.getRightPOVButton()
+            .onTrue(
+                superstructure.setStateCommand(CLIMB)
+                    .andThen(either(
+                        climber.setStateCommand(ClimberStates.CLIMB),
+                        climber.setStateCommand(ClimberStates.CLIMB_PRIME),
+                        () -> climber.stateEquals(ClimberStates.CLIMB_PRIME)
+                    ))
+            );
+
         controller.getButton(kRightTrigger)
             .onTrue(superstructure.toggle(ALGAE_1));
         controller.getButton(kRightTrigger)
@@ -190,10 +200,10 @@ public class RobotContainer {
             .onFalse(superstructure.setStateCommand(NEUTRAL));
 
         controller2.getButton(kX)
-            .onTrue(climber.runCommand(0.4))
+            .onTrue(climber.runCommand(0.25))
             .onFalse(climber.runCommand(0));
 
-        controller.getRightPOVButton().whileTrue(swerve.driveBackwards());
+        // controller.getRightPOVButton().whileTrue(swerve.driveBackwards());
     }
 
     private boolean lastRight = false;
