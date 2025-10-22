@@ -187,7 +187,7 @@ public class RobotContainer {
 
         controller.getButton(kRightTrigger)
             .onTrue(superstructure.toggle(ALGAE_1));
-        controller.getButton(kRightTrigger)
+        controller.getButton(kRightBumper)
             .onTrue(superstructure.toggle(ALGAE_2));
 
         controller2.getButton(kA)
