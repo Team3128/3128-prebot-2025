@@ -4,6 +4,7 @@ import common.core.controllers.Controller;
 import common.core.controllers.ControllerBase;
 import common.core.controllers.PIDFFConfig;
 import common.core.subsystems.PositionSubsystemBase;
+import common.hardware.motorcontroller.NAR_CANSpark;
 import common.hardware.motorcontroller.NAR_TalonFX;
 import common.hardware.motorcontroller.NAR_Motor.MotorConfig;
 import common.utility.shuffleboard.NAR_Shuffleboard;
@@ -17,7 +18,8 @@ public class WinchMechanism extends PositionSubsystemBase {
     private static PIDFFConfig config = new PIDFFConfig(0.00001, 0, 0, 1.2, 0, 0, 0);
     protected static ControllerBase controller = new Controller(config, Controller.Type.POSITION);
 
-    public static NAR_TalonFX leader = new NAR_TalonFX(WINCH_ID);
+    // public static NAR_TalonFX leader = new NAR_TalonFX(WINCH_ID);
+    public static NAR_CANSpark leader = new NAR_CANSpark(WINCH_ID);
 
     private WinchMechanism() {
         super(controller, leader);
