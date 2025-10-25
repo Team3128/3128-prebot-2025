@@ -330,7 +330,7 @@ public class Constants {
         public static final StatusFrames WINCH_STATUS_FRAME = StatusFrames.POSITION;
 
         public static final double WINCH_POSITION_MIN = 0;
-        public static final double WINCH_POSITION_MAX = 75;
+        public static final double WINCH_POSITION_MAX = 439;
         public static final double WINCH_TOLERANCE = 0.4;
 
         public static final double ROLLER_GEAR_RATIO = 1;

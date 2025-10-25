@@ -200,10 +200,10 @@ public class RobotContainer {
             .onFalse(superstructure.setStateCommand(NEUTRAL));
 
         controller2.getButton(kY)
-            .onTrue(climber.winch.runCommand(0.5))
+            .onTrue(climber.winch.runCommand(0.8))
             .onFalse(climber.winch.runCommand(0));
         controller2.getButton(kX)
-            .onTrue(climber.winch.runCommand(-0.5))
+            .onTrue(climber.winch.runCommand(-0.8))
             .onFalse(climber.winch.runCommand(0));
 
         // controller.getRightPOVButton().whileTrue(swerve.driveBackwards());
