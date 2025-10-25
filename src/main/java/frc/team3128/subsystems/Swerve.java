@@ -117,7 +117,7 @@ public class Swerve extends SwerveBase {
     public static DoubleSupplier kPSupplier, kISupplier, kDSupplier;
 
 
-    public static final double elevatorStartDist = 0.4;
+    public static final double elevatorStartDist = 1;
 
     public static final Constraints rotationConstraints = new Constraints(MAX_DRIVE_ANGULAR_VELOCITY, MAX_DRIVE_ANGULAR_ACCELERATION);
     public static final PIDFFConfig rotationConfig = new PIDFFConfig(10); //Conservative Kp estimate (2*a_max/v_max)

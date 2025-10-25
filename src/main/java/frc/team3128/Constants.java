@@ -135,8 +135,8 @@ public class Constants {
         public static final double FIELD_Y_LENGTH = Units.inchesToMeters(317); // meters = 8.052
         public static final Translation2d FIELD = new Translation2d(FIELD_X_LENGTH, FIELD_Y_LENGTH);
         public static final Translation2d CENTER_FIELD = FIELD.div(2);
-        public static final Translation2d MANIP_OFFSET = new Translation2d(Units.inchesToMeters(29.0 / 2.0), Units.inchesToMeters(8));
-        public static final Translation2d MANIP_OFFSET_BACK = new Translation2d(Units.inchesToMeters(29.0 / 2.0), Units.inchesToMeters(-8));
+        public static final Translation2d MANIP_OFFSET = new Translation2d(Units.inchesToMeters(29.0 / 2.0), Units.inchesToMeters(9));
+        public static final Translation2d MANIP_OFFSET_BACK = new Translation2d(Units.inchesToMeters(29.0 / 2.0), Units.inchesToMeters(-9));
         public static final Translation2d REEF_STOP_DIST = new Translation2d(Units.inchesToMeters(0.5), 0);
         public static final Translation2d CORAL_LEFT_POLE_SHIFT = new Translation2d(0, Units.inchesToMeters(-13.0 / 2));
         public static final Translation2d SOURCE_LEFT_SHIFT = new Translation2d(0, Units.inchesToMeters(-12.5));
@@ -322,7 +322,7 @@ public class Constants {
         public static final int WINCH_ID = 30;
         public static final int ROLLER_ID = 31;
 
-        public static final double WINCH_GEAR_RATIO = 1; //9.0 / 360.0;
+        public static final double WINCH_GEAR_RATIO = 0.6; //9.0 / 360.0;
         public static final double WINCH_SAMPLE_PER_MINUTE = 60;
         public static final int WINCH_STATOR_CURRENT_LIMIT = 40;
         public static final boolean WINCH_INVERT = true;
@@ -331,7 +331,7 @@ public class Constants {
 
         public static final double WINCH_POSITION_MIN = 0;
         public static final double WINCH_POSITION_MAX = 439;
-        public static final double WINCH_TOLERANCE = 0.4;
+        public static final double WINCH_TOLERANCE = 1;
 
         public static final double ROLLER_GEAR_RATIO = 1;
         public static final double ROLLER_SAMPLE_PER_MINUTE = 60;

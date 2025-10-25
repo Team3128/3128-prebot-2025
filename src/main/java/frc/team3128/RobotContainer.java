@@ -206,6 +206,9 @@ public class RobotContainer {
             .onTrue(climber.winch.runCommand(-0.8))
             .onFalse(climber.winch.runCommand(0));
 
+        controller2.getButton(kLeftTrigger)
+            .onTrue(climber.winch.resetCommand());
+
         // controller.getRightPOVButton().whileTrue(swerve.driveBackwards());
     }
 

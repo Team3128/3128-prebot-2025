@@ -103,6 +103,6 @@ public class ElevatorMechanism extends PositionSubsystemBase {
     }
 
     public boolean closeToSetpoint() {
-        return Math.abs(getSetpoint() - controller.getMeasurement()) <= 30 * TOLERANCE;
+        return Math.abs(getSetpoint() - controller.getMeasurement()) <= 15 * TOLERANCE;
     }
 }

@@ -42,7 +42,8 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
                 elevator.setStateCommand(state.getElevator()),
                 intake.setStateCommand(state.getIntake())
             ).beforeStarting(waitUntil(() -> !swerve.shouldWaitClose()).onlyIf(() -> state.shouldWaitClose()))
-            .beforeStarting(waitUntil(() -> !swerve.shouldWaitFull()).onlyIf(() -> state.shouldWaitFull()));;
+            .beforeStarting(waitUntil(() -> !swerve.shouldWaitFull()).onlyIf(() -> state.shouldWaitFull()));
+            defaultTransitions[state.ordinal()].addRequirements(this);
         }
         return defaultTransitions[state.ordinal()];
     };
@@ -58,6 +59,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
                 elevator.setStateCommand(state.getElevator())
             ).beforeStarting(waitUntil(() -> !swerve.shouldWaitClose()).onlyIf(() -> state.shouldWaitClose()))
             .beforeStarting(waitUntil(() -> !swerve.shouldWaitFull()).onlyIf(() -> state.shouldWaitFull()));
+            toHazardTransitions[state.ordinal()].addRequirements(this);
         }
         return toHazardTransitions[state.ordinal()];
     };
@@ -73,6 +75,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
                 arm.setStateCommand(state.getArm())
             ).beforeStarting(waitUntil(() -> !swerve.shouldWaitClose()).onlyIf(() -> state.shouldWaitClose()))
             .beforeStarting(waitUntil(() -> !swerve.shouldWaitFull()).onlyIf(() -> state.shouldWaitFull()));
+            fromHazardTransitions[state.ordinal()].addRequirements(this);
         }
         return fromHazardTransitions[state.ordinal()];
     };
