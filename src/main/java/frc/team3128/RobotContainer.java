@@ -133,47 +133,55 @@ public class RobotContainer {
         controller.getButton(kB)
             .onTrue(superstructure.tempToggleAndDrive(PRE_L2, L2));
         controller.getButton(kX)
-            .onTrue(either(
-                superstructure.tempToggleAndDrive(PRE_L3, L3),
-                either(
-                    superstructure.tempToggleAndDrive(PRE_L3, L3),
-                    superstructure.tempToggleAndDrive(PRE_L3_BACK, L3_BACK),
-                    () -> swerve.shouldScoreForward()
-                ),
-                () -> l2Mode
-            ));
+            .onTrue(superstructure.tempToggleAndDrive(PRE_L3, L3));
         controller.getButton(kY)
-            .onTrue(either(
-                superstructure.tempToggleAndDrive(PRE_L4, L4),
-                either(
-                    superstructure.tempToggleAndDrive(PRE_L4, L4),
-                    superstructure.tempToggleAndDrive(PRE_L4_BACK, L4_BACK),
-                    () -> swerve.shouldScoreForward()
-                ),
-                () -> l2Mode
-            ));
+            .onTrue(superstructure.tempToggleAndDrive(PRE_L4, L4));
+        // controller.getButton(kX)
+        //     .onTrue(either(
+        //         superstructure.tempToggleAndDrive(PRE_L3, L3),
+        //         either(
+        //             superstructure.tempToggleAndDrive(PRE_L3, L3),
+        //             superstructure.tempToggleAndDrive(PRE_L3_BACK, L3_BACK),
+        //             () -> swerve.shouldScoreForward()
+        //         ),
+        //         () -> l2Mode
+        //     ));
+        // controller.getButton(kY)
+        //     .onTrue(either(
+        //         superstructure.tempToggleAndDrive(PRE_L4, L4),
+        //         either(
+        //             superstructure.tempToggleAndDrive(PRE_L4, L4),
+        //             superstructure.tempToggleAndDrive(PRE_L4_BACK, L4_BACK),
+        //             () -> swerve.shouldScoreForward()
+        //         ),
+        //         () -> l2Mode
+        //     ));
         
+        // controller.getButton(kBack)
+        //     .onTrue(either(
+        //         superstructure.alignScoreCoral(false),
+        //         either(
+        //             superstructure.alignScoreCoral(false),
+        //             superstructure.alignScoreCoralBack(false),
+        //             () -> swerve.shouldScoreForward()
+        //         ),
+        //         () -> l2Mode
+        //     ));
         controller.getButton(kBack)
-            .onTrue(either(
-                superstructure.alignScoreCoral(false),
-                either(
-                    superstructure.alignScoreCoral(false),
-                    superstructure.alignScoreCoralBack(false),
-                    () -> swerve.shouldScoreForward()
-                ),
-                () -> l2Mode
-            ));
+            .onTrue(superstructure.alignScoreCoral(false));
 
         controller.getButton(kStart)
-            .onTrue(either(
-                superstructure.alignScoreCoral(true),
-                either(
-                    superstructure.alignScoreCoral(true),
-                    superstructure.alignScoreCoralBack(true),
-                    () -> swerve.shouldScoreForward()
-                ),
-                () -> l2Mode
-            ));
+            .onTrue(superstructure.alignScoreCoral(true));
+        // controller.getButton(kStart)
+        //     .onTrue(either(
+        //         superstructure.alignScoreCoral(true),
+        //         either(
+        //             superstructure.alignScoreCoral(true),
+        //             superstructure.alignScoreCoralBack(true),
+        //             () -> swerve.shouldScoreForward()
+        //         ),
+        //         () -> l2Mode
+        //     ));
 
         controller.getRightPOVButton()
             .onTrue(
@@ -194,6 +202,12 @@ public class RobotContainer {
             .onTrue(runOnce(() -> l1Mode = !l1Mode));
         controller2.getButton(kB)
             .onTrue(runOnce(() -> l2Mode = !l2Mode));
+        // controller2.getButton(kA)
+        //     .onTrue(elevator.elevator.runCommand(0.5))
+        //     .onFalse(elevator.elevator.stopCommand());
+        // controller2.getButton(kB)
+        //     .onTrue(elevator.elevator.runCommand(-0.5))
+        //     .onFalse(elevator.elevator.stopCommand());
 
         new Trigger(() -> l1Mode)
             .onTrue(superstructure.setStateCommand(HELD_NEUTRAL))
@@ -206,8 +220,20 @@ public class RobotContainer {
             .onTrue(climber.winch.runCommand(-0.8))
             .onFalse(climber.winch.runCommand(0));
 
-        controller2.getButton(kLeftTrigger)
+        controller2.getRightPOVButton()
             .onTrue(climber.winch.resetCommand());
+        controller2.getButton(kLeftTrigger)
+            .onTrue(intake.pivot.resetCommand());
+        controller2.getButton(kRightBumper)
+            .onTrue(elevator.elevator.resetCommand());
+        // controller2.getButton(kLeftTrigger)
+        //     .whileTrue(elevator.elevator.sysIdDynamic(Direction.kReverse));
+        // controller2.getButton(kLeftBumper)
+        //     .whileTrue(elevator.elevator.sysIdDynamic(Direction.kForward));
+        // controller2.getButton(kRightTrigger)
+        //     .whileTrue(elevator.elevator.sysIdQuasistatic(Direction.kReverse));
+        // controller2.getButton(kRightBumper)
+        //     .whileTrue(elevator.elevator.sysIdQuasistatic(Direction.kForward));
 
         // controller.getRightPOVButton().whileTrue(swerve.driveBackwards());
     }

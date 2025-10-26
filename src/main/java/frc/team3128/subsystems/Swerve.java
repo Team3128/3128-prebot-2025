@@ -198,7 +198,7 @@ public class Swerve extends SwerveBase {
     @Override
     public void drive(ChassisSpeeds velocity){
         // if ((Math.hypot(velocity.vxMetersPerSecond, velocity.vyMetersPerSecond) >= TRANSLATIONAL_DEADBAND) ||
-        if(Math.abs(velocity.omegaRadiansPerSecond) >= ROTATIONAL_DEADBAND) {
+        if(Math.hypot(velocity.vxMetersPerSecond, velocity.vyMetersPerSecond) >= TRANSLATIONAL_DEADBAND || Math.abs(velocity.omegaRadiansPerSecond) >= ROTATIONAL_DEADBAND) {
             translationController.disable();
             rotationController.disable();
         }
@@ -479,17 +479,18 @@ public class Swerve extends SwerveBase {
     }
 
     public boolean shouldWaitClose() {
-        return autoMoveEnabled && !atElevatorDist();
+        return translationController.isEnabled() && !atElevatorDist();
     }
 
     public boolean shouldWaitFull() {
-        return autoMoveEnabled;
+        return translationController.isEnabled();
     }
 
     public boolean shouldScoreForward() {
-        FieldStates closest = nearest(FieldStates.coral);
-        double angleDiff = Math.abs(getPose().getRotation().minus(allianceFlip(closest.getPose2d()).getRotation()).getDegrees());
-        return angleDiff < 90 || RobotContainer.l2Mode;
+        return true;
+        // FieldStates closest = nearest(FieldStates.coral);
+        // double angleDiff = Math.abs(getPose().getRotation().minus(allianceFlip(closest.getPose2d()).getRotation()).getDegrees());
+        // return angleDiff < 90 || RobotContainer.l2Mode;
     }
 
     public boolean driving = false;
