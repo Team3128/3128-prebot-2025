@@ -467,15 +467,6 @@ public class Swerve extends SwerveBase {
         .linearPosition(position.mut_replace(m.getPosition(), Meters))
         .linearVelocity(velocity.mut_replace(m.getVelocity(), MetersPerSecond))
         .voltage(appliedVoltage.mut_replace(m.getMotor().getMotorVoltage().getValueAsDouble(), Volts));
-        // for (final SwerveModule module : modules) {
-        //     log.motor("linear position").linearPosition(Meters.of(DRIVE_WHEEL_CIRCUMFERENCE*module.getDriveMotor().getPosition()/DRIVE_MOTOR_GEAR_RATIO));
-        //     log.motor("linear velocity").linearVelocity(MetersPerSecond.of(DRIVE_WHEEL_CIRCUMFERENCE*module.getDriveMotor().getVelocity()/(60*DRIVE_MOTOR_GEAR_RATIO)));
-        //     log.motor("drive voltage").voltage(Volts.of(12 * module.getDriveMotor().getAppliedOutput()));
-
-        //     // log.motor("angular position").angularPosition(Rotations.of(module.getAngleMotor().getPosition()));
-        //     // log.motor("angular velocity").angularVelocity(RotationsPerSecond.of(module.getAngleMotor().getVelocity() / 60.0));
-        //     // log.motor("angle voltage").voltage(Volts.of(12 * module.getDriveMotor().getAppliedOutput()));
-        // }
     }
 
     public boolean shouldWaitClose() {
@@ -489,7 +480,7 @@ public class Swerve extends SwerveBase {
     public boolean shouldScoreForward() {
         FieldStates closest = nearest(FieldStates.coral);
         double angleDiff = Math.abs(getPose().getRotation().minus(allianceFlip(closest.getPose2d()).getRotation()).getDegrees());
-        return angleDiff < 90 || RobotContainer.l2Mode;
+        return angleDiff < 90;
     }
 
     public boolean driving = false;
