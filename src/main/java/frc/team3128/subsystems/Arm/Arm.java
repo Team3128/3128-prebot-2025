@@ -21,6 +21,8 @@ public class Arm extends FSMSubsystemBase<ArmStates> {
     public RollerMechanism roller;
     public Camera cam;
 
+    
+
     private static TransitionMap<ArmStates> transitionMap = new TransitionMap<ArmStates>(ArmStates.class);
     private static final Command defaultTransitions[] = new Command[ArmStates.values().length];
     private Function<ArmStates, Command> defaultTransitioner = state -> {
