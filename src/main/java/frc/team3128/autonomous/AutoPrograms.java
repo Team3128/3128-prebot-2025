@@ -121,7 +121,7 @@ public class AutoPrograms {
         NamedCommands.registerCommand(
             "Start",
             runOnce(() -> {
-                superstructure.overrideState(HELD_NEUTRAL);
+                // superstructure.overrideState(HELD_NEUTRAL);
                 swerve.resetGyro(Robot.getAlliance() == Alliance.Red ? 0 : 180);
             })
         );
@@ -185,8 +185,8 @@ public class AutoPrograms {
         // String hardcode = "LB_3pc_ILK_auto";
         // String hardcode = "MID_1pc_H_auto"; 
         // String hardcode = "Left_Leave_Backwards";
-        // String hardcode = "proc_1pc_b";
-        String hardcode = "mid_1pc_g";  
+        String hardcode = "proc_1pc_b";
+        // String hardcode = "mid_1pc_g";  
         
          
         Command autoCommand;

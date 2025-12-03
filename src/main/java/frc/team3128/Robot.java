@@ -172,11 +172,11 @@ public class Robot extends NAR_Robot {
     public void disabledInit() {
         CommandScheduler.getInstance().cancelAll();
         Swerve.disable();
-        Arm.getInstance().overrideState(ArmStates.START);
-        Climber.getInstance().overrideState(ClimberStates.START);
-        Elevator.getInstance().overrideState(ElevatorStates.START);
-        Intake.getInstance().overrideState(IntakeStates.START);
-        Superstructure.getInstance().overrideState(SuperstructureStates.START);
+        // Arm.getInstance().overrideState(ArmStates.START);
+        // Climber.getInstance().overrideState(ClimberStates.START);
+        // Elevator.getInstance().overrideState(ElevatorStates.START);
+        // Intake.getInstance().overrideState(IntakeStates.START);
+        // Superstructure.getInstance().overrideState(SuperstructureStates.START);
     }
 
     @Override

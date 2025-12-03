@@ -33,7 +33,11 @@ import frc.team3128.subsystems.Elevator.*;
 import frc.team3128.subsystems.Intake.*;
 import frc.team3128.subsystems.Superstructure.Superstructure;
 
+import static frc.team3128.Constants.VisionConstants.APRIL_TAGS;
 import static frc.team3128.subsystems.Superstructure.SuperstructureStates.*;
+
+import java.util.function.DoubleSupplier;
+
 import static edu.wpi.first.wpilibj2.command.Commands.*;
 import frc.team3128.Constants.*;
 import frc.team3128.Constants.VisionConstants.*;
@@ -193,6 +197,8 @@ public class RobotContainer {
                     ))
             );
 
+        controller.getLeftPOVButton().onTrue(elevator.elevator.pidTo(()-> (elevator.elevator.getSetpoint() +0.02)));
+
         controller.getButton(kRightTrigger)
             .onTrue(superstructure.toggle(ALGAE_1));
         controller.getButton(kRightBumper)
@@ -226,6 +232,19 @@ public class RobotContainer {
             .onTrue(intake.pivot.resetCommand());
         controller2.getButton(kRightBumper)
             .onTrue(elevator.elevator.resetCommand());
+        controller2.getDownPOVButton()
+            .onTrue(
+                parallel(
+                    elevator.elevator.pidTo(0),
+                    arm.pivot.pidTo(180),
+                    intake.pivot.pidTo(0)
+                )
+            );
+        // controller2.getButton(kRightTrigger)
+        //     .onTrue(superstructure.setStateCommand(HELD_NEUTRAL));
+        controller2.getLeftPOVButton()
+            .onTrue(climber.roller.runCommand(0.5))
+            .onFalse(climber.roller.runCommand(0));
         // controller2.getButton(kLeftTrigger)
         //     .whileTrue(elevator.elevator.sysIdDynamic(Direction.kReverse));
         // controller2.getButton(kLeftBumper)
@@ -286,7 +305,7 @@ public class RobotContainer {
     }
 
     public void initCameras() {
-        Camera.setResources(() -> Swerve.getInstance().getYaw(), (pose, time) -> Swerve.getInstance().addVisionMeasurement(pose, time), new AprilTagFieldLayout(VisionConstants.APRIL_TAGS, FieldConstants.FIELD_X_LENGTH, FieldConstants.FIELD_Y_LENGTH), () -> Swerve.getInstance().getPose());
+        Camera.setResources(() -> Swerve.getInstance().getYaw(), (pose, time) -> Swerve.getInstance().addVisionMeasurement(pose, time), () -> Swerve.getInstance().getPose(), APRIL_TAGS);
         //Camera.addIgnoredTags(4, 5, 14, 15);
 
         

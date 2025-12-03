@@ -55,7 +55,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
                     arm.setStateCommand(state.getArm()),
                     intake.setStateCommand(state.getIntake())
                 ),
-                waitUntil(() -> arm.pivot.closeToSetpoint()),
+                waitUntil(() -> arm.pivot.closeToSetpoint()).withTimeout(2),
                 elevator.setStateCommand(state.getElevator())
             ).beforeStarting(waitUntil(() -> !swerve.shouldWaitClose()).onlyIf(() -> state.shouldWaitClose()))
             .beforeStarting(waitUntil(() -> !swerve.shouldWaitFull()).onlyIf(() -> state.shouldWaitFull()));
@@ -71,7 +71,7 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
                     elevator.setStateCommand(state.getElevator()),
                     intake.setStateCommand(state.getIntake())
                 ),
-                waitUntil(() -> elevator.elevator.closeToSetpoint()),
+                waitUntil(() -> elevator.elevator.closeToSetpoint()).withTimeout(2),
                 arm.setStateCommand(state.getArm())
             ).beforeStarting(waitUntil(() -> !swerve.shouldWaitClose()).onlyIf(() -> state.shouldWaitClose()))
             .beforeStarting(waitUntil(() -> !swerve.shouldWaitFull()).onlyIf(() -> state.shouldWaitFull()));
@@ -111,6 +111,8 @@ public class Superstructure extends FSMSubsystemBase<SuperstructureStates> {
         transitionMap.addConvergingTransition(List.of(PRE_L2, PRE_L3, PRE_L4, PRE_L3_BACK, PRE_L4_BACK, L2, L3, L4, L3_BACK, L4_BACK), (Command) null);
         transitionMap.addDivergingTransition(HELD_NEUTRAL, List.of(PRE_L3, PRE_L4, PRE_L3_BACK, PRE_L4_BACK), defaultTransitioner);
         transitionMap.addTransition(HELD_NEUTRAL, PRE_L2, toHazardTransitioner);
+        transitionMap.addDivergingTransition(NEUTRAL, List.of(PRE_L3, PRE_L4, PRE_L3_BACK, PRE_L4_BACK), defaultTransitioner);
+        transitionMap.addTransition(NEUTRAL, PRE_L2, toHazardTransitioner);
         transitionMap.addMappedTransition(coupledStates, defaultTransitioner);
     }
 
